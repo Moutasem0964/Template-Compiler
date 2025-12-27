@@ -33,6 +33,32 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompound(PythonSubsetParser.CompoundContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code importRule}
+	 * labeled alternative in {@link PythonSubsetParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImportRule(PythonSubsetParser.ImportRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code decorated}
+	 * labeled alternative in {@link PythonSubsetParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecorated(PythonSubsetParser.DecoratedContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#importStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImportStmt(PythonSubsetParser.ImportStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#decorator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecorator(PythonSubsetParser.DecoratorContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code exprStmt}
 	 * labeled alternative in {@link PythonSubsetParser#simpleStmt}.
 	 * @param ctx the parse tree
@@ -47,6 +73,13 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssign(PythonSubsetParser.AssignContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code globalAssign}
+	 * labeled alternative in {@link PythonSubsetParser#simpleStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGlobalAssign(PythonSubsetParser.GlobalAssignContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ifRule}
 	 * labeled alternative in {@link PythonSubsetParser#compoundStmt}.
 	 * @param ctx the parse tree
@@ -60,6 +93,25 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitForRule(PythonSubsetParser.ForRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code defRule}
+	 * labeled alternative in {@link PythonSubsetParser#compoundStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefRule(PythonSubsetParser.DefRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#defStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefStmt(PythonSubsetParser.DefStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#params}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParams(PythonSubsetParser.ParamsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PythonSubsetParser#ifStmt}.
 	 * @param ctx the parse tree
@@ -176,6 +228,13 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitName(PythonSubsetParser.NameContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code dict}
+	 * labeled alternative in {@link PythonSubsetParser#atom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDict(PythonSubsetParser.DictContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code list}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
@@ -188,6 +247,12 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitListLiteral(PythonSubsetParser.ListLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#dictLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDictLiteral(PythonSubsetParser.DictLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PythonSubsetParser#arglist}.
 	 * @param ctx the parse tree

@@ -1,8 +1,8 @@
 package compiler.symbol;
 
 import compiler.ast.visitors.AstVisitor;
-import compiler.ast.nodes.python.ForNode;
-import compiler.ast.core.*;
+import compiler.ast.nodes.python.*;
+import compiler.ast.core.AstNode;
 
 public class SymbolTableVisitor implements AstVisitor<Void> {
 
@@ -20,11 +20,25 @@ public class SymbolTableVisitor implements AstVisitor<Void> {
         currentScope = currentScope.getParent();
     }
 
+    // === Python Statements ===
+    @Override
+    public Void visitAssign(AssignNode node) {
+        // assume first child is NameNode
+        if (!node.getChildren().isEmpty() && node.getChildren().get(0) instanceof NameNode) {
+            NameNode target = (NameNode) node.getChildren().get(0);
+            currentScope.addSymbol(new Symbol(target.getName(), "variable"));
+        }
+        // visit value
+        for (AstNode child : node.getChildren()) {
+            child.accept(this);
+        }
+        return null;
+    }
+
     @Override
     public Void visitFor(ForNode node) {
         enterScope();
         currentScope.addSymbol(new Symbol(node.getVarName(), "loop_var"));
-        // visit body
         for (AstNode child : node.getChildren()) {
             child.accept(this);
         }
@@ -32,9 +46,29 @@ public class SymbolTableVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    // Add more as needed (e.g., assign for variables)
+    @Override
+    public Void visitDef(DefNode node) {
+        currentScope.addSymbol(new Symbol(node.getName(), "function"));
+        enterScope();
+        for (String param : node.getParams()) {
+            currentScope.addSymbol(new Symbol(param, "param"));
+        }
+        for (AstNode child : node.getChildren()) {
+            child.accept(this);
+        }
+        exitScope();
+        return null;
+    }
 
-    // Default: visit children
+    @Override
+    public Void visitIf(IfNode node) {
+        for (AstNode child : node.getChildren()) {
+            child.accept(this);
+        }
+        return null;
+    }
+
+    // === Expressions & others: default visit ===
     private Void defaultVisit(AstNode node) {
         for (AstNode child : node.getChildren()) {
             child.accept(this);
@@ -42,21 +76,73 @@ public class SymbolTableVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    // Implement all other visit methods with defaultVisit
-    @Override public Void visitTemplate(compiler.ast.nodes.TemplateNode node) { return defaultVisit(node); }
-    @Override public Void visitText(compiler.ast.nodes.TextNode node) { return null; }
-    @Override public Void visitJinjaExpr(compiler.ast.nodes.jinja.JinjaExprNode node) { return defaultVisit(node); }
-    @Override public Void visitJinjaStmt(compiler.ast.nodes.jinja.JinjaStmtNode node) { return defaultVisit(node); }
-    @Override public Void visitHtmlElement(compiler.ast.nodes.html.HtmlElementNode node) { return defaultVisit(node); }
-    @Override public Void visitCssStylesheet(compiler.ast.nodes.css.CssStylesheetNode node) { return defaultVisit(node); }
-    @Override public Void visitCssRule(compiler.ast.nodes.css.CssRuleNode node) { return defaultVisit(node); }
-    @Override public Void visitCssDeclaration(compiler.ast.nodes.css.CssDeclarationNode node) { return null; }
-    @Override public Void visitName(compiler.ast.nodes.python.NameNode node) { return null; }
-    @Override public Void visitString(compiler.ast.nodes.python.StringNode node) { return null; }
-    @Override public Void visitNumber(compiler.ast.nodes.python.NumberNode node) { return null; }
-    @Override public Void visitAttrAccess(compiler.ast.nodes.python.AttrAccessNode node) { return defaultVisit(node); }
-    @Override public Void visitCall(compiler.ast.nodes.python.CallNode node) { return defaultVisit(node); }
-    @Override public Void visitBinOp(compiler.ast.nodes.python.BinOpNode node) { return defaultVisit(node); }
-    @Override public Void visitAssign(compiler.ast.nodes.python.AssignNode node) { return defaultVisit(node); }
-    @Override public Void visitIf(compiler.ast.nodes.python.IfNode node) { return defaultVisit(node); }
+    @Override
+    public Void visitTemplate(compiler.ast.nodes.TemplateNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitText(compiler.ast.nodes.TextNode node) {
+        return null;
+    }
+
+    @Override
+    public Void visitJinjaExpr(compiler.ast.nodes.jinja.JinjaExprNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitJinjaStmt(compiler.ast.nodes.jinja.JinjaStmtNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitHtmlElement(compiler.ast.nodes.html.HtmlElementNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitCssStylesheet(compiler.ast.nodes.css.CssStylesheetNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitCssRule(compiler.ast.nodes.css.CssRuleNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitCssDeclaration(compiler.ast.nodes.css.CssDeclarationNode node) {
+        return null;
+    }
+
+    @Override
+    public Void visitName(NameNode node) {
+        return null;
+    }
+
+    @Override
+    public Void visitString(compiler.ast.nodes.python.StringNode node) {
+        return null;
+    }
+
+    @Override
+    public Void visitNumber(NumberNode node) {
+        return null;
+    }
+
+    @Override
+    public Void visitAttrAccess(AttrAccessNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitCall(CallNode node) {
+        return defaultVisit(node);
+    }
+
+    @Override
+    public Void visitBinOp(BinOpNode node) {
+        return defaultVisit(node);
+    }
 }

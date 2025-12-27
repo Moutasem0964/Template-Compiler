@@ -3,9 +3,9 @@ package compiler.visitors;
 import compiler.ast.core.AstNode;
 import compiler.ast.nodes.python.*;
 import compiler.lexer.PythonIndentingLexer;
-import compiler.parser.*;
+import compiler.parser.PythonSubsetParser;
+import compiler.parser.PythonSubsetParserBaseVisitor;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +22,14 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
         return baseLine + parserLine - 1;
     }
 
-    // Main helper used by TemplateAstBuilder for {{ }} and {% %}
     public AstNode parsePythonCode(String code, int startLine) {
         if (code == null || code.trim().isEmpty()) return null;
 
-        CharStream input = CharStreams.fromString(code + "\n"); // add newline to help simple statements
+        CharStream input = CharStreams.fromString(code + "\n"); // help single statements
         PythonIndentingLexer lexer = new PythonIndentingLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         PythonSubsetParser parser = new PythonSubsetParser(tokens);
-        parser.removeErrorListeners(); // optional
+        parser.removeErrorListeners();
 
         PythonSubsetParser.ProgramContext programCtx = parser.program();
         return visit(programCtx);
@@ -44,7 +43,7 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
             if (stmt != null) statements.add(stmt);
         }
         if (statements.isEmpty()) return null;
-        return statements.size() == 1 ? statements.get(0) : statements.get(0); // most Jinja cases have one
+        return statements.size() == 1 ? statements.get(0) : statements.get(0);
     }
 
     @Override
@@ -55,11 +54,6 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
     @Override
     public AstNode visitCompound(PythonSubsetParser.CompoundContext ctx) {
         return visit(ctx.compoundStmt());
-    }
-
-    @Override
-    public AstNode visitExprStmt(PythonSubsetParser.ExprStmtContext ctx) {
-        return visit(ctx.expr());
     }
 
     @Override
@@ -87,7 +81,7 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
         IfNode node = new IfNode(adjustLine(ctx.start.getLine()));
         node.addChild(visit(ctx.test(0))); // condition
         node.addChild(visit(ctx.suite(0))); // then body
-        // elif/else can be added later if needed
+        // elif/else could be added later
         return node;
     }
 
@@ -106,7 +100,7 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
         if (ctx.simpleStmt() != null) {
             AstNode s = visit(ctx.simpleStmt());
             if (s != null) stmts.add(s);
-        } else {
+        } else if (ctx.stmt() != null) {
             for (PythonSubsetParser.StmtContext s : ctx.stmt()) {
                 AstNode stmt = visit(s);
                 if (stmt != null) stmts.add(stmt);
@@ -121,7 +115,6 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
         return visit(ctx.expr());
     }
 
-    // Fixed BinOp cases — no ctx.op, use the token methods
     @Override
     public AstNode visitMulDiv(PythonSubsetParser.MulDivContext ctx) {
         String op = ctx.STAR() != null ? "*" : "/";
@@ -147,16 +140,11 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
         else if (ctx.LTEQ() != null) op = "<=";
         else if (ctx.GT() != null) op = ">";
         else if (ctx.GTEQ() != null) op = ">=";
-        else op = "=="; // EQEQ
+        else op = "==";
         BinOpNode node = new BinOpNode(op, adjustLine(ctx.start.getLine()));
         node.addChild(visit(ctx.expr(0)));
         node.addChild(visit(ctx.expr(1)));
         return node;
-    }
-
-    @Override
-    public AstNode visitAtomExpr(PythonSubsetParser.AtomExprContext ctx) {
-        return visit(ctx.atom());
     }
 
     @Override

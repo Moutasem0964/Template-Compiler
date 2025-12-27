@@ -165,6 +165,16 @@ public class PrintVisitor implements AstVisitor<Void> {
         printNode(node);
         return null;
     }
+    @Override
+    public Void visitDef(DefNode node) {
+        printHeader("Def \"" + node.getName() + "\" (line " + node.getLine() + ")");
+        if (!node.getParams().isEmpty()) {
+            printHeader("Params: " + node.getParams());
+        }
+        printNode(node);
+        return null;
+    }
+
 
     // === Utility ===
     public void printTree(AstNode root) {

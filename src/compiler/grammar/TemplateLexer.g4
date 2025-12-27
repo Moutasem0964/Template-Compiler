@@ -1,52 +1,83 @@
 lexer grammar TemplateLexer;
 
-@header {
-    package compiler.parser;
-}
+// Jinja2 control structures
+JINJA_BLOCK_START: '{%' -> pushMode(JINJA_MODE);
+JINJA_VAR_START: '{{' -> pushMode(JINJA_MODE);
+JINJA_COMMENT_START: '{#' -> pushMode(COMMENT_MODE);
 
-// Default mode
-OPEN_EXPR       : '{{' -> pushMode(PY_EXPR_MODE);
-OPEN_STMT       : '{%' -> pushMode(PY_STMT_MODE);
-OPEN_COMMENT    : '{#' -> skip, pushMode(COMMENT_MODE);
+// HTML Tags
+HTML_OPEN: '<' [a-zA-Z][a-zA-Z0-9]* -> pushMode(TAG_MODE);
+HTML_CLOSE: '</' [a-zA-Z][a-zA-Z0-9]* '>';
+HTML_SELF_CLOSE: '/>';
+DOCTYPE: '<!DOCTYPE' .*? '>';
 
-TAG_START       : '<' -> pushMode(HTML_TAG_MODE);
+// Text content (anything that's not a tag or Jinja expression)
+HTML_TEXT: ~[<{]+;
 
-TEXT            : (~[<{] | '{' ~[{%#] | '<' ~[a-zA-Z/])+ ;
+// Whitespace
+HTML_WS: [ \t\r\n]+ -> channel(HIDDEN);
 
-WS              : [ \t\r\n]+ -> channel(HIDDEN);
+// === JINJA MODE ===
+mode JINJA_MODE;
 
-// ====================== PYTHON EXPR MODE ======================
-mode PY_EXPR_MODE;
+JINJA_BLOCK_END: '%}' -> popMode;
+JINJA_VAR_END: '}}' -> popMode;
 
-CLOSE_EXPR      : '}}' -> popMode;
-PY_EXPR_CONTENT : (~[}] | '}' ~[}])+ ;
+// Jinja keywords
+FOR: 'for';
+IN: 'in';
+IF: 'if';
+ELIF: 'elif';
+ELSE: 'else';
+ENDIF: 'endif';
+ENDFOR: 'endfor';
 
-// ====================== PYTHON STMT MODE ======================
-mode PY_STMT_MODE;
+// Operators
+DOT: '.';
+LPAREN: '(';
+RPAREN: ')';
+LBRACK: '[';
+RBRACK: ']';
+COMMA: ',';
+EQUAL: '=';
+PIPE: '|';
 
-CLOSE_STMT      : '%}' -> popMode;
-PY_STMT_CONTENT : (~[%] | '%' ~[}])+ ;
+// String literals in Jinja
+JINJA_STRING
+    : '"' (~["\r\n] | '\\"')* '"'
+    | '\'' (~['\r\n] | '\\\'')* '\''
+    ;
 
-// ====================== COMMENT MODE ======================
+// Numbers in Jinja
+JINJA_NUMBER: [0-9]+ ('.' [0-9]+)?;
+
+// Identifiers in Jinja
+JINJA_NAME: [a-zA-Z_][a-zA-Z0-9_]*;
+
+// Whitespace in Jinja
+JINJA_WS: [ \t\r\n]+ -> skip;
+
+// === TAG MODE (for HTML attributes) ===
+mode TAG_MODE;
+
+TAG_CLOSE: '>' -> popMode;
+TAG_SLASH_CLOSE: '/>' -> popMode;
+
+TAG_EQUALS: '=';
+TAG_NAME: [a-zA-Z][a-zA-Z0-9_-]*;
+
+TAG_VALUE
+    : '"' (~["\r\n] | '\\"')* '"'
+    | '\'' (~['\r\n] | '\\\'')* '\''
+    ;
+
+// Jinja expressions in attributes
+TAG_JINJA_VAR_START: '{{' -> pushMode(JINJA_MODE);
+
+TAG_WS: [ \t\r\n]+ -> skip;
+
+// === COMMENT MODE ===
 mode COMMENT_MODE;
 
-CLOSE_COMMENT   : '#}' -> popMode;
-COMMENT_CONTENT : .+? ;
-
-// ====================== HTML TAG MODE ======================
-mode HTML_TAG_MODE;
-
-TAG_END         : '>' -> popMode;
-TAG_SLASH_CLOSE : '/>' -> popMode;
-SLASH           : '/';
-EQUALS          : '=';
-
-TAG_NAME        : [a-zA-Z][a-zA-Z0-9:-]* ;
-
-// Match both "style" and "STYLE" etc.
-STYLE_TAG       : [sS][tT][yY][lL][eE] ;
-
-ATTR_VALUE      : '"' (~["\r\n])* '"'
-                | '\'' (~['\r\n])* '\'' ;
-
-TAG_WS          : [ \t\r\n]+ -> channel(HIDDEN);
+JINJA_COMMENT_END: '#}' -> popMode;
+JINJA_COMMENT_TEXT: .+?;

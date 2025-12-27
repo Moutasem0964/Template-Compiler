@@ -2,45 +2,78 @@ package compiler.main;
 
 import compiler.ast.core.AstNode;
 import compiler.ast.visitors.PrintVisitor;
+import compiler.parser.TemplateLexer;
+import compiler.parser.TemplateParser;
 import compiler.visitors.TemplateAstBuilder;
-import compiler.parser.*;
+import compiler.symbol.Scope;
+import compiler.symbol.SymbolTableVisitor;
 import org.antlr.v4.runtime.*;
-
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.*;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 public class TestMain {
-    public static void main(String[] args) throws Exception {
-        String[] templateNames = {
-                "compiler/main/resources/templates/list_products.jinja",
-                "compiler/main/resources/templates/add_product.jinja",
-                "compiler/main/resources/templates/product_detail.jinja"
-        };
 
-        TemplateAstBuilder builder = new TemplateAstBuilder();
-        PrintVisitor printer = new PrintVisitor();
+    public static void main(String[] args) {
+        // === 1️⃣ Example template content ===
+        String templateCode = """
+                <html>
+                    <body>
+                        <h1>{{ title }}</h1>
+                        {% for item in items %}
+                            <p>{{ item }}</p>
+                        {% endfor %}
+                        {% set x = 10 %}
+                        {% def greet(name): %}
+                            Hello, {{ name }}
+                        {% enddef %}
+                    </body>
+                </html>
+                <style>
+                    h1 { color: blue; }
+                    p { font-size: 14px; }
+                </style>
+                """;
 
-        for (String name : templateNames) {
-            URL resource = TestMain.class.getClassLoader().getResource(name);
-            if (resource == null) {
-                System.err.println("Template not found: " + name);
-                continue;
-            }
-
-            String content = Files.readString(Paths.get(resource.toURI()));
-
-            CharStream input = CharStreams.fromString(content);
+        try {
+            // === 2️⃣ Lexing + Parsing ===
+            CharStream input = CharStreams.fromString(templateCode);
             TemplateLexer lexer = new TemplateLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             TemplateParser parser = new TemplateParser(tokens);
+            ParseTree tree = parser.template();
 
-            TemplateParser.TemplateContext tree = parser.template();
-            AstNode ast = builder.visit(tree);
+            // === 3️⃣ Build AST ===
+            TemplateAstBuilder astBuilder = new TemplateAstBuilder();
+            AstNode astRoot = astBuilder.visit(tree);
 
-            System.out.println("=== AST for " + name + " ===");
-            printer.printTree(ast);
-            System.out.println("\n");
+            // === 4️⃣ Print AST ===
+            System.out.println("=== AST Tree ===");
+            PrintVisitor printer = new PrintVisitor();
+            printer.printTree(astRoot);
+
+            // === 5️⃣ Build Symbol Table ===
+            SymbolTableVisitor symbolVisitor = new SymbolTableVisitor();
+            astRoot.accept(symbolVisitor);
+            Scope globalScope = symbolVisitor.getGlobalScope();
+
+            // === 6️⃣ Print Symbol Table ===
+            System.out.println("\n=== Symbol Table (Global Scope) ===");
+            printScope(globalScope, 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Recursive function to print symbols in a readable way
+    private static void printScope(Scope scope, int level) {
+        if (scope == null) return;
+        String indent = "  ".repeat(level);
+        scope.getSymbols().forEach((name, symbol) -> {
+            System.out.println(indent + name + " : " + symbol.getType());
+        });
+        if (scope.getParent() != null) {
+            System.out.println(indent + "(Parent Scope)");
+            printScope(scope.getParent(), level + 1);
         }
     }
 }

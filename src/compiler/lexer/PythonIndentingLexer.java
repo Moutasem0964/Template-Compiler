@@ -2,9 +2,7 @@ package compiler.lexer;
 
 import compiler.parser.PythonSubsetLexer;
 import compiler.parser.PythonSubsetParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.LinkedList;
@@ -16,7 +14,6 @@ public class PythonIndentingLexer extends PythonSubsetLexer {
     private final Stack<Integer> indentStack = new Stack<>();
     private final Queue<Token> tokenQueue = new LinkedList<>();
 
-    // Use the parser's token constants - ANTLR generates them for referenced tokens
     private static final int INDENT_TYPE = PythonSubsetParser.INDENT;
     private static final int DEDENT_TYPE = PythonSubsetParser.DEDENT;
 
@@ -27,17 +24,13 @@ public class PythonIndentingLexer extends PythonSubsetLexer {
 
     @Override
     public Token nextToken() {
-        if (!tokenQueue.isEmpty()) {
-            return tokenQueue.poll();
-        }
+        if (!tokenQueue.isEmpty()) return tokenQueue.poll();
 
         Token token = super.nextToken();
 
         if (token.getType() == PythonSubsetLexer.EOF) {
             emitDedentsToBase(token);
-            if (!tokenQueue.isEmpty()) {
-                return tokenQueue.poll();
-            }
+            if (!tokenQueue.isEmpty()) return tokenQueue.poll();
             return token;
         }
 
@@ -45,34 +38,22 @@ public class PythonIndentingLexer extends PythonSubsetLexer {
             handleNewline(token);
         }
 
-        if (!tokenQueue.isEmpty()) {
-            return tokenQueue.poll();
-        }
-
+        if (!tokenQueue.isEmpty()) return tokenQueue.poll();
         return token;
     }
 
     private void handleNewline(Token newlineToken) {
-        // Measure indentation after the newline
         int start = getCharIndex();
         int indent = 0;
 
         while (true) {
             int la = _input.LA(1);
-            if (la == ' ') {
-                indent++;
-                _input.consume();
-            } else if (la == '\t') {
-                indent += 4; // adjust tab size if needed (4 or 8)
-                _input.consume();
-            } else if (la == '\r' || la == '\n') {
-                // extra newline - ignore for indentation
-                _input.consume();
-            } else {
-                break;
-            }
+            if (la == ' ') { indent++; _input.consume(); }
+            else if (la == '\t') { indent += 4; _input.consume(); }
+            else if (la == '\r' || la == '\n') { _input.consume(); }
+            else break;
         }
-        _input.seek(start); // reset position
+        _input.seek(start);
 
         int current = indentStack.peek();
 
@@ -85,7 +66,6 @@ public class PythonIndentingLexer extends PythonSubsetLexer {
                 tokenQueue.add(createSyntheticToken(DEDENT_TYPE, newlineToken));
             }
         }
-        // Keep the original NEWLINE token for simple statements
     }
 
     private void emitDedentsToBase(Token eofToken) {

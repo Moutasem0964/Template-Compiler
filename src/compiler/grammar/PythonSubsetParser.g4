@@ -4,76 +4,88 @@ options {
     tokenVocab = PythonSubsetLexer;
 }
 
-@header {
-    package compiler.parser;
-}
-
-// Entry point
-program : stmt* EOF ;
+// Program is a list of statements
+file_input: stmt* EOF;
 
 // Statements
 stmt
-    : simpleStmt NEWLINE                    # simple
-    | compoundStmt                          # compound
+    : import_stmt       #ImportStatement
+    | from_import_stmt  #FromImportStatement
+    | function_def      #FunctionDefinition
+    | if_stmt           #IfStatement
+    | for_stmt          #ForStatement
+    | assign_stmt       #AssignStatement
+    | expr_stmt         #ExpressionStatement
+    | global_stmt       #GlobalStatement
+    | return_stmt       #ReturnStatement
     ;
 
-simpleStmt
-    : expr                                  # exprStmt
-    | NAME EQ expr                          # assign
+// Import statements
+import_stmt: IMPORT NAME (AS NAME)?;
+
+from_import_stmt: FROM NAME IMPORT NAME (COMMA NAME)* (AS NAME)?;
+
+// Function definition
+function_def
+    : decorator* DEF NAME LPAREN parameters? RPAREN COLON suite
     ;
 
-compoundStmt
-    : ifStmt                                # ifRule
-    | forStmt                               # forRule
+decorator: DECORATOR (LPAREN arguments? RPAREN)?;
+
+parameters: parameter (COMMA parameter)*;
+
+parameter: NAME (EQUAL expr)?;
+
+suite: simple_stmt | NEWLINE INDENT stmt+ DEDENT;
+
+simple_stmt: stmt NEWLINE;
+
+// Control flow
+if_stmt
+    : IF expr COLON suite (ELIF expr COLON suite)* (ELSE COLON suite)?
     ;
 
-// If statement
-ifStmt
-    : IF test COLON suite
-      (ELIF test COLON suite)*
-      (ELSE COLON suite)?
-    ;
-
-// For statement
-forStmt
+for_stmt
     : FOR NAME IN expr COLON suite
     ;
 
-// Suite (block)
-suite
-    : simpleStmt NEWLINE
-    | NEWLINE INDENT stmt+ DEDENT
-    ;
+// Assignment
+assign_stmt: NAME EQUAL expr;
 
-// Condition in if (alias for expr)
-test : expr ;
+global_stmt: GLOBAL NAME (COMMA NAME)*;
+
+return_stmt: RETURN expr?;
+
+expr_stmt: expr;
 
 // Expressions
 expr
-    : expr (STAR|SLASH) expr                # mulDiv
-    | expr (PLUS|MINUS) expr                # addSub
-    | expr (LT|LTEQ|GT|GTEQ|EQEQ) expr      # comparison
-    | atom                                  # atomExpr
+    : expr DOT NAME                                    #AttributeAccess
+    | expr LPAREN arguments? RPAREN                    #FunctionCall
+    | expr LBRACK expr RBRACK                          #Subscript
+    | MINUS expr                                       #UnaryMinus
+    | expr op=(STAR|SLASH|PERCENT|DOUBLESLASH) expr   #MulDivOp
+    | expr op=(PLUS|MINUS) expr                        #AddSubOp
+    | expr op=(EQEQUAL|NOTEQUAL|LESS|GREATER|LESSEQUAL|GREATEREQUAL) expr #Comparison
+    | NAME                                             #NameExpression
+    | NUMBER                                           #NumberLiteral
+    | STRING                                           #StringLiteral
+    | TRUE                                             #TrueLiteral
+    | FALSE                                            #FalseLiteral
+    | NONE                                             #NoneLiteral
+    | list_literal                                     #ListExpression
+    | dict_literal                                     #DictExpression
+    | LPAREN expr RPAREN                               #ParenExpression
     ;
 
-atom
-    : NAME                                  # name
-    | NUMBER                                # number
-    | STRING                                # string
-    | TRUE                                  # trueLit
-    | FALSE                                 # falseLit
-    | LPAREN expr RPAREN                    # paren
-    | atom DOT NAME                         # attrAccess
-    | atom LBRACK expr RBRACK               # subscript
-    | atom LPAREN arglist? RPAREN           # call
-    | listLiteral                           # list
-    ;
+// Arguments in function calls
+arguments: argument (COMMA argument)*;
 
-listLiteral
-    : LBRACK (expr (COMMA expr)*)? RBRACK
-    ;
+argument: NAME EQUAL expr | expr;
 
-arglist
-    : expr (COMMA expr)*
-    ;
+// List and dict literals
+list_literal: LBRACK (expr (COMMA expr)*)? RBRACK;
 
+dict_literal: LBRACE (dict_pair (COMMA dict_pair)*)? RBRACE;
+
+dict_pair: STRING COLON expr;

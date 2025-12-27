@@ -6,7 +6,7 @@ import compiler.ast.nodes.css.*;
 import compiler.ast.nodes.html.HtmlElementNode;
 import compiler.ast.nodes.jinja.*;
 import compiler.parser.*;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class TemplateAstBuilder extends TemplateParserBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitJinjaExpr(TemplateParser.JinjaExprContext ctx) {
-        String code = ctx.content.getText().trim();
+        String code = ctx.PY_EXPR_CONTENT().getText().trim();
         JinjaExprNode node = new JinjaExprNode(ctx.start.getLine());
         AstNode expr = pythonBuilder.parsePythonCode(code, ctx.start.getLine());
         if (expr != null) node.addChild(expr);
@@ -63,7 +63,7 @@ public class TemplateAstBuilder extends TemplateParserBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitJinjaStmt(TemplateParser.JinjaStmtContext ctx) {
-        String code = ctx.content.getText().trim();
+        String code = ctx.PY_STMT_CONTENT().getText().trim();
         JinjaStmtNode node = new JinjaStmtNode(ctx.start.getLine());
         AstNode stmt = pythonBuilder.parsePythonCode(code, ctx.start.getLine());
         if (stmt != null) node.addChild(stmt);
@@ -71,7 +71,7 @@ public class TemplateAstBuilder extends TemplateParserBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitFullTag(TemplateParser.FullTagContext ctx) {
+    public AstNode visitFullHtmlTag(TemplateParser.FullHtmlTagContext ctx) {
         String tagName = ctx.name.getText();
         HtmlElementNode element = new HtmlElementNode(tagName, ctx.start.getLine());
 
@@ -85,18 +85,16 @@ public class TemplateAstBuilder extends TemplateParserBaseVisitor<AstNode> {
             }
         }
 
-        List<AstNode> content = new ArrayList<>();
-        for (TemplateParser.PartContext part : ctx.part()) {
-            AstNode child = visit(part);
-            if (child != null) content.add(child);
+        for (TemplateParser.HtmlContentContext contentCtx : ctx.htmlContent()) {
+            AstNode child = visit(contentCtx);
+            if (child != null) element.addChild(child);
         }
-        element.addChildren(content);
 
         return element;
     }
 
     @Override
-    public AstNode visitSelfClosingTag(TemplateParser.SelfClosingTagContext ctx) {
+    public AstNode visitSelfClosingHtmlTag(TemplateParser.SelfClosingHtmlTagContext ctx) {
         String tagName = ctx.name.getText();
         HtmlElementNode element = new HtmlElementNode(tagName, ctx.start.getLine());
 
@@ -111,25 +109,19 @@ public class TemplateAstBuilder extends TemplateParserBaseVisitor<AstNode> {
         }
 
         return element;
+    }
+
+    @Override
+    public AstNode visitHtmlText(TemplateParser.HtmlTextContext ctx) {
+        String text = ctx.getText();
+        return new TextNode(text, ctx.start.getLine());
     }
 
     @Override
     public AstNode visitStyleTag(TemplateParser.StyleTagContext ctx) {
         CssStylesheetNode stylesheet = new CssStylesheetNode(ctx.start.getLine());
-
-        TemplateParser.StyleContentContext raw = ctx.cssContent;
-
-        StringBuilder cssContent = new StringBuilder();
-
-        if (raw != null) {
-            cssContent.append(raw.getText());
-        }
-
-        String css = cssContent.toString().trim();
-        if (!css.isEmpty()) {
-            parseCssRules(css, ctx.start.getLine(), stylesheet);
-        }
-
+        String css = ctx.CSS_CONTENT().getText().trim();
+        if (!css.isEmpty()) parseCssRules(css, ctx.start.getLine(), stylesheet);
         return stylesheet;
     }
 
