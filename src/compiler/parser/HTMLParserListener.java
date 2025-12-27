@@ -10,49 +10,107 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface HTMLParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by the {@code fullHtmlTag}
-	 * labeled alternative in {@link HTMLParser#htmlElement}.
+	 * Enter a parse tree produced by {@link HTMLParser#html_document}.
 	 * @param ctx the parse tree
 	 */
-	void enterFullHtmlTag(HTMLParser.FullHtmlTagContext ctx);
+	void enterHtml_document(HTMLParser.Html_documentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code fullHtmlTag}
-	 * labeled alternative in {@link HTMLParser#htmlElement}.
+	 * Exit a parse tree produced by {@link HTMLParser#html_document}.
 	 * @param ctx the parse tree
 	 */
-	void exitFullHtmlTag(HTMLParser.FullHtmlTagContext ctx);
+	void exitHtml_document(HTMLParser.Html_documentContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code selfClosingHtmlTag}
-	 * labeled alternative in {@link HTMLParser#htmlElement}.
+	 * Enter a parse tree produced by {@link HTMLParser#doctype}.
 	 * @param ctx the parse tree
 	 */
-	void enterSelfClosingHtmlTag(HTMLParser.SelfClosingHtmlTagContext ctx);
+	void enterDoctype(HTMLParser.DoctypeContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code selfClosingHtmlTag}
-	 * labeled alternative in {@link HTMLParser#htmlElement}.
+	 * Exit a parse tree produced by {@link HTMLParser#doctype}.
 	 * @param ctx the parse tree
 	 */
-	void exitSelfClosingHtmlTag(HTMLParser.SelfClosingHtmlTagContext ctx);
+	void exitDoctype(HTMLParser.DoctypeContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code htmlText}
-	 * labeled alternative in {@link HTMLParser#htmlContent}.
+	 * Enter a parse tree produced by the {@code HtmlElementContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
 	 * @param ctx the parse tree
 	 */
-	void enterHtmlText(HTMLParser.HtmlTextContext ctx);
+	void enterHtmlElementContent(HTMLParser.HtmlElementContentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code htmlText}
-	 * labeled alternative in {@link HTMLParser#htmlContent}.
+	 * Exit a parse tree produced by the {@code HtmlElementContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
 	 * @param ctx the parse tree
 	 */
-	void exitHtmlText(HTMLParser.HtmlTextContext ctx);
+	void exitHtmlElementContent(HTMLParser.HtmlElementContentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HTMLParser#attributes}.
+	 * Enter a parse tree produced by the {@code HtmlTextContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttributes(HTMLParser.AttributesContext ctx);
+	void enterHtmlTextContent(HTMLParser.HtmlTextContentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HTMLParser#attributes}.
+	 * Exit a parse tree produced by the {@code HtmlTextContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttributes(HTMLParser.AttributesContext ctx);
+	void exitHtmlTextContent(HTMLParser.HtmlTextContentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code HtmlCommentContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlCommentContent(HTMLParser.HtmlCommentContentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HtmlCommentContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlCommentContent(HTMLParser.HtmlCommentContentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NormalHtmlElement}
+	 * labeled alternative in {@link HTMLParser#html_element}.
+	 * @param ctx the parse tree
+	 */
+	void enterNormalHtmlElement(HTMLParser.NormalHtmlElementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NormalHtmlElement}
+	 * labeled alternative in {@link HTMLParser#html_element}.
+	 * @param ctx the parse tree
+	 */
+	void exitNormalHtmlElement(HTMLParser.NormalHtmlElementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code SelfClosingHtmlElement}
+	 * labeled alternative in {@link HTMLParser#html_element}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelfClosingHtmlElement(HTMLParser.SelfClosingHtmlElementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SelfClosingHtmlElement}
+	 * labeled alternative in {@link HTMLParser#html_element}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelfClosingHtmlElement(HTMLParser.SelfClosingHtmlElementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code HtmlAttributeWithValue}
+	 * labeled alternative in {@link HTMLParser#html_attribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlAttributeWithValue(HTMLParser.HtmlAttributeWithValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HtmlAttributeWithValue}
+	 * labeled alternative in {@link HTMLParser#html_attribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlAttributeWithValue(HTMLParser.HtmlAttributeWithValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code HtmlAttributeNoValue}
+	 * labeled alternative in {@link HTMLParser#html_attribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlAttributeNoValue(HTMLParser.HtmlAttributeNoValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HtmlAttributeNoValue}
+	 * labeled alternative in {@link HTMLParser#html_attribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlAttributeNoValue(HTMLParser.HtmlAttributeNoValueContext ctx);
 }

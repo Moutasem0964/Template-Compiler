@@ -1,5 +1,8 @@
 lexer grammar CSSLexer;
 
+@header {
+    package compiler.parser;
+}
 // CSS specific tokens
 AT_IMPORT: '@import';
 AT_MEDIA: '@media';

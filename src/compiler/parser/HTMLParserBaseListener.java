@@ -19,49 +19,109 @@ public class HTMLParserBaseListener implements HTMLParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFullHtmlTag(HTMLParser.FullHtmlTagContext ctx) { }
+	@Override public void enterHtml_document(HTMLParser.Html_documentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFullHtmlTag(HTMLParser.FullHtmlTagContext ctx) { }
+	@Override public void exitHtml_document(HTMLParser.Html_documentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelfClosingHtmlTag(HTMLParser.SelfClosingHtmlTagContext ctx) { }
+	@Override public void enterDoctype(HTMLParser.DoctypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelfClosingHtmlTag(HTMLParser.SelfClosingHtmlTagContext ctx) { }
+	@Override public void exitDoctype(HTMLParser.DoctypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHtmlText(HTMLParser.HtmlTextContext ctx) { }
+	@Override public void enterHtmlElementContent(HTMLParser.HtmlElementContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHtmlText(HTMLParser.HtmlTextContext ctx) { }
+	@Override public void exitHtmlElementContent(HTMLParser.HtmlElementContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttributes(HTMLParser.AttributesContext ctx) { }
+	@Override public void enterHtmlTextContent(HTMLParser.HtmlTextContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttributes(HTMLParser.AttributesContext ctx) { }
+	@Override public void exitHtmlTextContent(HTMLParser.HtmlTextContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHtmlCommentContent(HTMLParser.HtmlCommentContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlCommentContent(HTMLParser.HtmlCommentContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNormalHtmlElement(HTMLParser.NormalHtmlElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNormalHtmlElement(HTMLParser.NormalHtmlElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSelfClosingHtmlElement(HTMLParser.SelfClosingHtmlElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSelfClosingHtmlElement(HTMLParser.SelfClosingHtmlElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHtmlAttributeWithValue(HTMLParser.HtmlAttributeWithValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlAttributeWithValue(HTMLParser.HtmlAttributeWithValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHtmlAttributeNoValue(HTMLParser.HtmlAttributeNoValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlAttributeNoValue(HTMLParser.HtmlAttributeNoValueContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

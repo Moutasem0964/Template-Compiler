@@ -1,5 +1,10 @@
 parser grammar CSSParser;
 
+
+@header {
+    package compiler.parser;
+}
+
 options {
     tokenVocab = CSSLexer;
 }

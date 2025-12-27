@@ -1,5 +1,10 @@
 lexer grammar HTMLLexer;
 
+
+@header {
+    package compiler.parser;
+}
+
 // DOCTYPE
 HTML_DOCTYPE: '<!DOCTYPE' .*? '>';
 

@@ -1,5 +1,11 @@
 parser grammar TemplateParser;
 
+
+@header {
+    package compiler.parser;
+}
+
+
 options {
     tokenVocab = TemplateLexer;
 }

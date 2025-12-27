@@ -1,5 +1,10 @@
 lexer grammar PythonSubsetLexer;
 
+
+@header {
+    package compiler.parser;
+}
+
 // Keywords
 DEF: 'def';
 IF: 'if';

@@ -1,5 +1,10 @@
 parser grammar HTMLParser;
 
+
+@header {
+    package compiler.parser;
+}
+
 options {
     tokenVocab = HTMLLexer;
 }

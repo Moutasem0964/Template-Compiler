@@ -1,5 +1,10 @@
 lexer grammar TemplateLexer;
 
+
+@header {
+    package compiler.parser;
+}
+
 // Jinja2 control structures
 JINJA_BLOCK_START: '{%' -> pushMode(JINJA_MODE);
 JINJA_VAR_START: '{{' -> pushMode(JINJA_MODE);

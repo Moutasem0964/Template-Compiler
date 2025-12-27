@@ -20,42 +20,91 @@ public class PythonSubsetParserBaseVisitor<T> extends AbstractParseTreeVisitor<T
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProgram(PythonSubsetParser.ProgramContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFile_input(PythonSubsetParser.File_inputContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSimple(PythonSubsetParser.SimpleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitImportStatement(PythonSubsetParser.ImportStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitCompound(PythonSubsetParser.CompoundContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFromImportStatement(PythonSubsetParser.FromImportStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitImportRule(PythonSubsetParser.ImportRuleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFunctionDefinition(PythonSubsetParser.FunctionDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDecorated(PythonSubsetParser.DecoratedContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIfStatement(PythonSubsetParser.IfStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitImportStmt(PythonSubsetParser.ImportStmtContext ctx) { return visitChildren(ctx); }
+	@Override public T visitForStatement(PythonSubsetParser.ForStatementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAssignStatement(PythonSubsetParser.AssignStatementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpressionStatement(PythonSubsetParser.ExpressionStatementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitGlobalStatement(PythonSubsetParser.GlobalStatementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitReturnStatement(PythonSubsetParser.ReturnStatementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitImport_stmt(PythonSubsetParser.Import_stmtContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitFrom_import_stmt(PythonSubsetParser.From_import_stmtContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitFunction_def(PythonSubsetParser.Function_defContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -69,70 +118,14 @@ public class PythonSubsetParserBaseVisitor<T> extends AbstractParseTreeVisitor<T
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExprStmt(PythonSubsetParser.ExprStmtContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParameters(PythonSubsetParser.ParametersContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssign(PythonSubsetParser.AssignContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitGlobalAssign(PythonSubsetParser.GlobalAssignContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitIfRule(PythonSubsetParser.IfRuleContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitForRule(PythonSubsetParser.ForRuleContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitDefRule(PythonSubsetParser.DefRuleContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitDefStmt(PythonSubsetParser.DefStmtContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitParams(PythonSubsetParser.ParamsContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitIfStmt(PythonSubsetParser.IfStmtContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitForStmt(PythonSubsetParser.ForStmtContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParameter(PythonSubsetParser.ParameterContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -146,77 +139,98 @@ public class PythonSubsetParserBaseVisitor<T> extends AbstractParseTreeVisitor<T
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTest(PythonSubsetParser.TestContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitComparison(PythonSubsetParser.ComparisonContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIf_stmt(PythonSubsetParser.If_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAtomExpr(PythonSubsetParser.AtomExprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFor_stmt(PythonSubsetParser.For_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAddSub(PythonSubsetParser.AddSubContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssign_stmt(PythonSubsetParser.Assign_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMulDiv(PythonSubsetParser.MulDivContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGlobal_stmt(PythonSubsetParser.Global_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitCall(PythonSubsetParser.CallContext ctx) { return visitChildren(ctx); }
+	@Override public T visitReturn_stmt(PythonSubsetParser.Return_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNumber(PythonSubsetParser.NumberContext ctx) { return visitChildren(ctx); }
+	@Override public T visitExpr_stmt(PythonSubsetParser.Expr_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTrueLit(PythonSubsetParser.TrueLitContext ctx) { return visitChildren(ctx); }
+	@Override public T visitMulDivOp(PythonSubsetParser.MulDivOpContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParen(PythonSubsetParser.ParenContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDictExpression(PythonSubsetParser.DictExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitString(PythonSubsetParser.StringContext ctx) { return visitChildren(ctx); }
+	@Override public T visitNameExpression(PythonSubsetParser.NameExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAttrAccess(PythonSubsetParser.AttrAccessContext ctx) { return visitChildren(ctx); }
+	@Override public T visitListExpression(PythonSubsetParser.ListExpressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAddSubOp(PythonSubsetParser.AddSubOpContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitUnaryMinus(PythonSubsetParser.UnaryMinusContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNoneLiteral(PythonSubsetParser.NoneLiteralContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -230,47 +244,89 @@ public class PythonSubsetParserBaseVisitor<T> extends AbstractParseTreeVisitor<T
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFalseLit(PythonSubsetParser.FalseLitContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAttributeAccess(PythonSubsetParser.AttributeAccessContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitName(PythonSubsetParser.NameContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFalseLiteral(PythonSubsetParser.FalseLiteralContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDict(PythonSubsetParser.DictContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStringLiteral(PythonSubsetParser.StringLiteralContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitList(PythonSubsetParser.ListContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTrueLiteral(PythonSubsetParser.TrueLiteralContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitListLiteral(PythonSubsetParser.ListLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitComparison(PythonSubsetParser.ComparisonContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDictLiteral(PythonSubsetParser.DictLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParenExpression(PythonSubsetParser.ParenExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArglist(PythonSubsetParser.ArglistContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFunctionCall(PythonSubsetParser.FunctionCallContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNumberLiteral(PythonSubsetParser.NumberLiteralContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArguments(PythonSubsetParser.ArgumentsContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArgument(PythonSubsetParser.ArgumentContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitList_literal(PythonSubsetParser.List_literalContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDict_literal(PythonSubsetParser.Dict_literalContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDict_pair(PythonSubsetParser.Dict_pairContext ctx) { return visitChildren(ctx); }
 }

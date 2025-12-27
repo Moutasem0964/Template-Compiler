@@ -1,5 +1,10 @@
 parser grammar PythonSubsetParser;
 
+
+@header {
+    package compiler.parser;
+}
+
 options {
     tokenVocab = PythonSubsetLexer;
 }

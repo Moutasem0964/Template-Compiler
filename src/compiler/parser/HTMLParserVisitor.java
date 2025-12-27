@@ -13,30 +13,64 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface HTMLParserVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code fullHtmlTag}
-	 * labeled alternative in {@link HTMLParser#htmlElement}.
+	 * Visit a parse tree produced by {@link HTMLParser#html_document}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFullHtmlTag(HTMLParser.FullHtmlTagContext ctx);
+	T visitHtml_document(HTMLParser.Html_documentContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code selfClosingHtmlTag}
-	 * labeled alternative in {@link HTMLParser#htmlElement}.
+	 * Visit a parse tree produced by {@link HTMLParser#doctype}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSelfClosingHtmlTag(HTMLParser.SelfClosingHtmlTagContext ctx);
+	T visitDoctype(HTMLParser.DoctypeContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code htmlText}
-	 * labeled alternative in {@link HTMLParser#htmlContent}.
+	 * Visit a parse tree produced by the {@code HtmlElementContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHtmlText(HTMLParser.HtmlTextContext ctx);
+	T visitHtmlElementContent(HTMLParser.HtmlElementContentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link HTMLParser#attributes}.
+	 * Visit a parse tree produced by the {@code HtmlTextContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAttributes(HTMLParser.AttributesContext ctx);
+	T visitHtmlTextContent(HTMLParser.HtmlTextContentContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code HtmlCommentContent}
+	 * labeled alternative in {@link HTMLParser#html_content}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlCommentContent(HTMLParser.HtmlCommentContentContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NormalHtmlElement}
+	 * labeled alternative in {@link HTMLParser#html_element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNormalHtmlElement(HTMLParser.NormalHtmlElementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SelfClosingHtmlElement}
+	 * labeled alternative in {@link HTMLParser#html_element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSelfClosingHtmlElement(HTMLParser.SelfClosingHtmlElementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code HtmlAttributeWithValue}
+	 * labeled alternative in {@link HTMLParser#html_attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlAttributeWithValue(HTMLParser.HtmlAttributeWithValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code HtmlAttributeNoValue}
+	 * labeled alternative in {@link HTMLParser#html_attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlAttributeNoValue(HTMLParser.HtmlAttributeNoValueContext ctx);
 }

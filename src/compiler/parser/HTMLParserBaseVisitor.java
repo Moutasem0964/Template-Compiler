@@ -20,26 +20,61 @@ public class HTMLParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFullHtmlTag(HTMLParser.FullHtmlTagContext ctx) { return visitChildren(ctx); }
+	@Override public T visitHtml_document(HTMLParser.Html_documentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSelfClosingHtmlTag(HTMLParser.SelfClosingHtmlTagContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDoctype(HTMLParser.DoctypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitHtmlText(HTMLParser.HtmlTextContext ctx) { return visitChildren(ctx); }
+	@Override public T visitHtmlElementContent(HTMLParser.HtmlElementContentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAttributes(HTMLParser.AttributesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitHtmlTextContent(HTMLParser.HtmlTextContentContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitHtmlCommentContent(HTMLParser.HtmlCommentContentContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNormalHtmlElement(HTMLParser.NormalHtmlElementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSelfClosingHtmlElement(HTMLParser.SelfClosingHtmlElementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitHtmlAttributeWithValue(HTMLParser.HtmlAttributeWithValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitHtmlAttributeNoValue(HTMLParser.HtmlAttributeNoValueContext ctx) { return visitChildren(ctx); }
 }
