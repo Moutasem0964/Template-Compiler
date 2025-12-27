@@ -103,18 +103,6 @@ public class CSSParserBaseListener implements CSSParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDescendantCombinator(CSSParser.DescendantCombinatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDescendantCombinator(CSSParser.DescendantCombinatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterChildCombinator(CSSParser.ChildCombinatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -146,6 +134,18 @@ public class CSSParserBaseListener implements CSSParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGeneralSiblingCombinator(CSSParser.GeneralSiblingCombinatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDescendantCombinator(CSSParser.DescendantCombinatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDescendantCombinator(CSSParser.DescendantCombinatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -307,6 +307,18 @@ public class CSSParserBaseListener implements CSSParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNumberOnlyValue(CSSParser.NumberOnlyValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumberOnlyValue(CSSParser.NumberOnlyValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterColorValue(CSSParser.ColorValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -362,6 +374,30 @@ public class CSSParserBaseListener implements CSSParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCommaValue(CSSParser.CommaValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterImportantValue(CSSParser.ImportantValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImportantValue(CSSParser.ImportantValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterColonValue(CSSParser.ColonValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColonValue(CSSParser.ColonValueContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

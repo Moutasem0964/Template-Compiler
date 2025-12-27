@@ -235,6 +235,18 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSmall_stmt(PythonSubsetParser.Small_stmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSmall_stmt(PythonSubsetParser.Small_stmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIf_stmt(PythonSubsetParser.If_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -314,6 +326,18 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMulDivOp(PythonSubsetParser.MulDivOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterListComprehensionExpression(PythonSubsetParser.ListComprehensionExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitListComprehensionExpression(PythonSubsetParser.ListComprehensionExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -554,6 +578,18 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDict_pair(PythonSubsetParser.Dict_pairContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterList_comprehension(PythonSubsetParser.List_comprehensionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitList_comprehension(PythonSubsetParser.List_comprehensionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

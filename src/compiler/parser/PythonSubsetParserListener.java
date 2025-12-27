@@ -208,6 +208,16 @@ public interface PythonSubsetParserListener extends ParseTreeListener {
 	 */
 	void exitSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PythonSubsetParser#small_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterSmall_stmt(PythonSubsetParser.Small_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PythonSubsetParser#small_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitSmall_stmt(PythonSubsetParser.Small_stmtContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PythonSubsetParser#if_stmt}.
 	 * @param ctx the parse tree
 	 */
@@ -279,6 +289,18 @@ public interface PythonSubsetParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMulDivOp(PythonSubsetParser.MulDivOpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ListComprehensionExpression}
+	 * labeled alternative in {@link PythonSubsetParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterListComprehensionExpression(PythonSubsetParser.ListComprehensionExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ListComprehensionExpression}
+	 * labeled alternative in {@link PythonSubsetParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitListComprehensionExpression(PythonSubsetParser.ListComprehensionExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code DictExpression}
 	 * labeled alternative in {@link PythonSubsetParser#expr}.
@@ -509,4 +531,14 @@ public interface PythonSubsetParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDict_pair(PythonSubsetParser.Dict_pairContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PythonSubsetParser#list_comprehension}.
+	 * @param ctx the parse tree
+	 */
+	void enterList_comprehension(PythonSubsetParser.List_comprehensionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PythonSubsetParser#list_comprehension}.
+	 * @param ctx the parse tree
+	 */
+	void exitList_comprehension(PythonSubsetParser.List_comprehensionContext ctx);
 }

@@ -21,37 +21,37 @@ public interface CSSParserListener extends ParseTreeListener {
 	void exitStylesheet(CSSParser.StylesheetContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code StyleRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 */
 	void enterStyleRule(CSSParser.StyleRuleContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code StyleRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 */
 	void exitStyleRule(CSSParser.StyleRuleContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ImportRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 */
 	void enterImportRule(CSSParser.ImportRuleContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code ImportRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 */
 	void exitImportRule(CSSParser.ImportRuleContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MediaRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 */
 	void enterMediaRule(CSSParser.MediaRuleContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code MediaRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 */
 	void exitMediaRule(CSSParser.MediaRuleContext ctx);
@@ -90,18 +90,6 @@ public interface CSSParserListener extends ParseTreeListener {
 	 */
 	void exitSimpleSelectorRule(CSSParser.SimpleSelectorRuleContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code DescendantCombinator}
-	 * labeled alternative in {@link CSSParser#combinator}.
-	 * @param ctx the parse tree
-	 */
-	void enterDescendantCombinator(CSSParser.DescendantCombinatorContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DescendantCombinator}
-	 * labeled alternative in {@link CSSParser#combinator}.
-	 * @param ctx the parse tree
-	 */
-	void exitDescendantCombinator(CSSParser.DescendantCombinatorContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ChildCombinator}
 	 * labeled alternative in {@link CSSParser#combinator}.
 	 * @param ctx the parse tree
@@ -137,6 +125,18 @@ public interface CSSParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGeneralSiblingCombinator(CSSParser.GeneralSiblingCombinatorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DescendantCombinator}
+	 * labeled alternative in {@link CSSParser#combinator}.
+	 * @param ctx the parse tree
+	 */
+	void enterDescendantCombinator(CSSParser.DescendantCombinatorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DescendantCombinator}
+	 * labeled alternative in {@link CSSParser#combinator}.
+	 * @param ctx the parse tree
+	 */
+	void exitDescendantCombinator(CSSParser.DescendantCombinatorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ElementSelector}
 	 * labeled alternative in {@link CSSParser#simple_selector}.
@@ -288,6 +288,18 @@ public interface CSSParserListener extends ParseTreeListener {
 	 */
 	void exitNumberValue(CSSParser.NumberValueContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code NumberOnlyValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumberOnlyValue(CSSParser.NumberOnlyValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NumberOnlyValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumberOnlyValue(CSSParser.NumberOnlyValueContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ColorValue}
 	 * labeled alternative in {@link CSSParser#value_item}.
 	 * @param ctx the parse tree
@@ -347,4 +359,28 @@ public interface CSSParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCommaValue(CSSParser.CommaValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ImportantValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 */
+	void enterImportantValue(CSSParser.ImportantValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ImportantValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 */
+	void exitImportantValue(CSSParser.ImportantValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ColonValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 */
+	void enterColonValue(CSSParser.ColonValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ColonValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 */
+	void exitColonValue(CSSParser.ColonValueContext ctx);
 }

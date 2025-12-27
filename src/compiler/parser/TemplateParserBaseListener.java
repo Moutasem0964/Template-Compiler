@@ -103,6 +103,18 @@ public class TemplateParserBaseListener implements TemplateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDoctypeContent(TemplateParser.DoctypeContentContext ctx) { }
 	/**
 	 * {@inheritDoc}

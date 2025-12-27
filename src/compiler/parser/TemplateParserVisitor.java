@@ -61,6 +61,13 @@ public interface TemplateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitJinjaCommentContent(TemplateParser.JinjaCommentContentContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code HtmlCommentContent}
+	 * labeled alternative in {@link TemplateParser#content}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code DoctypeContent}
 	 * labeled alternative in {@link TemplateParser#content}.
 	 * @param ctx the parse tree

@@ -20,21 +20,21 @@ public interface CSSParserVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStylesheet(CSSParser.StylesheetContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code StyleRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStyleRule(CSSParser.StyleRuleContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ImportRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitImportRule(CSSParser.ImportRuleContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code MediaRule}
-	 * labeled alternative in {@link CSSParser#rule}.
+	 * labeled alternative in {@link CSSParser#cssRule}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -60,13 +60,6 @@ public interface CSSParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSimpleSelectorRule(CSSParser.SimpleSelectorRuleContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code DescendantCombinator}
-	 * labeled alternative in {@link CSSParser#combinator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDescendantCombinator(CSSParser.DescendantCombinatorContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code ChildCombinator}
 	 * labeled alternative in {@link CSSParser#combinator}.
 	 * @param ctx the parse tree
@@ -87,6 +80,13 @@ public interface CSSParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitGeneralSiblingCombinator(CSSParser.GeneralSiblingCombinatorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code DescendantCombinator}
+	 * labeled alternative in {@link CSSParser#combinator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDescendantCombinator(CSSParser.DescendantCombinatorContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ElementSelector}
 	 * labeled alternative in {@link CSSParser#simple_selector}.
@@ -176,6 +176,13 @@ public interface CSSParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumberValue(CSSParser.NumberValueContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code NumberOnlyValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumberOnlyValue(CSSParser.NumberOnlyValueContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ColorValue}
 	 * labeled alternative in {@link CSSParser#value_item}.
 	 * @param ctx the parse tree
@@ -210,4 +217,18 @@ public interface CSSParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCommaValue(CSSParser.CommaValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ImportantValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImportantValue(CSSParser.ImportantValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ColonValue}
+	 * labeled alternative in {@link CSSParser#value_item}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColonValue(CSSParser.ColonValueContext ctx);
 }

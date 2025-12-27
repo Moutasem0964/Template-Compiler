@@ -10,13 +10,13 @@ options {
 }
 
 // Root rule - a CSS stylesheet
-stylesheet: rule* EOF;
+stylesheet: cssRule* EOF;
 
 // CSS rule: selector { declarations }
-rule
+cssRule
     : selector_group LBRACE declaration* RBRACE    #StyleRule
     | AT_IMPORT STRING SEMICOLON                   #ImportRule
-    | AT_MEDIA media_query LBRACE rule* RBRACE    #MediaRule
+    | AT_MEDIA media_query LBRACE cssRule* RBRACE  #MediaRule
     ;
 
 // Selector groups: selector, selector, ...
@@ -29,10 +29,10 @@ selector
     ;
 
 combinator
-    : WS?                           #DescendantCombinator
-    | GT                            #ChildCombinator
+    : GT                            #ChildCombinator
     | PLUS                          #AdjacentSiblingCombinator
     | TILDE                         #GeneralSiblingCombinator
+    |                               #DescendantCombinator
     ;
 
 simple_selector
@@ -54,18 +54,21 @@ media_query: IDENT (COLON IDENT)?;
 
 // CSS declaration: property: value;
 declaration
-    : IDENT COLON value IMPORTANT? SEMICOLON    #PropertyDeclaration
-    | IDENT COLON value IMPORTANT?              #PropertyDeclarationNoSemicolon
+    : IDENT COLON value SEMICOLON              #PropertyDeclaration
+    | IDENT COLON value                        #PropertyDeclarationNoSemicolon
     ;
 
-// CSS values
+// CSS values (simplified - just collect all tokens until semicolon or close brace)
 value: value_item+;
 
 value_item
     : NUMBER UNIT?           #NumberValue
+    | NUMBER                 #NumberOnlyValue
     | COLOR_HEX              #ColorValue
     | STRING                 #StringValue
     | IDENT                  #IdentValue
     | URL                    #UrlValue
     | COMMA                  #CommaValue
+    | IMPORTANT              #ImportantValue
+    | COLON                  #ColonValue
     ;

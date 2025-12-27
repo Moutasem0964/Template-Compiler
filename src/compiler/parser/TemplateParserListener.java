@@ -92,6 +92,18 @@ public interface TemplateParserListener extends ParseTreeListener {
 	 */
 	void exitJinjaCommentContent(TemplateParser.JinjaCommentContentContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code HtmlCommentContent}
+	 * labeled alternative in {@link TemplateParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HtmlCommentContent}
+	 * labeled alternative in {@link TemplateParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code DoctypeContent}
 	 * labeled alternative in {@link TemplateParser#content}.
 	 * @param ctx the parse tree

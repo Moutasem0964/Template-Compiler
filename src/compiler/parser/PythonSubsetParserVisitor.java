@@ -130,6 +130,12 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#small_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSmall_stmt(PythonSubsetParser.Small_stmtContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PythonSubsetParser#if_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -172,6 +178,13 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMulDivOp(PythonSubsetParser.MulDivOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ListComprehensionExpression}
+	 * labeled alternative in {@link PythonSubsetParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitListComprehensionExpression(PythonSubsetParser.ListComprehensionExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code DictExpression}
 	 * labeled alternative in {@link PythonSubsetParser#expr}.
@@ -307,4 +320,10 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDict_pair(PythonSubsetParser.Dict_pairContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#list_comprehension}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitList_comprehension(PythonSubsetParser.List_comprehensionContext ctx);
 }

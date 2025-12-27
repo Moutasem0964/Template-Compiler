@@ -1,6 +1,7 @@
 lexer grammar TemplateLexer;
 
 
+
 @header {
     package compiler.parser;
 }
@@ -10,10 +11,12 @@ JINJA_BLOCK_START: '{%' -> pushMode(JINJA_MODE);
 JINJA_VAR_START: '{{' -> pushMode(JINJA_MODE);
 JINJA_COMMENT_START: '{#' -> pushMode(COMMENT_MODE);
 
+// HTML Comments
+HTML_COMMENT: '<!--' .*? '-->';
+
 // HTML Tags
 HTML_OPEN: '<' [a-zA-Z][a-zA-Z0-9]* -> pushMode(TAG_MODE);
 HTML_CLOSE: '</' [a-zA-Z][a-zA-Z0-9]* '>';
-HTML_SELF_CLOSE: '/>';
 DOCTYPE: '<!DOCTYPE' .*? '>';
 
 // Text content (anything that's not a tag or Jinja expression)
@@ -72,8 +75,8 @@ TAG_EQUALS: '=';
 TAG_NAME: [a-zA-Z][a-zA-Z0-9_-]*;
 
 TAG_VALUE
-    : '"' (~["\r\n] | '\\"')* '"'
-    | '\'' (~['\r\n] | '\\\'')* '\''
+    : '"' (~["])* '"'
+    | '\'' (~['])* '\''
     ;
 
 // Jinja expressions in attributes

@@ -1,8 +1,10 @@
 lexer grammar CSSLexer;
 
+
 @header {
     package compiler.parser;
 }
+
 // CSS specific tokens
 AT_IMPORT: '@import';
 AT_MEDIA: '@media';
@@ -17,7 +19,7 @@ PSEUDO: ':' [a-zA-Z][a-zA-Z0-9_-]* ('(' [^)]* ')')?;
 IMPORTANT: '!important';
 
 // Structural
-LBRACE: '{';
+LBRACE: '{' -> pushMode(DECLARATION_MODE);
 RBRACE: '}';
 LPAREN: '(';
 RPAREN: ')';
@@ -31,11 +33,26 @@ PLUS: '+';
 TILDE: '~';
 STAR: '*';
 
-// Values
-STRING
-    : '"' (~["\r\n] | '\\' .)* '"'
-    | '\'' (~['\r\n] | '\\' .)* '\''
-    ;
+// Identifiers (property names, element names, etc.)
+IDENT: [a-zA-Z_-][a-zA-Z0-9_-]*;
+
+// Whitespace
+WS: [ \t\r\n]+ -> skip;
+
+// Comments
+COMMENT: '/*' .*? '*/' -> skip;
+
+// === DECLARATION MODE (inside {}) ===
+mode DECLARATION_MODE;
+
+DECL_RBRACE: '}' -> popMode, type(RBRACE);
+DECL_SEMICOLON: ';' -> type(SEMICOLON);
+DECL_COLON: ':' -> type(COLON);
+DECL_IMPORTANT: '!important' -> type(IMPORTANT);
+DECL_COMMA: ',' -> type(COMMA);
+
+// Values - in declaration mode, # is a color not a selector
+COLOR_HEX: '#' [0-9a-fA-F]+;
 
 // Numbers with units
 NUMBER: [0-9]+ ('.' [0-9]+)?;
@@ -45,17 +62,20 @@ UNIT
     | 'pc' | 'ex' | 'ch' | 'vmin' | 'vmax' | 's' | 'ms' | 'deg' | 'rad'
     ;
 
-// Colors
-COLOR_HEX: '#' [0-9a-fA-F]+;
-
-// Identifiers (property names, values, etc.)
-IDENT: [a-zA-Z_-][a-zA-Z0-9_-]*;
+// Strings
+STRING
+    : '"' (~["\r\n] | '\\' .)* '"'
+    | '\'' (~['\r\n] | '\\' .)* '\''
+    ;
 
 // URLs
 URL: 'url(' [ \t]* STRING [ \t]* ')';
 
-// Whitespace
-WS: [ \t\r\n]+ -> skip;
+// Property names and values
+DECL_IDENT: [a-zA-Z_-][a-zA-Z0-9_-]* -> type(IDENT);
 
-// Comments
-COMMENT: '/*' .*? '*/' -> skip;
+// Whitespace in declarations
+DECL_WS: [ \t\r\n]+ -> skip;
+
+// Comments in declarations
+DECL_COMMENT: '/*' .*? '*/' -> skip;

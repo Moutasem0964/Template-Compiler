@@ -1,10 +1,10 @@
 parser grammar TemplateParser;
 
 
+
 @header {
     package compiler.parser;
 }
-
 
 options {
     tokenVocab = TemplateLexer;
@@ -21,6 +21,7 @@ content
     | jinja_for         #JinjaForContent
     | jinja_if          #JinjaIfContent
     | jinja_comment     #JinjaCommentContent
+    | HTML_COMMENT      #HtmlCommentContent
     | DOCTYPE           #DoctypeContent
     ;
 

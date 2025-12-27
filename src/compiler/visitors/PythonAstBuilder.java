@@ -208,8 +208,10 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
     @Override
     public AstNode visitSuite(SuiteContext ctx) {
         if (ctx.simple_stmt() != null) {
-            return visit(ctx.simple_stmt().stmt());
+            // Simple statement on same line - visit the small_stmt inside
+            return visit(ctx.simple_stmt().small_stmt());
         } else {
+            // Block of statements
             AstNode suite = new AstNode("Suite", ctx.getStart().getLine()) {
                 @Override
                 public <R> R accept(compiler.ast.visitors.AstVisitor<R> visitor) {
@@ -226,6 +228,17 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
 
             return suite;
         }
+    }
+
+    @Override
+    public AstNode visitSimple_stmt(Simple_stmtContext ctx) {
+        return visit(ctx.small_stmt());
+    }
+
+    @Override
+    public AstNode visitSmall_stmt(Small_stmtContext ctx) {
+        // Small_stmt wraps one of: expr_stmt, return_stmt, assign_stmt, global_stmt
+        return visitChildren(ctx);
     }
 
     // ========== EXPRESSIONS ==========
@@ -441,9 +454,14 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
 
         if (ctx.dict_literal().dict_pair() != null) {
             for (Dict_pairContext pair : ctx.dict_literal().dict_pair()) {
-                String key = pair.STRING().getText();
-                key = key.substring(1, key.length() - 1);
-                dictNode.addChild(new StringNode(key, line));
+                // Handle both STRING and NAME keys
+                if (pair.STRING() != null) {
+                    String key = pair.STRING().getText();
+                    key = key.substring(1, key.length() - 1);
+                    dictNode.addChild(new StringNode(key, line));
+                } else if (pair.NAME() != null) {
+                    dictNode.addChild(new NameNode(pair.NAME().getText(), line));
+                }
 
                 AstNode value = visit(pair.expr());
                 if (value != null) {
@@ -453,5 +471,54 @@ public class PythonAstBuilder extends PythonSubsetParserBaseVisitor<AstNode> {
         }
 
         return dictNode;
+    }
+
+    @Override
+    public AstNode visitListComprehensionExpression(ListComprehensionExpressionContext ctx) {
+        int line = ctx.getStart().getLine();
+        AstNode listCompNode = new AstNode("ListComprehension", line) {
+            @Override
+            public <R> R accept(compiler.ast.visitors.AstVisitor<R> visitor) {
+                return null;
+            }
+        };
+
+        return visit(ctx.list_comprehension());
+    }
+
+    @Override
+    public AstNode visitList_comprehension(List_comprehensionContext ctx) {
+        int line = ctx.getStart().getLine();
+        AstNode listCompNode = new AstNode("ListComp", line) {
+            @Override
+            public <R> R accept(compiler.ast.visitors.AstVisitor<R> visitor) {
+                return null;
+            }
+        };
+
+        // Add expression
+        AstNode expr = visit(ctx.expr(0));
+        if (expr != null) {
+            listCompNode.addChild(expr);
+        }
+
+        // Add loop variable
+        listCompNode.addChild(new NameNode(ctx.NAME().getText(), line));
+
+        // Add iterable
+        AstNode iterable = visit(ctx.expr(1));
+        if (iterable != null) {
+            listCompNode.addChild(iterable);
+        }
+
+        // Add condition if exists
+        if (ctx.IF() != null && ctx.expr().size() > 2) {
+            AstNode condition = visit(ctx.expr(2));
+            if (condition != null) {
+                listCompNode.addChild(condition);
+            }
+        }
+
+        return listCompNode;
     }
 }

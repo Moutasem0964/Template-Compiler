@@ -12,7 +12,7 @@ public class CssAstBuilder extends CSSParserBaseVisitor<AstNode> {
         int line = ctx.getStart().getLine();
         CssStylesheetNode stylesheet = new CssStylesheetNode(line);
 
-        for (RuleContext rule : ctx.rule_()) {
+        for (CssRuleContext rule : ctx.cssRule()) {
             AstNode ruleNode = visit(rule);
             if (ruleNode != null) {
                 stylesheet.addChild(ruleNode);
@@ -64,7 +64,7 @@ public class CssAstBuilder extends CSSParserBaseVisitor<AstNode> {
         CssRuleNode mediaNode = new CssRuleNode(mediaQuery, line);
 
         // Add nested rules
-        for (RuleContext rule : ctx.rule_()) {
+        for (CssRuleContext rule : ctx.cssRule()) {
             AstNode ruleNode = visit(rule);
             if (ruleNode != null) {
                 mediaNode.addChild(ruleNode);
@@ -81,10 +81,6 @@ public class CssAstBuilder extends CSSParserBaseVisitor<AstNode> {
         String property = ctx.IDENT().getText();
         String value = buildValueString(ctx.value());
 
-        if (ctx.IMPORTANT() != null) {
-            value += " !important";
-        }
-
         return new CssDeclarationNode(property, value, line);
     }
 
@@ -94,10 +90,6 @@ public class CssAstBuilder extends CSSParserBaseVisitor<AstNode> {
 
         String property = ctx.IDENT().getText();
         String value = buildValueString(ctx.value());
-
-        if (ctx.IMPORTANT() != null) {
-            value += " !important";
-        }
 
         return new CssDeclarationNode(property, value, line);
     }
@@ -198,6 +190,9 @@ public class CssAstBuilder extends CSSParserBaseVisitor<AstNode> {
                     sb.append(num.UNIT().getText());
                 }
                 sb.append(" ");
+            } else if (item instanceof NumberOnlyValueContext) {
+                NumberOnlyValueContext num = (NumberOnlyValueContext) item;
+                sb.append(num.NUMBER().getText()).append(" ");
             } else if (item instanceof ColorValueContext) {
                 ColorValueContext color = (ColorValueContext) item;
                 sb.append(color.COLOR_HEX().getText()).append(" ");
@@ -212,6 +207,10 @@ public class CssAstBuilder extends CSSParserBaseVisitor<AstNode> {
                 sb.append(url.URL().getText()).append(" ");
             } else if (item instanceof CommaValueContext) {
                 sb.append(", ");
+            } else if (item instanceof ImportantValueContext) {
+                sb.append("!important ");
+            } else if (item instanceof ColonValueContext) {
+                sb.append(":");
             }
         }
 

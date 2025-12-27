@@ -161,7 +161,7 @@ public class TemplateAstBuilder extends TemplateParserBaseVisitor<AstNode> {
         int line = ctx.getStart().getLine();
         JinjaExprNode jinjaExpr = new JinjaExprNode(line);
 
-        // Add the expression
+        // Add the expression (singular)
         AstNode expr = visit(ctx.jinja_expr());
         if (expr != null) {
             jinjaExpr.addChild(expr);

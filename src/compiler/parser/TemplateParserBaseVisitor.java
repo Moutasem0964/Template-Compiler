@@ -69,6 +69,13 @@ public class TemplateParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitDoctypeContent(TemplateParser.DoctypeContentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
