@@ -127,6 +127,18 @@ public class TemplateParserBaseListener implements TemplateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCloseTagContent(TemplateParser.CloseTagContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCloseTagContent(TemplateParser.CloseTagContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNormalElement(TemplateParser.NormalElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -146,6 +158,18 @@ public class TemplateParserBaseListener implements TemplateParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSelfClosingElement(TemplateParser.SelfClosingElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOpenOnlyElement(TemplateParser.OpenOnlyElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpenOnlyElement(TemplateParser.OpenOnlyElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

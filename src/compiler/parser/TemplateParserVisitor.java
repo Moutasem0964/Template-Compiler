@@ -75,6 +75,13 @@ public interface TemplateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDoctypeContent(TemplateParser.DoctypeContentContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code CloseTagContent}
+	 * labeled alternative in {@link TemplateParser#content}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCloseTagContent(TemplateParser.CloseTagContentContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NormalElement}
 	 * labeled alternative in {@link TemplateParser#html_element}.
 	 * @param ctx the parse tree
@@ -88,6 +95,13 @@ public interface TemplateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSelfClosingElement(TemplateParser.SelfClosingElementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code OpenOnlyElement}
+	 * labeled alternative in {@link TemplateParser#html_element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpenOnlyElement(TemplateParser.OpenOnlyElementContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code StaticAttribute}
 	 * labeled alternative in {@link TemplateParser#attribute}.

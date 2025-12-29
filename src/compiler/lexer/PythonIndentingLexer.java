@@ -1,86 +1,145 @@
 package compiler.lexer;
 
 import compiler.parser.PythonSubsetLexer;
-import compiler.parser.PythonSubsetParser;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
-public class PythonIndentingLexer extends PythonSubsetLexer {
+public class PythonIndentingLexer extends Lexer {
 
+    private final PythonSubsetLexer lexer;
     private final Stack<Integer> indentStack = new Stack<>();
     private final Queue<Token> tokenQueue = new LinkedList<>();
-
-    private static final int INDENT_TYPE = PythonSubsetParser.INDENT;
-    private static final int DEDENT_TYPE = PythonSubsetParser.DEDENT;
+    private Token lastToken = null;
+    private boolean atLineStart = true;
 
     public PythonIndentingLexer(CharStream input) {
         super(input);
-        indentStack.push(0); // base indentation level
+        this.lexer = new PythonSubsetLexer(input);
+        indentStack.push(0);
     }
 
     @Override
     public Token nextToken() {
-        if (!tokenQueue.isEmpty()) return tokenQueue.poll();
+        // Return queued tokens first
+        if (!tokenQueue.isEmpty()) {
+            return tokenQueue.poll();
+        }
 
-        Token token = super.nextToken();
+        // Get next token from underlying lexer
+        Token token = lexer.nextToken();
 
-        if (token.getType() == PythonSubsetLexer.EOF) {
-            emitDedentsToBase(token);
-            if (!tokenQueue.isEmpty()) return tokenQueue.poll();
+        // Handle EOF - emit all remaining DEDENTs
+        if (token.getType() == Token.EOF) {
+            // Emit NEWLINE before DEDENTs if last token wasn't NEWLINE
+            if (lastToken != null && lastToken.getType() != PythonSubsetLexer.NEWLINE) {
+                tokenQueue.add(createToken(PythonSubsetLexer.NEWLINE, "\n", token));
+            }
+
+            while (indentStack.size() > 1) {
+                indentStack.pop();
+                tokenQueue.add(createToken(PythonSubsetLexer.DEDENT, "<DEDENT>", token));
+            }
+
+            if (!tokenQueue.isEmpty()) {
+                tokenQueue.add(token);
+                return tokenQueue.poll();
+            }
             return token;
         }
 
+        // Handle NEWLINE - check indentation on next line
         if (token.getType() == PythonSubsetLexer.NEWLINE) {
-            handleNewline(token);
+            atLineStart = true;
+            lastToken = token;
+            return token;
         }
 
-        if (!tokenQueue.isEmpty()) return tokenQueue.poll();
-        return token;
-    }
-
-    private void handleNewline(Token newlineToken) {
-        int start = getCharIndex();
-        int indent = 0;
-
-        while (true) {
-            int la = _input.LA(1);
-            if (la == ' ') { indent++; _input.consume(); }
-            else if (la == '\t') { indent += 4; _input.consume(); }
-            else if (la == '\r' || la == '\n') { _input.consume(); }
-            else break;
+        // Skip hidden channel tokens for indent calculation
+        if (token.getChannel() == Lexer.HIDDEN) {
+            lastToken = token;
+            return token;
         }
-        _input.seek(start);
 
-        int current = indentStack.peek();
+        // Handle indentation at start of line
+        if (atLineStart && token.getType() != PythonSubsetLexer.NEWLINE) {
+            atLineStart = false;
 
-        if (indent > current) {
-            indentStack.push(indent);
-            tokenQueue.add(createSyntheticToken(INDENT_TYPE, newlineToken));
-        } else if (indent < current) {
-            while (indentStack.peek() > indent && indentStack.size() > 1) {
-                indentStack.pop();
-                tokenQueue.add(createSyntheticToken(DEDENT_TYPE, newlineToken));
+            int indent = token.getCharPositionInLine();
+            int currentIndent = indentStack.peek();
+
+            if (indent > currentIndent) {
+                // INDENT
+                indentStack.push(indent);
+                tokenQueue.add(createToken(PythonSubsetLexer.INDENT, "<INDENT>", token));
+                tokenQueue.add(token);
+                return tokenQueue.poll();
+            } else if (indent < currentIndent) {
+                // DEDENT (possibly multiple)
+                while (!indentStack.isEmpty() && indentStack.peek() > indent) {
+                    indentStack.pop();
+                    tokenQueue.add(createToken(PythonSubsetLexer.DEDENT, "<DEDENT>", token));
+                }
+
+                tokenQueue.add(token);
+                return tokenQueue.poll();
             }
         }
-    }
 
-    private void emitDedentsToBase(Token eofToken) {
-        while (indentStack.size() > 1) {
-            indentStack.pop();
-            tokenQueue.add(createSyntheticToken(DEDENT_TYPE, eofToken));
-        }
-    }
-
-    private Token createSyntheticToken(int type, Token original) {
-        CommonToken token = new CommonToken(new Pair<>(_tokenFactorySourcePair.a, _input),
-                type, DEFAULT_TOKEN_CHANNEL, original.getStartIndex(), original.getStopIndex());
-        token.setLine(original.getLine());
-        token.setCharPositionInLine(original.getCharPositionInLine());
-        token.setText("<synthetic:" + getVocabulary().getSymbolicName(type) + ">");
+        lastToken = token;
         return token;
+    }
+
+    private Token createToken(int type, String text, Token original) {
+        CommonToken t = new CommonToken(
+                new Pair<>(lexer, lexer.getInputStream()),
+                type,
+                Lexer.DEFAULT_TOKEN_CHANNEL,
+                original.getStartIndex(),
+                original.getStopIndex()
+        );
+        t.setLine(original.getLine());
+        t.setCharPositionInLine(original.getCharPositionInLine());
+        t.setText(text);
+        return t;
+    }
+
+    @Override
+    public String getGrammarFileName() {
+        return lexer.getGrammarFileName();
+    }
+
+    @Override
+    public String[] getRuleNames() {
+        return lexer.getRuleNames();
+    }
+
+    @Override
+    public String getSerializedATN() {
+        return lexer.getSerializedATN();
+    }
+
+    @Override
+    public String[] getChannelNames() {
+        return lexer.getChannelNames();
+    }
+
+    @Override
+    public String[] getModeNames() {
+        return lexer.getModeNames();
+    }
+
+    @Override
+    public Vocabulary getVocabulary() {
+        return lexer.getVocabulary();
+    }
+
+    @Override
+    public ATN getATN() {
+        return lexer.getATN();
     }
 }

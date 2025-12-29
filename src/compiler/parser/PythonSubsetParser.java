@@ -20,26 +20,33 @@ public class PythonSubsetParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		DEF=1, IF=2, ELIF=3, ELSE=4, FOR=5, IN=6, RETURN=7, IMPORT=8, FROM=9, 
-		AS=10, GLOBAL=11, TRUE=12, FALSE=13, NONE=14, PLUS=15, MINUS=16, STAR=17, 
-		SLASH=18, PERCENT=19, DOUBLESTAR=20, DOUBLESLASH=21, EQUAL=22, PLUSEQUAL=23, 
-		MINUSEQUAL=24, EQEQUAL=25, NOTEQUAL=26, LESS=27, GREATER=28, LESSEQUAL=29, 
-		GREATEREQUAL=30, LPAREN=31, RPAREN=32, LBRACK=33, RBRACK=34, LBRACE=35, 
-		RBRACE=36, COMMA=37, COLON=38, DOT=39, ARROW=40, STRING=41, NUMBER=42, 
-		NAME=43, DECORATOR=44, NEWLINE=45, WS=46, COMMENT=47, INDENT=48, DEDENT=49;
+		AS=10, GLOBAL=11, TRUE=12, FALSE=13, NONE=14, OR=15, AND=16, NOT=17, PLUS=18, 
+		MINUS=19, STAR=20, SLASH=21, PERCENT=22, DOUBLESTAR=23, DOUBLESLASH=24, 
+		EQUAL=25, PLUSEQUAL=26, MINUSEQUAL=27, EQEQUAL=28, NOTEQUAL=29, LESS=30, 
+		GREATER=31, LESSEQUAL=32, GREATEREQUAL=33, LPAREN=34, RPAREN=35, LBRACK=36, 
+		RBRACK=37, LBRACE=38, RBRACE=39, COMMA=40, COLON=41, DOT=42, ARROW=43, 
+		STRING=44, NUMBER=45, NAME=46, DECORATOR=47, NEWLINE=48, INDENT=49, DEDENT=50, 
+		WS=51, COMMENT=52;
 	public static final int
-		RULE_file_input = 0, RULE_stmt = 1, RULE_import_stmt = 2, RULE_from_import_stmt = 3, 
-		RULE_function_def = 4, RULE_decorator = 5, RULE_parameters = 6, RULE_parameter = 7, 
-		RULE_suite = 8, RULE_simple_stmt = 9, RULE_small_stmt = 10, RULE_if_stmt = 11, 
-		RULE_for_stmt = 12, RULE_assign_stmt = 13, RULE_global_stmt = 14, RULE_return_stmt = 15, 
-		RULE_expr_stmt = 16, RULE_expr = 17, RULE_arguments = 18, RULE_argument = 19, 
-		RULE_list_literal = 20, RULE_dict_literal = 21, RULE_dict_pair = 22, RULE_list_comprehension = 23;
+		RULE_file_input = 0, RULE_stmt = 1, RULE_simple_stmt = 2, RULE_small_stmt = 3, 
+		RULE_compound_stmt = 4, RULE_import_stmt = 5, RULE_from_import_stmt = 6, 
+		RULE_import_as_names = 7, RULE_import_as_name = 8, RULE_dotted_name = 9, 
+		RULE_function_def = 10, RULE_decorator = 11, RULE_parameters = 12, RULE_parameter = 13, 
+		RULE_suite = 14, RULE_if_stmt = 15, RULE_for_stmt = 16, RULE_assign_stmt = 17, 
+		RULE_global_stmt = 18, RULE_return_stmt = 19, RULE_expr_stmt = 20, RULE_test = 21, 
+		RULE_or_test = 22, RULE_and_test = 23, RULE_not_test = 24, RULE_comparison = 25, 
+		RULE_comp_op = 26, RULE_expr = 27, RULE_term = 28, RULE_factor = 29, RULE_power = 30, 
+		RULE_atom_expr = 31, RULE_trailer = 32, RULE_atom = 33, RULE_testlist = 34, 
+		RULE_dictorsetmaker = 35, RULE_comp_for = 36, RULE_arguments = 37, RULE_argument = 38;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"file_input", "stmt", "import_stmt", "from_import_stmt", "function_def", 
-			"decorator", "parameters", "parameter", "suite", "simple_stmt", "small_stmt", 
-			"if_stmt", "for_stmt", "assign_stmt", "global_stmt", "return_stmt", "expr_stmt", 
-			"expr", "arguments", "argument", "list_literal", "dict_literal", "dict_pair", 
-			"list_comprehension"
+			"file_input", "stmt", "simple_stmt", "small_stmt", "compound_stmt", "import_stmt", 
+			"from_import_stmt", "import_as_names", "import_as_name", "dotted_name", 
+			"function_def", "decorator", "parameters", "parameter", "suite", "if_stmt", 
+			"for_stmt", "assign_stmt", "global_stmt", "return_stmt", "expr_stmt", 
+			"test", "or_test", "and_test", "not_test", "comparison", "comp_op", "expr", 
+			"term", "factor", "power", "atom_expr", "trailer", "atom", "testlist", 
+			"dictorsetmaker", "comp_for", "arguments", "argument"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -48,22 +55,22 @@ public class PythonSubsetParser extends Parser {
 		return new String[] {
 			null, "'def'", "'if'", "'elif'", "'else'", "'for'", "'in'", "'return'", 
 			"'import'", "'from'", "'as'", "'global'", "'True'", "'False'", "'None'", 
-			"'+'", "'-'", "'*'", "'/'", "'%'", "'**'", "'//'", "'='", "'+='", "'-='", 
-			"'=='", "'!='", "'<'", "'>'", "'<='", "'>='", "'('", "')'", "'['", "']'", 
-			"'{'", "'}'", "','", "':'", "'.'", "'->'", null, null, null, null, null, 
-			null, null, "'<<<INDENT>>>'", "'<<<DEDENT>>>'"
+			"'or'", "'and'", "'not'", "'+'", "'-'", "'*'", "'/'", "'%'", "'**'", 
+			"'//'", "'='", "'+='", "'-='", "'=='", "'!='", "'<'", "'>'", "'<='", 
+			"'>='", "'('", "')'", "'['", "']'", "'{'", "'}'", "','", "':'", "'.'", 
+			"'->'", null, null, null, null, null, "'<<<INDENT>>>'", "'<<<DEDENT>>>'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "DEF", "IF", "ELIF", "ELSE", "FOR", "IN", "RETURN", "IMPORT", "FROM", 
-			"AS", "GLOBAL", "TRUE", "FALSE", "NONE", "PLUS", "MINUS", "STAR", "SLASH", 
-			"PERCENT", "DOUBLESTAR", "DOUBLESLASH", "EQUAL", "PLUSEQUAL", "MINUSEQUAL", 
-			"EQEQUAL", "NOTEQUAL", "LESS", "GREATER", "LESSEQUAL", "GREATEREQUAL", 
-			"LPAREN", "RPAREN", "LBRACK", "RBRACK", "LBRACE", "RBRACE", "COMMA", 
-			"COLON", "DOT", "ARROW", "STRING", "NUMBER", "NAME", "DECORATOR", "NEWLINE", 
-			"WS", "COMMENT", "INDENT", "DEDENT"
+			"AS", "GLOBAL", "TRUE", "FALSE", "NONE", "OR", "AND", "NOT", "PLUS", 
+			"MINUS", "STAR", "SLASH", "PERCENT", "DOUBLESTAR", "DOUBLESLASH", "EQUAL", 
+			"PLUSEQUAL", "MINUSEQUAL", "EQEQUAL", "NOTEQUAL", "LESS", "GREATER", 
+			"LESSEQUAL", "GREATEREQUAL", "LPAREN", "RPAREN", "LBRACK", "RBRACK", 
+			"LBRACE", "RBRACE", "COMMA", "COLON", "DOT", "ARROW", "STRING", "NUMBER", 
+			"NAME", "DECORATOR", "NEWLINE", "INDENT", "DEDENT", "WS", "COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -156,17 +163,17 @@ public class PythonSubsetParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(52);
+			setState(82);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 68214818175910L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 545718545578918L) != 0)) {
 				{
-				setState(50);
+				setState(80);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case NEWLINE:
 					{
-					setState(48);
+					setState(78);
 					match(NEWLINE);
 					}
 					break;
@@ -180,6 +187,8 @@ public class PythonSubsetParser extends Parser {
 				case TRUE:
 				case FALSE:
 				case NONE:
+				case NOT:
+				case PLUS:
 				case MINUS:
 				case LPAREN:
 				case LBRACK:
@@ -189,7 +198,7 @@ public class PythonSubsetParser extends Parser {
 				case NAME:
 				case DECORATOR:
 					{
-					setState(49);
+					setState(79);
 					stmt();
 					}
 					break;
@@ -197,11 +206,11 @@ public class PythonSubsetParser extends Parser {
 					throw new NoViableAltException(this);
 				}
 				}
-				setState(54);
+				setState(84);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(55);
+			setState(85);
 			match(EOF);
 			}
 		}
@@ -218,193 +227,27 @@ public class PythonSubsetParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class StmtContext extends ParserRuleContext {
+		public Simple_stmtContext simple_stmt() {
+			return getRuleContext(Simple_stmtContext.class,0);
+		}
+		public Compound_stmtContext compound_stmt() {
+			return getRuleContext(Compound_stmtContext.class,0);
+		}
 		public StmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_stmt; }
-	 
-		public StmtContext() { }
-		public void copyFrom(StmtContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class FromImportStatementContext extends StmtContext {
-		public From_import_stmtContext from_import_stmt() {
-			return getRuleContext(From_import_stmtContext.class,0);
-		}
-		public FromImportStatementContext(StmtContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterFromImportStatement(this);
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitFromImportStatement(this);
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitStmt(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitFromImportStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class IfStatementContext extends StmtContext {
-		public If_stmtContext if_stmt() {
-			return getRuleContext(If_stmtContext.class,0);
-		}
-		public IfStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterIfStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitIfStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitIfStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class GlobalStatementContext extends StmtContext {
-		public Global_stmtContext global_stmt() {
-			return getRuleContext(Global_stmtContext.class,0);
-		}
-		public GlobalStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterGlobalStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitGlobalStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitGlobalStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ExpressionStatementContext extends StmtContext {
-		public Expr_stmtContext expr_stmt() {
-			return getRuleContext(Expr_stmtContext.class,0);
-		}
-		public ExpressionStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterExpressionStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitExpressionStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitExpressionStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ReturnStatementContext extends StmtContext {
-		public Return_stmtContext return_stmt() {
-			return getRuleContext(Return_stmtContext.class,0);
-		}
-		public ReturnStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterReturnStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitReturnStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitReturnStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class FunctionDefinitionContext extends StmtContext {
-		public Function_defContext function_def() {
-			return getRuleContext(Function_defContext.class,0);
-		}
-		public FunctionDefinitionContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterFunctionDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitFunctionDefinition(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitFunctionDefinition(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ImportStatementContext extends StmtContext {
-		public Import_stmtContext import_stmt() {
-			return getRuleContext(Import_stmtContext.class,0);
-		}
-		public ImportStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterImportStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitImportStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitImportStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ForStatementContext extends StmtContext {
-		public For_stmtContext for_stmt() {
-			return getRuleContext(For_stmtContext.class,0);
-		}
-		public ForStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterForStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitForStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitForStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class AssignStatementContext extends StmtContext {
-		public Assign_stmtContext assign_stmt() {
-			return getRuleContext(Assign_stmtContext.class,0);
-		}
-		public AssignStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterAssignStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitAssignStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitAssignStatement(this);
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitStmt(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -413,79 +256,190 @@ public class PythonSubsetParser extends Parser {
 		StmtContext _localctx = new StmtContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_stmt);
 		try {
-			setState(66);
+			setState(89);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
-			case 1:
-				_localctx = new ImportStatementContext(_localctx);
+			switch (_input.LA(1)) {
+			case RETURN:
+			case IMPORT:
+			case FROM:
+			case GLOBAL:
+			case TRUE:
+			case FALSE:
+			case NONE:
+			case NOT:
+			case PLUS:
+			case MINUS:
+			case LPAREN:
+			case LBRACK:
+			case LBRACE:
+			case STRING:
+			case NUMBER:
+			case NAME:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(57);
-				import_stmt();
+				setState(87);
+				simple_stmt();
 				}
 				break;
-			case 2:
-				_localctx = new FromImportStatementContext(_localctx);
+			case DEF:
+			case IF:
+			case FOR:
+			case DECORATOR:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(58);
-				from_import_stmt();
+				setState(88);
+				compound_stmt();
 				}
 				break;
-			case 3:
-				_localctx = new FunctionDefinitionContext(_localctx);
-				enterOuterAlt(_localctx, 3);
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Simple_stmtContext extends ParserRuleContext {
+		public Small_stmtContext small_stmt() {
+			return getRuleContext(Small_stmtContext.class,0);
+		}
+		public TerminalNode NEWLINE() { return getToken(PythonSubsetParser.NEWLINE, 0); }
+		public Simple_stmtContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_simple_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterSimple_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitSimple_stmt(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitSimple_stmt(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Simple_stmtContext simple_stmt() throws RecognitionException {
+		Simple_stmtContext _localctx = new Simple_stmtContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_simple_stmt);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(91);
+			small_stmt();
+			setState(92);
+			match(NEWLINE);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Small_stmtContext extends ParserRuleContext {
+		public Expr_stmtContext expr_stmt() {
+			return getRuleContext(Expr_stmtContext.class,0);
+		}
+		public Assign_stmtContext assign_stmt() {
+			return getRuleContext(Assign_stmtContext.class,0);
+		}
+		public Return_stmtContext return_stmt() {
+			return getRuleContext(Return_stmtContext.class,0);
+		}
+		public Global_stmtContext global_stmt() {
+			return getRuleContext(Global_stmtContext.class,0);
+		}
+		public Import_stmtContext import_stmt() {
+			return getRuleContext(Import_stmtContext.class,0);
+		}
+		public From_import_stmtContext from_import_stmt() {
+			return getRuleContext(From_import_stmtContext.class,0);
+		}
+		public Small_stmtContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_small_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterSmall_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitSmall_stmt(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitSmall_stmt(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Small_stmtContext small_stmt() throws RecognitionException {
+		Small_stmtContext _localctx = new Small_stmtContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_small_stmt);
+		try {
+			setState(100);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
 				{
-				setState(59);
-				function_def();
-				}
-				break;
-			case 4:
-				_localctx = new IfStatementContext(_localctx);
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(60);
-				if_stmt();
-				}
-				break;
-			case 5:
-				_localctx = new ForStatementContext(_localctx);
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(61);
-				for_stmt();
-				}
-				break;
-			case 6:
-				_localctx = new AssignStatementContext(_localctx);
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(62);
-				assign_stmt();
-				}
-				break;
-			case 7:
-				_localctx = new ExpressionStatementContext(_localctx);
-				enterOuterAlt(_localctx, 7);
-				{
-				setState(63);
+				setState(94);
 				expr_stmt();
 				}
 				break;
-			case 8:
-				_localctx = new GlobalStatementContext(_localctx);
-				enterOuterAlt(_localctx, 8);
+			case 2:
+				enterOuterAlt(_localctx, 2);
 				{
-				setState(64);
+				setState(95);
+				assign_stmt();
+				}
+				break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(96);
+				return_stmt();
+				}
+				break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(97);
 				global_stmt();
 				}
 				break;
-			case 9:
-				_localctx = new ReturnStatementContext(_localctx);
-				enterOuterAlt(_localctx, 9);
+			case 5:
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(65);
-				return_stmt();
+				setState(98);
+				import_stmt();
+				}
+				break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(99);
+				from_import_stmt();
 				}
 				break;
 			}
@@ -502,14 +456,87 @@ public class PythonSubsetParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
+	public static class Compound_stmtContext extends ParserRuleContext {
+		public Function_defContext function_def() {
+			return getRuleContext(Function_defContext.class,0);
+		}
+		public If_stmtContext if_stmt() {
+			return getRuleContext(If_stmtContext.class,0);
+		}
+		public For_stmtContext for_stmt() {
+			return getRuleContext(For_stmtContext.class,0);
+		}
+		public Compound_stmtContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_compound_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterCompound_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitCompound_stmt(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitCompound_stmt(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Compound_stmtContext compound_stmt() throws RecognitionException {
+		Compound_stmtContext _localctx = new Compound_stmtContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_compound_stmt);
+		try {
+			setState(105);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case DEF:
+			case DECORATOR:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(102);
+				function_def();
+				}
+				break;
+			case IF:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(103);
+				if_stmt();
+				}
+				break;
+			case FOR:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(104);
+				for_stmt();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
 	public static class Import_stmtContext extends ParserRuleContext {
 		public TerminalNode IMPORT() { return getToken(PythonSubsetParser.IMPORT, 0); }
-		public List<TerminalNode> NAME() { return getTokens(PythonSubsetParser.NAME); }
-		public TerminalNode NAME(int i) {
-			return getToken(PythonSubsetParser.NAME, i);
+		public Dotted_nameContext dotted_name() {
+			return getRuleContext(Dotted_nameContext.class,0);
 		}
-		public TerminalNode NEWLINE() { return getToken(PythonSubsetParser.NEWLINE, 0); }
 		public TerminalNode AS() { return getToken(PythonSubsetParser.AS, 0); }
+		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
 		public Import_stmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -531,29 +558,27 @@ public class PythonSubsetParser extends Parser {
 
 	public final Import_stmtContext import_stmt() throws RecognitionException {
 		Import_stmtContext _localctx = new Import_stmtContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_import_stmt);
+		enterRule(_localctx, 10, RULE_import_stmt);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(68);
+			setState(107);
 			match(IMPORT);
-			setState(69);
-			match(NAME);
-			setState(72);
+			setState(108);
+			dotted_name();
+			setState(111);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AS) {
 				{
-				setState(70);
+				setState(109);
 				match(AS);
-				setState(71);
+				setState(110);
 				match(NAME);
 				}
 			}
 
-			setState(74);
-			match(NEWLINE);
 			}
 		}
 		catch (RecognitionException re) {
@@ -570,17 +595,14 @@ public class PythonSubsetParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class From_import_stmtContext extends ParserRuleContext {
 		public TerminalNode FROM() { return getToken(PythonSubsetParser.FROM, 0); }
-		public List<TerminalNode> NAME() { return getTokens(PythonSubsetParser.NAME); }
-		public TerminalNode NAME(int i) {
-			return getToken(PythonSubsetParser.NAME, i);
+		public Dotted_nameContext dotted_name() {
+			return getRuleContext(Dotted_nameContext.class,0);
 		}
 		public TerminalNode IMPORT() { return getToken(PythonSubsetParser.IMPORT, 0); }
-		public TerminalNode NEWLINE() { return getToken(PythonSubsetParser.NEWLINE, 0); }
-		public List<TerminalNode> COMMA() { return getTokens(PythonSubsetParser.COMMA); }
-		public TerminalNode COMMA(int i) {
-			return getToken(PythonSubsetParser.COMMA, i);
+		public TerminalNode STAR() { return getToken(PythonSubsetParser.STAR, 0); }
+		public Import_as_namesContext import_as_names() {
+			return getRuleContext(Import_as_namesContext.class,0);
 		}
-		public TerminalNode AS() { return getToken(PythonSubsetParser.AS, 0); }
 		public From_import_stmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -602,49 +624,230 @@ public class PythonSubsetParser extends Parser {
 
 	public final From_import_stmtContext from_import_stmt() throws RecognitionException {
 		From_import_stmtContext _localctx = new From_import_stmtContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_from_import_stmt);
+		enterRule(_localctx, 12, RULE_from_import_stmt);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(113);
+			match(FROM);
+			setState(114);
+			dotted_name();
+			setState(115);
+			match(IMPORT);
+			setState(118);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case STAR:
+				{
+				setState(116);
+				match(STAR);
+				}
+				break;
+			case NAME:
+				{
+				setState(117);
+				import_as_names();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Import_as_namesContext extends ParserRuleContext {
+		public List<Import_as_nameContext> import_as_name() {
+			return getRuleContexts(Import_as_nameContext.class);
+		}
+		public Import_as_nameContext import_as_name(int i) {
+			return getRuleContext(Import_as_nameContext.class,i);
+		}
+		public List<TerminalNode> COMMA() { return getTokens(PythonSubsetParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(PythonSubsetParser.COMMA, i);
+		}
+		public Import_as_namesContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_import_as_names; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterImport_as_names(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitImport_as_names(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitImport_as_names(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Import_as_namesContext import_as_names() throws RecognitionException {
+		Import_as_namesContext _localctx = new Import_as_namesContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_import_as_names);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(76);
-			match(FROM);
-			setState(77);
-			match(NAME);
-			setState(78);
-			match(IMPORT);
-			setState(79);
-			match(NAME);
-			setState(84);
+			setState(120);
+			import_as_name();
+			setState(125);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(80);
+				setState(121);
 				match(COMMA);
-				setState(81);
-				match(NAME);
+				setState(122);
+				import_as_name();
 				}
 				}
-				setState(86);
+				setState(127);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(89);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Import_as_nameContext extends ParserRuleContext {
+		public List<TerminalNode> NAME() { return getTokens(PythonSubsetParser.NAME); }
+		public TerminalNode NAME(int i) {
+			return getToken(PythonSubsetParser.NAME, i);
+		}
+		public TerminalNode AS() { return getToken(PythonSubsetParser.AS, 0); }
+		public Import_as_nameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_import_as_name; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterImport_as_name(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitImport_as_name(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitImport_as_name(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Import_as_nameContext import_as_name() throws RecognitionException {
+		Import_as_nameContext _localctx = new Import_as_nameContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_import_as_name);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(128);
+			match(NAME);
+			setState(131);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AS) {
 				{
-				setState(87);
+				setState(129);
 				match(AS);
-				setState(88);
+				setState(130);
 				match(NAME);
 				}
 			}
 
-			setState(91);
-			match(NEWLINE);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Dotted_nameContext extends ParserRuleContext {
+		public List<TerminalNode> NAME() { return getTokens(PythonSubsetParser.NAME); }
+		public TerminalNode NAME(int i) {
+			return getToken(PythonSubsetParser.NAME, i);
+		}
+		public List<TerminalNode> DOT() { return getTokens(PythonSubsetParser.DOT); }
+		public TerminalNode DOT(int i) {
+			return getToken(PythonSubsetParser.DOT, i);
+		}
+		public Dotted_nameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_dotted_name; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterDotted_name(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitDotted_name(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitDotted_name(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Dotted_nameContext dotted_name() throws RecognitionException {
+		Dotted_nameContext _localctx = new Dotted_nameContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_dotted_name);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(133);
+			match(NAME);
+			setState(138);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==DOT) {
+				{
+				{
+				setState(134);
+				match(DOT);
+				setState(135);
+				match(NAME);
+				}
+				}
+				setState(140);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -698,46 +901,46 @@ public class PythonSubsetParser extends Parser {
 
 	public final Function_defContext function_def() throws RecognitionException {
 		Function_defContext _localctx = new Function_defContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_function_def);
+		enterRule(_localctx, 20, RULE_function_def);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(96);
+			setState(144);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DECORATOR) {
 				{
 				{
-				setState(93);
+				setState(141);
 				decorator();
 				}
 				}
-				setState(98);
+				setState(146);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(99);
+			setState(147);
 			match(DEF);
-			setState(100);
+			setState(148);
 			match(NAME);
-			setState(101);
+			setState(149);
 			match(LPAREN);
-			setState(103);
+			setState(151);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NAME) {
 				{
-				setState(102);
+				setState(150);
 				parameters();
 				}
 			}
 
-			setState(105);
+			setState(153);
 			match(RPAREN);
-			setState(106);
+			setState(154);
 			match(COLON);
-			setState(107);
+			setState(155);
 			suite();
 			}
 		}
@@ -756,8 +959,6 @@ public class PythonSubsetParser extends Parser {
 	public static class DecoratorContext extends ParserRuleContext {
 		public TerminalNode DECORATOR() { return getToken(PythonSubsetParser.DECORATOR, 0); }
 		public TerminalNode NEWLINE() { return getToken(PythonSubsetParser.NEWLINE, 0); }
-		public TerminalNode LPAREN() { return getToken(PythonSubsetParser.LPAREN, 0); }
-		public TerminalNode RPAREN() { return getToken(PythonSubsetParser.RPAREN, 0); }
 		public ArgumentsContext arguments() {
 			return getRuleContext(ArgumentsContext.class,0);
 		}
@@ -782,36 +983,24 @@ public class PythonSubsetParser extends Parser {
 
 	public final DecoratorContext decorator() throws RecognitionException {
 		DecoratorContext _localctx = new DecoratorContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_decorator);
+		enterRule(_localctx, 22, RULE_decorator);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(157);
 			match(DECORATOR);
-			setState(115);
+			setState(159);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==LPAREN) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 123506080509952L) != 0)) {
 				{
-				setState(110);
-				match(LPAREN);
-				setState(112);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 15438260039680L) != 0)) {
-					{
-					setState(111);
-					arguments();
-					}
-				}
-
-				setState(114);
-				match(RPAREN);
+				setState(158);
+				arguments();
 				}
 			}
 
-			setState(117);
+			setState(161);
 			match(NEWLINE);
 			}
 		}
@@ -859,26 +1048,26 @@ public class PythonSubsetParser extends Parser {
 
 	public final ParametersContext parameters() throws RecognitionException {
 		ParametersContext _localctx = new ParametersContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_parameters);
+		enterRule(_localctx, 24, RULE_parameters);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(119);
+			setState(163);
 			parameter();
-			setState(124);
+			setState(168);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(120);
+				setState(164);
 				match(COMMA);
-				setState(121);
+				setState(165);
 				parameter();
 				}
 				}
-				setState(126);
+				setState(170);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -899,8 +1088,8 @@ public class PythonSubsetParser extends Parser {
 	public static class ParameterContext extends ParserRuleContext {
 		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
 		public TerminalNode EQUAL() { return getToken(PythonSubsetParser.EQUAL, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
 		}
 		public ParameterContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -923,22 +1112,22 @@ public class PythonSubsetParser extends Parser {
 
 	public final ParameterContext parameter() throws RecognitionException {
 		ParameterContext _localctx = new ParameterContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_parameter);
+		enterRule(_localctx, 26, RULE_parameter);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(127);
+			setState(171);
 			match(NAME);
-			setState(130);
+			setState(174);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==EQUAL) {
 				{
-				setState(128);
+				setState(172);
 				match(EQUAL);
-				setState(129);
-				expr(0);
+				setState(173);
+				test();
 				}
 			}
 
@@ -990,17 +1179,21 @@ public class PythonSubsetParser extends Parser {
 
 	public final SuiteContext suite() throws RecognitionException {
 		SuiteContext _localctx = new SuiteContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_suite);
+		enterRule(_localctx, 28, RULE_suite);
 		int _la;
 		try {
-			setState(142);
+			setState(186);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case RETURN:
+			case IMPORT:
+			case FROM:
 			case GLOBAL:
 			case TRUE:
 			case FALSE:
 			case NONE:
+			case NOT:
+			case PLUS:
 			case MINUS:
 			case LPAREN:
 			case LBRACK:
@@ -1010,32 +1203,32 @@ public class PythonSubsetParser extends Parser {
 			case NAME:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(132);
+				setState(176);
 				simple_stmt();
 				}
 				break;
 			case NEWLINE:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(133);
+				setState(177);
 				match(NEWLINE);
-				setState(134);
+				setState(178);
 				match(INDENT);
-				setState(136); 
+				setState(180); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(135);
+					setState(179);
 					stmt();
 					}
 					}
-					setState(138); 
+					setState(182); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 33030446087078L) != 0) );
-				setState(140);
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 264243568868262L) != 0) );
+				setState(184);
 				match(DEDENT);
 				}
 				break;
@@ -1055,142 +1248,13 @@ public class PythonSubsetParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class Simple_stmtContext extends ParserRuleContext {
-		public Small_stmtContext small_stmt() {
-			return getRuleContext(Small_stmtContext.class,0);
-		}
-		public TerminalNode NEWLINE() { return getToken(PythonSubsetParser.NEWLINE, 0); }
-		public Simple_stmtContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_simple_stmt; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterSimple_stmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitSimple_stmt(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitSimple_stmt(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Simple_stmtContext simple_stmt() throws RecognitionException {
-		Simple_stmtContext _localctx = new Simple_stmtContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_simple_stmt);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(144);
-			small_stmt();
-			setState(145);
-			match(NEWLINE);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class Small_stmtContext extends ParserRuleContext {
-		public Expr_stmtContext expr_stmt() {
-			return getRuleContext(Expr_stmtContext.class,0);
-		}
-		public Return_stmtContext return_stmt() {
-			return getRuleContext(Return_stmtContext.class,0);
-		}
-		public Assign_stmtContext assign_stmt() {
-			return getRuleContext(Assign_stmtContext.class,0);
-		}
-		public Global_stmtContext global_stmt() {
-			return getRuleContext(Global_stmtContext.class,0);
-		}
-		public Small_stmtContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_small_stmt; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterSmall_stmt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitSmall_stmt(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitSmall_stmt(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Small_stmtContext small_stmt() throws RecognitionException {
-		Small_stmtContext _localctx = new Small_stmtContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_small_stmt);
-		try {
-			setState(151);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(147);
-				expr_stmt();
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(148);
-				return_stmt();
-				}
-				break;
-			case 3:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(149);
-				assign_stmt();
-				}
-				break;
-			case 4:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(150);
-				global_stmt();
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
 	public static class If_stmtContext extends ParserRuleContext {
 		public TerminalNode IF() { return getToken(PythonSubsetParser.IF, 0); }
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
+		public List<TestContext> test() {
+			return getRuleContexts(TestContext.class);
 		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
+		public TestContext test(int i) {
+			return getRuleContext(TestContext.class,i);
 		}
 		public List<TerminalNode> COLON() { return getTokens(PythonSubsetParser.COLON); }
 		public TerminalNode COLON(int i) {
@@ -1228,49 +1292,49 @@ public class PythonSubsetParser extends Parser {
 
 	public final If_stmtContext if_stmt() throws RecognitionException {
 		If_stmtContext _localctx = new If_stmtContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_if_stmt);
+		enterRule(_localctx, 30, RULE_if_stmt);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(153);
+			setState(188);
 			match(IF);
-			setState(154);
-			expr(0);
-			setState(155);
+			setState(189);
+			test();
+			setState(190);
 			match(COLON);
-			setState(156);
+			setState(191);
 			suite();
-			setState(164);
+			setState(199);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==ELIF) {
 				{
 				{
-				setState(157);
+				setState(192);
 				match(ELIF);
-				setState(158);
-				expr(0);
-				setState(159);
+				setState(193);
+				test();
+				setState(194);
 				match(COLON);
-				setState(160);
+				setState(195);
 				suite();
 				}
 				}
-				setState(166);
+				setState(201);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(170);
+			setState(205);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ELSE) {
 				{
-				setState(167);
+				setState(202);
 				match(ELSE);
-				setState(168);
+				setState(203);
 				match(COLON);
-				setState(169);
+				setState(204);
 				suite();
 				}
 			}
@@ -1293,8 +1357,8 @@ public class PythonSubsetParser extends Parser {
 		public TerminalNode FOR() { return getToken(PythonSubsetParser.FOR, 0); }
 		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
 		public TerminalNode IN() { return getToken(PythonSubsetParser.IN, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
 		}
 		public TerminalNode COLON() { return getToken(PythonSubsetParser.COLON, 0); }
 		public SuiteContext suite() {
@@ -1321,21 +1385,21 @@ public class PythonSubsetParser extends Parser {
 
 	public final For_stmtContext for_stmt() throws RecognitionException {
 		For_stmtContext _localctx = new For_stmtContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_for_stmt);
+		enterRule(_localctx, 32, RULE_for_stmt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(172);
+			setState(207);
 			match(FOR);
-			setState(173);
+			setState(208);
 			match(NAME);
-			setState(174);
+			setState(209);
 			match(IN);
-			setState(175);
-			expr(0);
-			setState(176);
+			setState(210);
+			test();
+			setState(211);
 			match(COLON);
-			setState(177);
+			setState(212);
 			suite();
 			}
 		}
@@ -1354,8 +1418,8 @@ public class PythonSubsetParser extends Parser {
 	public static class Assign_stmtContext extends ParserRuleContext {
 		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
 		public TerminalNode EQUAL() { return getToken(PythonSubsetParser.EQUAL, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
 		}
 		public Assign_stmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1378,16 +1442,16 @@ public class PythonSubsetParser extends Parser {
 
 	public final Assign_stmtContext assign_stmt() throws RecognitionException {
 		Assign_stmtContext _localctx = new Assign_stmtContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_assign_stmt);
+		enterRule(_localctx, 34, RULE_assign_stmt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(179);
+			setState(214);
 			match(NAME);
-			setState(180);
+			setState(215);
 			match(EQUAL);
-			setState(181);
-			expr(0);
+			setState(216);
+			test();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1433,28 +1497,28 @@ public class PythonSubsetParser extends Parser {
 
 	public final Global_stmtContext global_stmt() throws RecognitionException {
 		Global_stmtContext _localctx = new Global_stmtContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_global_stmt);
+		enterRule(_localctx, 36, RULE_global_stmt);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(183);
+			setState(218);
 			match(GLOBAL);
-			setState(184);
+			setState(219);
 			match(NAME);
-			setState(189);
+			setState(224);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(185);
+				setState(220);
 				match(COMMA);
-				setState(186);
+				setState(221);
 				match(NAME);
 				}
 				}
-				setState(191);
+				setState(226);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1474,8 +1538,8 @@ public class PythonSubsetParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class Return_stmtContext extends ParserRuleContext {
 		public TerminalNode RETURN() { return getToken(PythonSubsetParser.RETURN, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
 		}
 		public Return_stmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1498,22 +1562,23 @@ public class PythonSubsetParser extends Parser {
 
 	public final Return_stmtContext return_stmt() throws RecognitionException {
 		Return_stmtContext _localctx = new Return_stmtContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_return_stmt);
+		enterRule(_localctx, 38, RULE_return_stmt);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(192);
+			setState(227);
 			match(RETURN);
-			setState(194);
+			setState(229);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
-			case 1:
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 123506080509952L) != 0)) {
 				{
-				setState(193);
-				expr(0);
+				setState(228);
+				test();
 				}
-				break;
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -1529,8 +1594,8 @@ public class PythonSubsetParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class Expr_stmtContext extends ParserRuleContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
 		}
 		public Expr_stmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1553,12 +1618,400 @@ public class PythonSubsetParser extends Parser {
 
 	public final Expr_stmtContext expr_stmt() throws RecognitionException {
 		Expr_stmtContext _localctx = new Expr_stmtContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_expr_stmt);
+		enterRule(_localctx, 40, RULE_expr_stmt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(196);
-			expr(0);
+			setState(231);
+			test();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class TestContext extends ParserRuleContext {
+		public Or_testContext or_test() {
+			return getRuleContext(Or_testContext.class,0);
+		}
+		public TestContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_test; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterTest(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitTest(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitTest(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final TestContext test() throws RecognitionException {
+		TestContext _localctx = new TestContext(_ctx, getState());
+		enterRule(_localctx, 42, RULE_test);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(233);
+			or_test();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Or_testContext extends ParserRuleContext {
+		public List<And_testContext> and_test() {
+			return getRuleContexts(And_testContext.class);
+		}
+		public And_testContext and_test(int i) {
+			return getRuleContext(And_testContext.class,i);
+		}
+		public List<TerminalNode> OR() { return getTokens(PythonSubsetParser.OR); }
+		public TerminalNode OR(int i) {
+			return getToken(PythonSubsetParser.OR, i);
+		}
+		public Or_testContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_or_test; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterOr_test(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitOr_test(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitOr_test(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Or_testContext or_test() throws RecognitionException {
+		Or_testContext _localctx = new Or_testContext(_ctx, getState());
+		enterRule(_localctx, 44, RULE_or_test);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(235);
+			and_test();
+			setState(240);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==OR) {
+				{
+				{
+				setState(236);
+				match(OR);
+				setState(237);
+				and_test();
+				}
+				}
+				setState(242);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class And_testContext extends ParserRuleContext {
+		public List<Not_testContext> not_test() {
+			return getRuleContexts(Not_testContext.class);
+		}
+		public Not_testContext not_test(int i) {
+			return getRuleContext(Not_testContext.class,i);
+		}
+		public List<TerminalNode> AND() { return getTokens(PythonSubsetParser.AND); }
+		public TerminalNode AND(int i) {
+			return getToken(PythonSubsetParser.AND, i);
+		}
+		public And_testContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_and_test; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterAnd_test(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitAnd_test(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitAnd_test(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final And_testContext and_test() throws RecognitionException {
+		And_testContext _localctx = new And_testContext(_ctx, getState());
+		enterRule(_localctx, 46, RULE_and_test);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(243);
+			not_test();
+			setState(248);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==AND) {
+				{
+				{
+				setState(244);
+				match(AND);
+				setState(245);
+				not_test();
+				}
+				}
+				setState(250);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Not_testContext extends ParserRuleContext {
+		public TerminalNode NOT() { return getToken(PythonSubsetParser.NOT, 0); }
+		public Not_testContext not_test() {
+			return getRuleContext(Not_testContext.class,0);
+		}
+		public ComparisonContext comparison() {
+			return getRuleContext(ComparisonContext.class,0);
+		}
+		public Not_testContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_not_test; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterNot_test(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitNot_test(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitNot_test(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Not_testContext not_test() throws RecognitionException {
+		Not_testContext _localctx = new Not_testContext(_ctx, getState());
+		enterRule(_localctx, 48, RULE_not_test);
+		try {
+			setState(254);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case NOT:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(251);
+				match(NOT);
+				setState(252);
+				not_test();
+				}
+				break;
+			case TRUE:
+			case FALSE:
+			case NONE:
+			case PLUS:
+			case MINUS:
+			case LPAREN:
+			case LBRACK:
+			case LBRACE:
+			case STRING:
+			case NUMBER:
+			case NAME:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(253);
+				comparison();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ComparisonContext extends ParserRuleContext {
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
+		public List<Comp_opContext> comp_op() {
+			return getRuleContexts(Comp_opContext.class);
+		}
+		public Comp_opContext comp_op(int i) {
+			return getRuleContext(Comp_opContext.class,i);
+		}
+		public ComparisonContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_comparison; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterComparison(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitComparison(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitComparison(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ComparisonContext comparison() throws RecognitionException {
+		ComparisonContext _localctx = new ComparisonContext(_ctx, getState());
+		enterRule(_localctx, 50, RULE_comparison);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(256);
+			expr();
+			setState(262);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 16911433792L) != 0)) {
+				{
+				{
+				setState(257);
+				comp_op();
+				setState(258);
+				expr();
+				}
+				}
+				setState(264);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Comp_opContext extends ParserRuleContext {
+		public TerminalNode LESS() { return getToken(PythonSubsetParser.LESS, 0); }
+		public TerminalNode GREATER() { return getToken(PythonSubsetParser.GREATER, 0); }
+		public TerminalNode EQEQUAL() { return getToken(PythonSubsetParser.EQEQUAL, 0); }
+		public TerminalNode GREATEREQUAL() { return getToken(PythonSubsetParser.GREATEREQUAL, 0); }
+		public TerminalNode LESSEQUAL() { return getToken(PythonSubsetParser.LESSEQUAL, 0); }
+		public TerminalNode NOTEQUAL() { return getToken(PythonSubsetParser.NOTEQUAL, 0); }
+		public TerminalNode IN() { return getToken(PythonSubsetParser.IN, 0); }
+		public Comp_opContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_comp_op; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterComp_op(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitComp_op(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitComp_op(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Comp_opContext comp_op() throws RecognitionException {
+		Comp_opContext _localctx = new Comp_opContext(_ctx, getState());
+		enterRule(_localctx, 52, RULE_comp_op);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(265);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 16911433792L) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1574,640 +2027,71 @@ public class PythonSubsetParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExprContext extends ParserRuleContext {
+		public List<TermContext> term() {
+			return getRuleContexts(TermContext.class);
+		}
+		public TermContext term(int i) {
+			return getRuleContext(TermContext.class,i);
+		}
+		public List<TerminalNode> PLUS() { return getTokens(PythonSubsetParser.PLUS); }
+		public TerminalNode PLUS(int i) {
+			return getToken(PythonSubsetParser.PLUS, i);
+		}
+		public List<TerminalNode> MINUS() { return getTokens(PythonSubsetParser.MINUS); }
+		public TerminalNode MINUS(int i) {
+			return getToken(PythonSubsetParser.MINUS, i);
+		}
 		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
-	 
-		public ExprContext() { }
-		public void copyFrom(ExprContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class MulDivOpContext extends ExprContext {
-		public Token op;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode STAR() { return getToken(PythonSubsetParser.STAR, 0); }
-		public TerminalNode SLASH() { return getToken(PythonSubsetParser.SLASH, 0); }
-		public TerminalNode PERCENT() { return getToken(PythonSubsetParser.PERCENT, 0); }
-		public TerminalNode DOUBLESLASH() { return getToken(PythonSubsetParser.DOUBLESLASH, 0); }
-		public TerminalNode DOUBLESTAR() { return getToken(PythonSubsetParser.DOUBLESTAR, 0); }
-		public MulDivOpContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterMulDivOp(this);
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitMulDivOp(this);
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitExpr(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitMulDivOp(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ListComprehensionExpressionContext extends ExprContext {
-		public List_comprehensionContext list_comprehension() {
-			return getRuleContext(List_comprehensionContext.class,0);
-		}
-		public ListComprehensionExpressionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterListComprehensionExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitListComprehensionExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitListComprehensionExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class DictExpressionContext extends ExprContext {
-		public Dict_literalContext dict_literal() {
-			return getRuleContext(Dict_literalContext.class,0);
-		}
-		public DictExpressionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterDictExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitDictExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitDictExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class NameExpressionContext extends ExprContext {
-		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
-		public NameExpressionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterNameExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitNameExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitNameExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ListExpressionContext extends ExprContext {
-		public List_literalContext list_literal() {
-			return getRuleContext(List_literalContext.class,0);
-		}
-		public ListExpressionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterListExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitListExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitListExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class AddSubOpContext extends ExprContext {
-		public Token op;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode PLUS() { return getToken(PythonSubsetParser.PLUS, 0); }
-		public TerminalNode MINUS() { return getToken(PythonSubsetParser.MINUS, 0); }
-		public AddSubOpContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterAddSubOp(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitAddSubOp(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitAddSubOp(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class UnaryMinusContext extends ExprContext {
-		public TerminalNode MINUS() { return getToken(PythonSubsetParser.MINUS, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public UnaryMinusContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterUnaryMinus(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitUnaryMinus(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitUnaryMinus(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class NoneLiteralContext extends ExprContext {
-		public TerminalNode NONE() { return getToken(PythonSubsetParser.NONE, 0); }
-		public NoneLiteralContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterNoneLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitNoneLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitNoneLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class SubscriptContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode LBRACK() { return getToken(PythonSubsetParser.LBRACK, 0); }
-		public TerminalNode RBRACK() { return getToken(PythonSubsetParser.RBRACK, 0); }
-		public SubscriptContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterSubscript(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitSubscript(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitSubscript(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class AttributeAccessContext extends ExprContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode DOT() { return getToken(PythonSubsetParser.DOT, 0); }
-		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
-		public AttributeAccessContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterAttributeAccess(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitAttributeAccess(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitAttributeAccess(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class FalseLiteralContext extends ExprContext {
-		public TerminalNode FALSE() { return getToken(PythonSubsetParser.FALSE, 0); }
-		public FalseLiteralContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterFalseLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitFalseLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitFalseLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class StringLiteralContext extends ExprContext {
-		public TerminalNode STRING() { return getToken(PythonSubsetParser.STRING, 0); }
-		public StringLiteralContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterStringLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitStringLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitStringLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class TrueLiteralContext extends ExprContext {
-		public TerminalNode TRUE() { return getToken(PythonSubsetParser.TRUE, 0); }
-		public TrueLiteralContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterTrueLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitTrueLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitTrueLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ComparisonContext extends ExprContext {
-		public Token op;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode EQEQUAL() { return getToken(PythonSubsetParser.EQEQUAL, 0); }
-		public TerminalNode NOTEQUAL() { return getToken(PythonSubsetParser.NOTEQUAL, 0); }
-		public TerminalNode LESS() { return getToken(PythonSubsetParser.LESS, 0); }
-		public TerminalNode GREATER() { return getToken(PythonSubsetParser.GREATER, 0); }
-		public TerminalNode LESSEQUAL() { return getToken(PythonSubsetParser.LESSEQUAL, 0); }
-		public TerminalNode GREATEREQUAL() { return getToken(PythonSubsetParser.GREATEREQUAL, 0); }
-		public ComparisonContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterComparison(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitComparison(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitComparison(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ParenExpressionContext extends ExprContext {
-		public TerminalNode LPAREN() { return getToken(PythonSubsetParser.LPAREN, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode RPAREN() { return getToken(PythonSubsetParser.RPAREN, 0); }
-		public ParenExpressionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterParenExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitParenExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitParenExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class FunctionCallContext extends ExprContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode LPAREN() { return getToken(PythonSubsetParser.LPAREN, 0); }
-		public TerminalNode RPAREN() { return getToken(PythonSubsetParser.RPAREN, 0); }
-		public ArgumentsContext arguments() {
-			return getRuleContext(ArgumentsContext.class,0);
-		}
-		public FunctionCallContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterFunctionCall(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitFunctionCall(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitFunctionCall(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class NumberLiteralContext extends ExprContext {
-		public TerminalNode NUMBER() { return getToken(PythonSubsetParser.NUMBER, 0); }
-		public NumberLiteralContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterNumberLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitNumberLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitNumberLiteral(this);
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ExprContext expr() throws RecognitionException {
-		return expr(0);
-	}
-
-	private ExprContext expr(int _p) throws RecognitionException {
-		ParserRuleContext _parentctx = _ctx;
-		int _parentState = getState();
-		ExprContext _localctx = new ExprContext(_ctx, _parentState);
-		ExprContext _prevctx = _localctx;
-		int _startState = 34;
-		enterRecursionRule(_localctx, 34, RULE_expr, _p);
+		ExprContext _localctx = new ExprContext(_ctx, getState());
+		enterRule(_localctx, 54, RULE_expr);
 		int _la;
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(214);
+			setState(267);
+			term();
+			setState(272);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
-			case 1:
+			_la = _input.LA(1);
+			while (_la==PLUS || _la==MINUS) {
 				{
-				_localctx = new UnaryMinusContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-
-				setState(199);
-				match(MINUS);
-				setState(200);
-				expr(14);
-				}
-				break;
-			case 2:
 				{
-				_localctx = new NameExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(201);
-				match(NAME);
+				setState(268);
+				_la = _input.LA(1);
+				if ( !(_la==PLUS || _la==MINUS) ) {
+				_errHandler.recoverInline(this);
 				}
-				break;
-			case 3:
-				{
-				_localctx = new NumberLiteralContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(202);
-				match(NUMBER);
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
 				}
-				break;
-			case 4:
-				{
-				_localctx = new StringLiteralContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(203);
-				match(STRING);
+				setState(269);
+				term();
 				}
-				break;
-			case 5:
-				{
-				_localctx = new TrueLiteralContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(204);
-				match(TRUE);
 				}
-				break;
-			case 6:
-				{
-				_localctx = new FalseLiteralContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(205);
-				match(FALSE);
-				}
-				break;
-			case 7:
-				{
-				_localctx = new NoneLiteralContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(206);
-				match(NONE);
-				}
-				break;
-			case 8:
-				{
-				_localctx = new ListExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(207);
-				list_literal();
-				}
-				break;
-			case 9:
-				{
-				_localctx = new DictExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(208);
-				dict_literal();
-				}
-				break;
-			case 10:
-				{
-				_localctx = new ListComprehensionExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(209);
-				list_comprehension();
-				}
-				break;
-			case 11:
-				{
-				_localctx = new ParenExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(210);
-				match(LPAREN);
-				setState(211);
-				expr(0);
-				setState(212);
-				match(RPAREN);
-				}
-				break;
-			}
-			_ctx.stop = _input.LT(-1);
-			setState(241);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,22,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( _parseListeners!=null ) triggerExitRuleEvent();
-					_prevctx = _localctx;
-					{
-					setState(239);
-					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
-					case 1:
-						{
-						_localctx = new MulDivOpContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(216);
-						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
-						setState(217);
-						((MulDivOpContext)_localctx).op = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4063232L) != 0)) ) {
-							((MulDivOpContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(218);
-						expr(14);
-						}
-						break;
-					case 2:
-						{
-						_localctx = new AddSubOpContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(219);
-						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
-						setState(220);
-						((AddSubOpContext)_localctx).op = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !(_la==PLUS || _la==MINUS) ) {
-							((AddSubOpContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(221);
-						expr(13);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new ComparisonContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(222);
-						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(223);
-						((ComparisonContext)_localctx).op = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 2113929216L) != 0)) ) {
-							((ComparisonContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(224);
-						expr(12);
-						}
-						break;
-					case 4:
-						{
-						_localctx = new AttributeAccessContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(225);
-						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
-						setState(226);
-						match(DOT);
-						setState(227);
-						match(NAME);
-						}
-						break;
-					case 5:
-						{
-						_localctx = new FunctionCallContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(228);
-						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
-						setState(229);
-						match(LPAREN);
-						setState(231);
-						_errHandler.sync(this);
-						_la = _input.LA(1);
-						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 15438260039680L) != 0)) {
-							{
-							setState(230);
-							arguments();
-							}
-						}
-
-						setState(233);
-						match(RPAREN);
-						}
-						break;
-					case 6:
-						{
-						_localctx = new SubscriptContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(234);
-						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
-						setState(235);
-						match(LBRACK);
-						setState(236);
-						expr(0);
-						setState(237);
-						match(RBRACK);
-						}
-						break;
-					}
-					} 
-				}
-				setState(243);
+				setState(274);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,22,_ctx);
+				_la = _input.LA(1);
 			}
 			}
 		}
@@ -2217,7 +2101,1052 @@ public class PythonSubsetParser extends Parser {
 			_errHandler.recover(this, re);
 		}
 		finally {
-			unrollRecursionContexts(_parentctx);
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class TermContext extends ParserRuleContext {
+		public List<FactorContext> factor() {
+			return getRuleContexts(FactorContext.class);
+		}
+		public FactorContext factor(int i) {
+			return getRuleContext(FactorContext.class,i);
+		}
+		public List<TerminalNode> STAR() { return getTokens(PythonSubsetParser.STAR); }
+		public TerminalNode STAR(int i) {
+			return getToken(PythonSubsetParser.STAR, i);
+		}
+		public List<TerminalNode> SLASH() { return getTokens(PythonSubsetParser.SLASH); }
+		public TerminalNode SLASH(int i) {
+			return getToken(PythonSubsetParser.SLASH, i);
+		}
+		public List<TerminalNode> PERCENT() { return getTokens(PythonSubsetParser.PERCENT); }
+		public TerminalNode PERCENT(int i) {
+			return getToken(PythonSubsetParser.PERCENT, i);
+		}
+		public List<TerminalNode> DOUBLESLASH() { return getTokens(PythonSubsetParser.DOUBLESLASH); }
+		public TerminalNode DOUBLESLASH(int i) {
+			return getToken(PythonSubsetParser.DOUBLESLASH, i);
+		}
+		public TermContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_term; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterTerm(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitTerm(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitTerm(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final TermContext term() throws RecognitionException {
+		TermContext _localctx = new TermContext(_ctx, getState());
+		enterRule(_localctx, 56, RULE_term);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(275);
+			factor();
+			setState(280);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 24117248L) != 0)) {
+				{
+				{
+				setState(276);
+				_la = _input.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 24117248L) != 0)) ) {
+				_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				setState(277);
+				factor();
+				}
+				}
+				setState(282);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorContext extends ParserRuleContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
+		}
+		public TerminalNode PLUS() { return getToken(PythonSubsetParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(PythonSubsetParser.MINUS, 0); }
+		public PowerContext power() {
+			return getRuleContext(PowerContext.class,0);
+		}
+		public FactorContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_factor; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterFactor(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitFactor(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitFactor(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final FactorContext factor() throws RecognitionException {
+		FactorContext _localctx = new FactorContext(_ctx, getState());
+		enterRule(_localctx, 58, RULE_factor);
+		int _la;
+		try {
+			setState(286);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case PLUS:
+			case MINUS:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(283);
+				_la = _input.LA(1);
+				if ( !(_la==PLUS || _la==MINUS) ) {
+				_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				setState(284);
+				factor();
+				}
+				break;
+			case TRUE:
+			case FALSE:
+			case NONE:
+			case LPAREN:
+			case LBRACK:
+			case LBRACE:
+			case STRING:
+			case NUMBER:
+			case NAME:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(285);
+				power();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class PowerContext extends ParserRuleContext {
+		public Atom_exprContext atom_expr() {
+			return getRuleContext(Atom_exprContext.class,0);
+		}
+		public TerminalNode DOUBLESTAR() { return getToken(PythonSubsetParser.DOUBLESTAR, 0); }
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
+		}
+		public PowerContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_power; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterPower(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitPower(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitPower(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final PowerContext power() throws RecognitionException {
+		PowerContext _localctx = new PowerContext(_ctx, getState());
+		enterRule(_localctx, 60, RULE_power);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(288);
+			atom_expr();
+			setState(291);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==DOUBLESTAR) {
+				{
+				setState(289);
+				match(DOUBLESTAR);
+				setState(290);
+				factor();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Atom_exprContext extends ParserRuleContext {
+		public AtomContext atom() {
+			return getRuleContext(AtomContext.class,0);
+		}
+		public List<TrailerContext> trailer() {
+			return getRuleContexts(TrailerContext.class);
+		}
+		public TrailerContext trailer(int i) {
+			return getRuleContext(TrailerContext.class,i);
+		}
+		public Atom_exprContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_atom_expr; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterAtom_expr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitAtom_expr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitAtom_expr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Atom_exprContext atom_expr() throws RecognitionException {
+		Atom_exprContext _localctx = new Atom_exprContext(_ctx, getState());
+		enterRule(_localctx, 62, RULE_atom_expr);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(293);
+			atom();
+			setState(297);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4483945857024L) != 0)) {
+				{
+				{
+				setState(294);
+				trailer();
+				}
+				}
+				setState(299);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class TrailerContext extends ParserRuleContext {
+		public TrailerContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_trailer; }
+	 
+		public TrailerContext() { }
+		public void copyFrom(TrailerContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class IndexTrailerContext extends TrailerContext {
+		public TerminalNode LBRACK() { return getToken(PythonSubsetParser.LBRACK, 0); }
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
+		}
+		public TerminalNode RBRACK() { return getToken(PythonSubsetParser.RBRACK, 0); }
+		public IndexTrailerContext(TrailerContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterIndexTrailer(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitIndexTrailer(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitIndexTrailer(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class CallTrailerContext extends TrailerContext {
+		public TerminalNode LPAREN() { return getToken(PythonSubsetParser.LPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(PythonSubsetParser.RPAREN, 0); }
+		public ArgumentsContext arguments() {
+			return getRuleContext(ArgumentsContext.class,0);
+		}
+		public CallTrailerContext(TrailerContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterCallTrailer(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitCallTrailer(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitCallTrailer(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class AttrTrailerContext extends TrailerContext {
+		public TerminalNode DOT() { return getToken(PythonSubsetParser.DOT, 0); }
+		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
+		public AttrTrailerContext(TrailerContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterAttrTrailer(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitAttrTrailer(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitAttrTrailer(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final TrailerContext trailer() throws RecognitionException {
+		TrailerContext _localctx = new TrailerContext(_ctx, getState());
+		enterRule(_localctx, 64, RULE_trailer);
+		int _la;
+		try {
+			setState(311);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case LPAREN:
+				_localctx = new CallTrailerContext(_localctx);
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(300);
+				match(LPAREN);
+				setState(302);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 123506080509952L) != 0)) {
+					{
+					setState(301);
+					arguments();
+					}
+				}
+
+				setState(304);
+				match(RPAREN);
+				}
+				break;
+			case LBRACK:
+				_localctx = new IndexTrailerContext(_localctx);
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(305);
+				match(LBRACK);
+				setState(306);
+				test();
+				setState(307);
+				match(RBRACK);
+				}
+				break;
+			case DOT:
+				_localctx = new AttrTrailerContext(_localctx);
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(309);
+				match(DOT);
+				setState(310);
+				match(NAME);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class AtomContext extends ParserRuleContext {
+		public AtomContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_atom; }
+	 
+		public AtomContext() { }
+		public void copyFrom(AtomContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class TrueAtomContext extends AtomContext {
+		public TerminalNode TRUE() { return getToken(PythonSubsetParser.TRUE, 0); }
+		public TrueAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterTrueAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitTrueAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitTrueAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FalseAtomContext extends AtomContext {
+		public TerminalNode FALSE() { return getToken(PythonSubsetParser.FALSE, 0); }
+		public FalseAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterFalseAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitFalseAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitFalseAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class NumberAtomContext extends AtomContext {
+		public TerminalNode NUMBER() { return getToken(PythonSubsetParser.NUMBER, 0); }
+		public NumberAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterNumberAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitNumberAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitNumberAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class StringAtomContext extends AtomContext {
+		public List<TerminalNode> STRING() { return getTokens(PythonSubsetParser.STRING); }
+		public TerminalNode STRING(int i) {
+			return getToken(PythonSubsetParser.STRING, i);
+		}
+		public StringAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterStringAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitStringAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitStringAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class DictAtomContext extends AtomContext {
+		public TerminalNode LBRACE() { return getToken(PythonSubsetParser.LBRACE, 0); }
+		public TerminalNode RBRACE() { return getToken(PythonSubsetParser.RBRACE, 0); }
+		public DictorsetmakerContext dictorsetmaker() {
+			return getRuleContext(DictorsetmakerContext.class,0);
+		}
+		public DictAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterDictAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitDictAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitDictAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ListAtomContext extends AtomContext {
+		public TerminalNode LBRACK() { return getToken(PythonSubsetParser.LBRACK, 0); }
+		public TerminalNode RBRACK() { return getToken(PythonSubsetParser.RBRACK, 0); }
+		public TestlistContext testlist() {
+			return getRuleContext(TestlistContext.class,0);
+		}
+		public ListAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterListAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitListAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitListAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ParenAtomContext extends AtomContext {
+		public TerminalNode LPAREN() { return getToken(PythonSubsetParser.LPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(PythonSubsetParser.RPAREN, 0); }
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
+		}
+		public ParenAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterParenAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitParenAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitParenAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class NameAtomContext extends AtomContext {
+		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
+		public NameAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterNameAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitNameAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitNameAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class NoneAtomContext extends AtomContext {
+		public TerminalNode NONE() { return getToken(PythonSubsetParser.NONE, 0); }
+		public NoneAtomContext(AtomContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterNoneAtom(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitNoneAtom(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitNoneAtom(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final AtomContext atom() throws RecognitionException {
+		AtomContext _localctx = new AtomContext(_ctx, getState());
+		enterRule(_localctx, 66, RULE_atom);
+		int _la;
+		try {
+			setState(338);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case LPAREN:
+				_localctx = new ParenAtomContext(_localctx);
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(313);
+				match(LPAREN);
+				setState(315);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 123506080509952L) != 0)) {
+					{
+					setState(314);
+					test();
+					}
+				}
+
+				setState(317);
+				match(RPAREN);
+				}
+				break;
+			case LBRACK:
+				_localctx = new ListAtomContext(_localctx);
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(318);
+				match(LBRACK);
+				setState(320);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 123506080509952L) != 0)) {
+					{
+					setState(319);
+					testlist();
+					}
+				}
+
+				setState(322);
+				match(RBRACK);
+				}
+				break;
+			case LBRACE:
+				_localctx = new DictAtomContext(_localctx);
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(323);
+				match(LBRACE);
+				setState(325);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 123506080509952L) != 0)) {
+					{
+					setState(324);
+					dictorsetmaker();
+					}
+				}
+
+				setState(327);
+				match(RBRACE);
+				}
+				break;
+			case NAME:
+				_localctx = new NameAtomContext(_localctx);
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(328);
+				match(NAME);
+				}
+				break;
+			case NUMBER:
+				_localctx = new NumberAtomContext(_localctx);
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(329);
+				match(NUMBER);
+				}
+				break;
+			case STRING:
+				_localctx = new StringAtomContext(_localctx);
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(331); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(330);
+					match(STRING);
+					}
+					}
+					setState(333); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==STRING );
+				}
+				break;
+			case TRUE:
+				_localctx = new TrueAtomContext(_localctx);
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(335);
+				match(TRUE);
+				}
+				break;
+			case FALSE:
+				_localctx = new FalseAtomContext(_localctx);
+				enterOuterAlt(_localctx, 8);
+				{
+				setState(336);
+				match(FALSE);
+				}
+				break;
+			case NONE:
+				_localctx = new NoneAtomContext(_localctx);
+				enterOuterAlt(_localctx, 9);
+				{
+				setState(337);
+				match(NONE);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class TestlistContext extends ParserRuleContext {
+		public List<TestContext> test() {
+			return getRuleContexts(TestContext.class);
+		}
+		public TestContext test(int i) {
+			return getRuleContext(TestContext.class,i);
+		}
+		public List<TerminalNode> COMMA() { return getTokens(PythonSubsetParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(PythonSubsetParser.COMMA, i);
+		}
+		public TestlistContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_testlist; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterTestlist(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitTestlist(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitTestlist(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final TestlistContext testlist() throws RecognitionException {
+		TestlistContext _localctx = new TestlistContext(_ctx, getState());
+		enterRule(_localctx, 68, RULE_testlist);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(340);
+			test();
+			setState(345);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==COMMA) {
+				{
+				{
+				setState(341);
+				match(COMMA);
+				setState(342);
+				test();
+				}
+				}
+				setState(347);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class DictorsetmakerContext extends ParserRuleContext {
+		public List<TestContext> test() {
+			return getRuleContexts(TestContext.class);
+		}
+		public TestContext test(int i) {
+			return getRuleContext(TestContext.class,i);
+		}
+		public List<TerminalNode> COLON() { return getTokens(PythonSubsetParser.COLON); }
+		public TerminalNode COLON(int i) {
+			return getToken(PythonSubsetParser.COLON, i);
+		}
+		public Comp_forContext comp_for() {
+			return getRuleContext(Comp_forContext.class,0);
+		}
+		public List<TerminalNode> COMMA() { return getTokens(PythonSubsetParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(PythonSubsetParser.COMMA, i);
+		}
+		public DictorsetmakerContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_dictorsetmaker; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterDictorsetmaker(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitDictorsetmaker(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitDictorsetmaker(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final DictorsetmakerContext dictorsetmaker() throws RecognitionException {
+		DictorsetmakerContext _localctx = new DictorsetmakerContext(_ctx, getState());
+		enterRule(_localctx, 70, RULE_dictorsetmaker);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(353);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
+			case 1:
+				{
+				setState(348);
+				test();
+				setState(349);
+				match(COLON);
+				setState(350);
+				test();
+				}
+				break;
+			case 2:
+				{
+				setState(352);
+				test();
+				}
+				break;
+			}
+			setState(369);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case FOR:
+				{
+				setState(355);
+				comp_for();
+				}
+				break;
+			case RBRACE:
+			case COMMA:
+				{
+				setState(366);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==COMMA) {
+					{
+					{
+					setState(356);
+					match(COMMA);
+					setState(362);
+					_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
+					case 1:
+						{
+						setState(357);
+						test();
+						setState(358);
+						match(COLON);
+						setState(359);
+						test();
+						}
+						break;
+					case 2:
+						{
+						setState(361);
+						test();
+						}
+						break;
+					}
+					}
+					}
+					setState(368);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Comp_forContext extends ParserRuleContext {
+		public TerminalNode FOR() { return getToken(PythonSubsetParser.FOR, 0); }
+		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
+		public TerminalNode IN() { return getToken(PythonSubsetParser.IN, 0); }
+		public List<TestContext> test() {
+			return getRuleContexts(TestContext.class);
+		}
+		public TestContext test(int i) {
+			return getRuleContext(TestContext.class,i);
+		}
+		public TerminalNode IF() { return getToken(PythonSubsetParser.IF, 0); }
+		public Comp_forContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_comp_for; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterComp_for(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitComp_for(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitComp_for(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Comp_forContext comp_for() throws RecognitionException {
+		Comp_forContext _localctx = new Comp_forContext(_ctx, getState());
+		enterRule(_localctx, 72, RULE_comp_for);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(371);
+			match(FOR);
+			setState(372);
+			match(NAME);
+			setState(373);
+			match(IN);
+			setState(374);
+			test();
+			setState(377);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==IF) {
+				{
+				setState(375);
+				match(IF);
+				setState(376);
+				test();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
 		}
 		return _localctx;
 	}
@@ -2255,26 +3184,26 @@ public class PythonSubsetParser extends Parser {
 
 	public final ArgumentsContext arguments() throws RecognitionException {
 		ArgumentsContext _localctx = new ArgumentsContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_arguments);
+		enterRule(_localctx, 74, RULE_arguments);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(244);
+			setState(379);
 			argument();
-			setState(249);
+			setState(384);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(245);
+				setState(380);
 				match(COMMA);
-				setState(246);
+				setState(381);
 				argument();
 				}
 				}
-				setState(251);
+				setState(386);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -2293,53 +3222,84 @@ public class PythonSubsetParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ArgumentContext extends ParserRuleContext {
-		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
-		public TerminalNode EQUAL() { return getToken(PythonSubsetParser.EQUAL, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
 		public ArgumentContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argument; }
+	 
+		public ArgumentContext() { }
+		public void copyFrom(ArgumentContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class PositionalArgumentContext extends ArgumentContext {
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
+		}
+		public PositionalArgumentContext(ArgumentContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterArgument(this);
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterPositionalArgument(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitArgument(this);
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitPositionalArgument(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitArgument(this);
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitPositionalArgument(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class KeywordArgumentContext extends ArgumentContext {
+		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
+		public TerminalNode EQUAL() { return getToken(PythonSubsetParser.EQUAL, 0); }
+		public TestContext test() {
+			return getRuleContext(TestContext.class,0);
+		}
+		public KeywordArgumentContext(ArgumentContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterKeywordArgument(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitKeywordArgument(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitKeywordArgument(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ArgumentContext argument() throws RecognitionException {
 		ArgumentContext _localctx = new ArgumentContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_argument);
+		enterRule(_localctx, 76, RULE_argument);
 		try {
-			setState(256);
+			setState(391);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,24,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,44,_ctx) ) {
 			case 1:
+				_localctx = new KeywordArgumentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(252);
+				setState(387);
 				match(NAME);
-				setState(253);
+				setState(388);
 				match(EQUAL);
-				setState(254);
-				expr(0);
+				setState(389);
+				test();
 				}
 				break;
 			case 2:
+				_localctx = new PositionalArgumentContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(255);
-				expr(0);
+				setState(390);
+				test();
 				}
 				break;
 			}
@@ -2355,533 +3315,253 @@ public class PythonSubsetParser extends Parser {
 		return _localctx;
 	}
 
-	@SuppressWarnings("CheckReturnValue")
-	public static class List_literalContext extends ParserRuleContext {
-		public TerminalNode LBRACK() { return getToken(PythonSubsetParser.LBRACK, 0); }
-		public TerminalNode RBRACK() { return getToken(PythonSubsetParser.RBRACK, 0); }
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public List<TerminalNode> COMMA() { return getTokens(PythonSubsetParser.COMMA); }
-		public TerminalNode COMMA(int i) {
-			return getToken(PythonSubsetParser.COMMA, i);
-		}
-		public List_literalContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_list_literal; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterList_literal(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitList_literal(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitList_literal(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final List_literalContext list_literal() throws RecognitionException {
-		List_literalContext _localctx = new List_literalContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_list_literal);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(258);
-			match(LBRACK);
-			setState(267);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 15438260039680L) != 0)) {
-				{
-				setState(259);
-				expr(0);
-				setState(264);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==COMMA) {
-					{
-					{
-					setState(260);
-					match(COMMA);
-					setState(261);
-					expr(0);
-					}
-					}
-					setState(266);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				}
-			}
-
-			setState(269);
-			match(RBRACK);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class Dict_literalContext extends ParserRuleContext {
-		public TerminalNode LBRACE() { return getToken(PythonSubsetParser.LBRACE, 0); }
-		public TerminalNode RBRACE() { return getToken(PythonSubsetParser.RBRACE, 0); }
-		public List<Dict_pairContext> dict_pair() {
-			return getRuleContexts(Dict_pairContext.class);
-		}
-		public Dict_pairContext dict_pair(int i) {
-			return getRuleContext(Dict_pairContext.class,i);
-		}
-		public List<TerminalNode> COMMA() { return getTokens(PythonSubsetParser.COMMA); }
-		public TerminalNode COMMA(int i) {
-			return getToken(PythonSubsetParser.COMMA, i);
-		}
-		public Dict_literalContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_dict_literal; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterDict_literal(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitDict_literal(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitDict_literal(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Dict_literalContext dict_literal() throws RecognitionException {
-		Dict_literalContext _localctx = new Dict_literalContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_dict_literal);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(271);
-			match(LBRACE);
-			setState(280);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==STRING || _la==NAME) {
-				{
-				setState(272);
-				dict_pair();
-				setState(277);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==COMMA) {
-					{
-					{
-					setState(273);
-					match(COMMA);
-					setState(274);
-					dict_pair();
-					}
-					}
-					setState(279);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				}
-			}
-
-			setState(282);
-			match(RBRACE);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class Dict_pairContext extends ParserRuleContext {
-		public TerminalNode COLON() { return getToken(PythonSubsetParser.COLON, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode STRING() { return getToken(PythonSubsetParser.STRING, 0); }
-		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
-		public Dict_pairContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_dict_pair; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterDict_pair(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitDict_pair(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitDict_pair(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Dict_pairContext dict_pair() throws RecognitionException {
-		Dict_pairContext _localctx = new Dict_pairContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_dict_pair);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(284);
-			_la = _input.LA(1);
-			if ( !(_la==STRING || _la==NAME) ) {
-			_errHandler.recoverInline(this);
-			}
-			else {
-				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-				_errHandler.reportMatch(this);
-				consume();
-			}
-			setState(285);
-			match(COLON);
-			setState(286);
-			expr(0);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class List_comprehensionContext extends ParserRuleContext {
-		public TerminalNode LBRACK() { return getToken(PythonSubsetParser.LBRACK, 0); }
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode FOR() { return getToken(PythonSubsetParser.FOR, 0); }
-		public TerminalNode NAME() { return getToken(PythonSubsetParser.NAME, 0); }
-		public TerminalNode IN() { return getToken(PythonSubsetParser.IN, 0); }
-		public TerminalNode RBRACK() { return getToken(PythonSubsetParser.RBRACK, 0); }
-		public TerminalNode IF() { return getToken(PythonSubsetParser.IF, 0); }
-		public List_comprehensionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_list_comprehension; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).enterList_comprehension(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PythonSubsetParserListener ) ((PythonSubsetParserListener)listener).exitList_comprehension(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonSubsetParserVisitor ) return ((PythonSubsetParserVisitor<? extends T>)visitor).visitList_comprehension(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final List_comprehensionContext list_comprehension() throws RecognitionException {
-		List_comprehensionContext _localctx = new List_comprehensionContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_list_comprehension);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(288);
-			match(LBRACK);
-			setState(289);
-			expr(0);
-			setState(290);
-			match(FOR);
-			setState(291);
-			match(NAME);
-			setState(292);
-			match(IN);
-			setState(293);
-			expr(0);
-			setState(296);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==IF) {
-				{
-				setState(294);
-				match(IF);
-				setState(295);
-				expr(0);
-				}
-			}
-
-			setState(298);
-			match(RBRACK);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
-		switch (ruleIndex) {
-		case 17:
-			return expr_sempred((ExprContext)_localctx, predIndex);
-		}
-		return true;
-	}
-	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
-		switch (predIndex) {
-		case 0:
-			return precpred(_ctx, 13);
-		case 1:
-			return precpred(_ctx, 12);
-		case 2:
-			return precpred(_ctx, 11);
-		case 3:
-			return precpred(_ctx, 17);
-		case 4:
-			return precpred(_ctx, 16);
-		case 5:
-			return precpred(_ctx, 15);
-		}
-		return true;
-	}
-
 	public static final String _serializedATN =
-		"\u0004\u00011\u012d\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u00014\u018a\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
 		"\f\u0007\f\u0002\r\u0007\r\u0002\u000e\u0007\u000e\u0002\u000f\u0007\u000f"+
 		"\u0002\u0010\u0007\u0010\u0002\u0011\u0007\u0011\u0002\u0012\u0007\u0012"+
 		"\u0002\u0013\u0007\u0013\u0002\u0014\u0007\u0014\u0002\u0015\u0007\u0015"+
-		"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0001\u0000\u0001\u0000"+
-		"\u0005\u00003\b\u0000\n\u0000\f\u00006\t\u0000\u0001\u0000\u0001\u0000"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001C\b\u0001\u0001\u0002"+
-		"\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002I\b\u0002\u0001\u0002"+
+		"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0002\u0018\u0007\u0018"+
+		"\u0002\u0019\u0007\u0019\u0002\u001a\u0007\u001a\u0002\u001b\u0007\u001b"+
+		"\u0002\u001c\u0007\u001c\u0002\u001d\u0007\u001d\u0002\u001e\u0007\u001e"+
+		"\u0002\u001f\u0007\u001f\u0002 \u0007 \u0002!\u0007!\u0002\"\u0007\"\u0002"+
+		"#\u0007#\u0002$\u0007$\u0002%\u0007%\u0002&\u0007&\u0001\u0000\u0001\u0000"+
+		"\u0005\u0000Q\b\u0000\n\u0000\f\u0000T\t\u0000\u0001\u0000\u0001\u0000"+
+		"\u0001\u0001\u0001\u0001\u0003\u0001Z\b\u0001\u0001\u0002\u0001\u0002"+
 		"\u0001\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0005\u0003S\b\u0003\n\u0003\f\u0003V\t\u0003\u0001\u0003"+
-		"\u0001\u0003\u0003\u0003Z\b\u0003\u0001\u0003\u0001\u0003\u0001\u0004"+
-		"\u0005\u0004_\b\u0004\n\u0004\f\u0004b\t\u0004\u0001\u0004\u0001\u0004"+
-		"\u0001\u0004\u0001\u0004\u0003\u0004h\b\u0004\u0001\u0004\u0001\u0004"+
-		"\u0001\u0004\u0001\u0004\u0001\u0005\u0001\u0005\u0001\u0005\u0003\u0005"+
-		"q\b\u0005\u0001\u0005\u0003\u0005t\b\u0005\u0001\u0005\u0001\u0005\u0001"+
-		"\u0006\u0001\u0006\u0001\u0006\u0005\u0006{\b\u0006\n\u0006\f\u0006~\t"+
-		"\u0006\u0001\u0007\u0001\u0007\u0001\u0007\u0003\u0007\u0083\b\u0007\u0001"+
-		"\b\u0001\b\u0001\b\u0001\b\u0004\b\u0089\b\b\u000b\b\f\b\u008a\u0001\b"+
-		"\u0001\b\u0003\b\u008f\b\b\u0001\t\u0001\t\u0001\t\u0001\n\u0001\n\u0001"+
-		"\n\u0001\n\u0003\n\u0098\b\n\u0001\u000b\u0001\u000b\u0001\u000b\u0001"+
-		"\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0005"+
-		"\u000b\u00a3\b\u000b\n\u000b\f\u000b\u00a6\t\u000b\u0001\u000b\u0001\u000b"+
-		"\u0001\u000b\u0003\u000b\u00ab\b\u000b\u0001\f\u0001\f\u0001\f\u0001\f"+
-		"\u0001\f\u0001\f\u0001\f\u0001\r\u0001\r\u0001\r\u0001\r\u0001\u000e\u0001"+
-		"\u000e\u0001\u000e\u0001\u000e\u0005\u000e\u00bc\b\u000e\n\u000e\f\u000e"+
-		"\u00bf\t\u000e\u0001\u000f\u0001\u000f\u0003\u000f\u00c3\b\u000f\u0001"+
-		"\u0010\u0001\u0010\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001"+
-		"\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001"+
-		"\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0003"+
-		"\u0011\u00d7\b\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001"+
-		"\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001"+
-		"\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0003\u0011\u00e8"+
-		"\b\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001"+
-		"\u0011\u0005\u0011\u00f0\b\u0011\n\u0011\f\u0011\u00f3\t\u0011\u0001\u0012"+
-		"\u0001\u0012\u0001\u0012\u0005\u0012\u00f8\b\u0012\n\u0012\f\u0012\u00fb"+
-		"\t\u0012\u0001\u0013\u0001\u0013\u0001\u0013\u0001\u0013\u0003\u0013\u0101"+
-		"\b\u0013\u0001\u0014\u0001\u0014\u0001\u0014\u0001\u0014\u0005\u0014\u0107"+
-		"\b\u0014\n\u0014\f\u0014\u010a\t\u0014\u0003\u0014\u010c\b\u0014\u0001"+
-		"\u0014\u0001\u0014\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0015\u0005"+
-		"\u0015\u0114\b\u0015\n\u0015\f\u0015\u0117\t\u0015\u0003\u0015\u0119\b"+
-		"\u0015\u0001\u0015\u0001\u0015\u0001\u0016\u0001\u0016\u0001\u0016\u0001"+
-		"\u0016\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0001"+
-		"\u0017\u0001\u0017\u0001\u0017\u0003\u0017\u0129\b\u0017\u0001\u0017\u0001"+
-		"\u0017\u0001\u0017\u0000\u0001\"\u0018\u0000\u0002\u0004\u0006\b\n\f\u000e"+
-		"\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,.\u0000\u0004"+
-		"\u0001\u0000\u0011\u0015\u0001\u0000\u000f\u0010\u0001\u0000\u0019\u001e"+
-		"\u0002\u0000))++\u0148\u00004\u0001\u0000\u0000\u0000\u0002B\u0001\u0000"+
-		"\u0000\u0000\u0004D\u0001\u0000\u0000\u0000\u0006L\u0001\u0000\u0000\u0000"+
-		"\b`\u0001\u0000\u0000\u0000\nm\u0001\u0000\u0000\u0000\fw\u0001\u0000"+
-		"\u0000\u0000\u000e\u007f\u0001\u0000\u0000\u0000\u0010\u008e\u0001\u0000"+
-		"\u0000\u0000\u0012\u0090\u0001\u0000\u0000\u0000\u0014\u0097\u0001\u0000"+
-		"\u0000\u0000\u0016\u0099\u0001\u0000\u0000\u0000\u0018\u00ac\u0001\u0000"+
-		"\u0000\u0000\u001a\u00b3\u0001\u0000\u0000\u0000\u001c\u00b7\u0001\u0000"+
-		"\u0000\u0000\u001e\u00c0\u0001\u0000\u0000\u0000 \u00c4\u0001\u0000\u0000"+
-		"\u0000\"\u00d6\u0001\u0000\u0000\u0000$\u00f4\u0001\u0000\u0000\u0000"+
-		"&\u0100\u0001\u0000\u0000\u0000(\u0102\u0001\u0000\u0000\u0000*\u010f"+
-		"\u0001\u0000\u0000\u0000,\u011c\u0001\u0000\u0000\u0000.\u0120\u0001\u0000"+
-		"\u0000\u000003\u0005-\u0000\u000013\u0003\u0002\u0001\u000020\u0001\u0000"+
-		"\u0000\u000021\u0001\u0000\u0000\u000036\u0001\u0000\u0000\u000042\u0001"+
-		"\u0000\u0000\u000045\u0001\u0000\u0000\u000057\u0001\u0000\u0000\u0000"+
-		"64\u0001\u0000\u0000\u000078\u0005\u0000\u0000\u00018\u0001\u0001\u0000"+
-		"\u0000\u00009C\u0003\u0004\u0002\u0000:C\u0003\u0006\u0003\u0000;C\u0003"+
-		"\b\u0004\u0000<C\u0003\u0016\u000b\u0000=C\u0003\u0018\f\u0000>C\u0003"+
-		"\u001a\r\u0000?C\u0003 \u0010\u0000@C\u0003\u001c\u000e\u0000AC\u0003"+
-		"\u001e\u000f\u0000B9\u0001\u0000\u0000\u0000B:\u0001\u0000\u0000\u0000"+
-		"B;\u0001\u0000\u0000\u0000B<\u0001\u0000\u0000\u0000B=\u0001\u0000\u0000"+
-		"\u0000B>\u0001\u0000\u0000\u0000B?\u0001\u0000\u0000\u0000B@\u0001\u0000"+
-		"\u0000\u0000BA\u0001\u0000\u0000\u0000C\u0003\u0001\u0000\u0000\u0000"+
-		"DE\u0005\b\u0000\u0000EH\u0005+\u0000\u0000FG\u0005\n\u0000\u0000GI\u0005"+
-		"+\u0000\u0000HF\u0001\u0000\u0000\u0000HI\u0001\u0000\u0000\u0000IJ\u0001"+
-		"\u0000\u0000\u0000JK\u0005-\u0000\u0000K\u0005\u0001\u0000\u0000\u0000"+
-		"LM\u0005\t\u0000\u0000MN\u0005+\u0000\u0000NO\u0005\b\u0000\u0000OT\u0005"+
-		"+\u0000\u0000PQ\u0005%\u0000\u0000QS\u0005+\u0000\u0000RP\u0001\u0000"+
-		"\u0000\u0000SV\u0001\u0000\u0000\u0000TR\u0001\u0000\u0000\u0000TU\u0001"+
-		"\u0000\u0000\u0000UY\u0001\u0000\u0000\u0000VT\u0001\u0000\u0000\u0000"+
-		"WX\u0005\n\u0000\u0000XZ\u0005+\u0000\u0000YW\u0001\u0000\u0000\u0000"+
-		"YZ\u0001\u0000\u0000\u0000Z[\u0001\u0000\u0000\u0000[\\\u0005-\u0000\u0000"+
-		"\\\u0007\u0001\u0000\u0000\u0000]_\u0003\n\u0005\u0000^]\u0001\u0000\u0000"+
-		"\u0000_b\u0001\u0000\u0000\u0000`^\u0001\u0000\u0000\u0000`a\u0001\u0000"+
-		"\u0000\u0000ac\u0001\u0000\u0000\u0000b`\u0001\u0000\u0000\u0000cd\u0005"+
-		"\u0001\u0000\u0000de\u0005+\u0000\u0000eg\u0005\u001f\u0000\u0000fh\u0003"+
-		"\f\u0006\u0000gf\u0001\u0000\u0000\u0000gh\u0001\u0000\u0000\u0000hi\u0001"+
-		"\u0000\u0000\u0000ij\u0005 \u0000\u0000jk\u0005&\u0000\u0000kl\u0003\u0010"+
-		"\b\u0000l\t\u0001\u0000\u0000\u0000ms\u0005,\u0000\u0000np\u0005\u001f"+
-		"\u0000\u0000oq\u0003$\u0012\u0000po\u0001\u0000\u0000\u0000pq\u0001\u0000"+
-		"\u0000\u0000qr\u0001\u0000\u0000\u0000rt\u0005 \u0000\u0000sn\u0001\u0000"+
-		"\u0000\u0000st\u0001\u0000\u0000\u0000tu\u0001\u0000\u0000\u0000uv\u0005"+
-		"-\u0000\u0000v\u000b\u0001\u0000\u0000\u0000w|\u0003\u000e\u0007\u0000"+
-		"xy\u0005%\u0000\u0000y{\u0003\u000e\u0007\u0000zx\u0001\u0000\u0000\u0000"+
-		"{~\u0001\u0000\u0000\u0000|z\u0001\u0000\u0000\u0000|}\u0001\u0000\u0000"+
-		"\u0000}\r\u0001\u0000\u0000\u0000~|\u0001\u0000\u0000\u0000\u007f\u0082"+
-		"\u0005+\u0000\u0000\u0080\u0081\u0005\u0016\u0000\u0000\u0081\u0083\u0003"+
-		"\"\u0011\u0000\u0082\u0080\u0001\u0000\u0000\u0000\u0082\u0083\u0001\u0000"+
-		"\u0000\u0000\u0083\u000f\u0001\u0000\u0000\u0000\u0084\u008f\u0003\u0012"+
-		"\t\u0000\u0085\u0086\u0005-\u0000\u0000\u0086\u0088\u00050\u0000\u0000"+
-		"\u0087\u0089\u0003\u0002\u0001\u0000\u0088\u0087\u0001\u0000\u0000\u0000"+
-		"\u0089\u008a\u0001\u0000\u0000\u0000\u008a\u0088\u0001\u0000\u0000\u0000"+
-		"\u008a\u008b\u0001\u0000\u0000\u0000\u008b\u008c\u0001\u0000\u0000\u0000"+
-		"\u008c\u008d\u00051\u0000\u0000\u008d\u008f\u0001\u0000\u0000\u0000\u008e"+
-		"\u0084\u0001\u0000\u0000\u0000\u008e\u0085\u0001\u0000\u0000\u0000\u008f"+
-		"\u0011\u0001\u0000\u0000\u0000\u0090\u0091\u0003\u0014\n\u0000\u0091\u0092"+
-		"\u0005-\u0000\u0000\u0092\u0013\u0001\u0000\u0000\u0000\u0093\u0098\u0003"+
-		" \u0010\u0000\u0094\u0098\u0003\u001e\u000f\u0000\u0095\u0098\u0003\u001a"+
-		"\r\u0000\u0096\u0098\u0003\u001c\u000e\u0000\u0097\u0093\u0001\u0000\u0000"+
-		"\u0000\u0097\u0094\u0001\u0000\u0000\u0000\u0097\u0095\u0001\u0000\u0000"+
-		"\u0000\u0097\u0096\u0001\u0000\u0000\u0000\u0098\u0015\u0001\u0000\u0000"+
-		"\u0000\u0099\u009a\u0005\u0002\u0000\u0000\u009a\u009b\u0003\"\u0011\u0000"+
-		"\u009b\u009c\u0005&\u0000\u0000\u009c\u00a4\u0003\u0010\b\u0000\u009d"+
-		"\u009e\u0005\u0003\u0000\u0000\u009e\u009f\u0003\"\u0011\u0000\u009f\u00a0"+
-		"\u0005&\u0000\u0000\u00a0\u00a1\u0003\u0010\b\u0000\u00a1\u00a3\u0001"+
-		"\u0000\u0000\u0000\u00a2\u009d\u0001\u0000\u0000\u0000\u00a3\u00a6\u0001"+
-		"\u0000\u0000\u0000\u00a4\u00a2\u0001\u0000\u0000\u0000\u00a4\u00a5\u0001"+
-		"\u0000\u0000\u0000\u00a5\u00aa\u0001\u0000\u0000\u0000\u00a6\u00a4\u0001"+
-		"\u0000\u0000\u0000\u00a7\u00a8\u0005\u0004\u0000\u0000\u00a8\u00a9\u0005"+
-		"&\u0000\u0000\u00a9\u00ab\u0003\u0010\b\u0000\u00aa\u00a7\u0001\u0000"+
-		"\u0000\u0000\u00aa\u00ab\u0001\u0000\u0000\u0000\u00ab\u0017\u0001\u0000"+
-		"\u0000\u0000\u00ac\u00ad\u0005\u0005\u0000\u0000\u00ad\u00ae\u0005+\u0000"+
-		"\u0000\u00ae\u00af\u0005\u0006\u0000\u0000\u00af\u00b0\u0003\"\u0011\u0000"+
-		"\u00b0\u00b1\u0005&\u0000\u0000\u00b1\u00b2\u0003\u0010\b\u0000\u00b2"+
-		"\u0019\u0001\u0000\u0000\u0000\u00b3\u00b4\u0005+\u0000\u0000\u00b4\u00b5"+
-		"\u0005\u0016\u0000\u0000\u00b5\u00b6\u0003\"\u0011\u0000\u00b6\u001b\u0001"+
-		"\u0000\u0000\u0000\u00b7\u00b8\u0005\u000b\u0000\u0000\u00b8\u00bd\u0005"+
-		"+\u0000\u0000\u00b9\u00ba\u0005%\u0000\u0000\u00ba\u00bc\u0005+\u0000"+
-		"\u0000\u00bb\u00b9\u0001\u0000\u0000\u0000\u00bc\u00bf\u0001\u0000\u0000"+
-		"\u0000\u00bd\u00bb\u0001\u0000\u0000\u0000\u00bd\u00be\u0001\u0000\u0000"+
-		"\u0000\u00be\u001d\u0001\u0000\u0000\u0000\u00bf\u00bd\u0001\u0000\u0000"+
-		"\u0000\u00c0\u00c2\u0005\u0007\u0000\u0000\u00c1\u00c3\u0003\"\u0011\u0000"+
-		"\u00c2\u00c1\u0001\u0000\u0000\u0000\u00c2\u00c3\u0001\u0000\u0000\u0000"+
-		"\u00c3\u001f\u0001\u0000\u0000\u0000\u00c4\u00c5\u0003\"\u0011\u0000\u00c5"+
-		"!\u0001\u0000\u0000\u0000\u00c6\u00c7\u0006\u0011\uffff\uffff\u0000\u00c7"+
-		"\u00c8\u0005\u0010\u0000\u0000\u00c8\u00d7\u0003\"\u0011\u000e\u00c9\u00d7"+
-		"\u0005+\u0000\u0000\u00ca\u00d7\u0005*\u0000\u0000\u00cb\u00d7\u0005)"+
-		"\u0000\u0000\u00cc\u00d7\u0005\f\u0000\u0000\u00cd\u00d7\u0005\r\u0000"+
-		"\u0000\u00ce\u00d7\u0005\u000e\u0000\u0000\u00cf\u00d7\u0003(\u0014\u0000"+
-		"\u00d0\u00d7\u0003*\u0015\u0000\u00d1\u00d7\u0003.\u0017\u0000\u00d2\u00d3"+
-		"\u0005\u001f\u0000\u0000\u00d3\u00d4\u0003\"\u0011\u0000\u00d4\u00d5\u0005"+
-		" \u0000\u0000\u00d5\u00d7\u0001\u0000\u0000\u0000\u00d6\u00c6\u0001\u0000"+
-		"\u0000\u0000\u00d6\u00c9\u0001\u0000\u0000\u0000\u00d6\u00ca\u0001\u0000"+
-		"\u0000\u0000\u00d6\u00cb\u0001\u0000\u0000\u0000\u00d6\u00cc\u0001\u0000"+
-		"\u0000\u0000\u00d6\u00cd\u0001\u0000\u0000\u0000\u00d6\u00ce\u0001\u0000"+
-		"\u0000\u0000\u00d6\u00cf\u0001\u0000\u0000\u0000\u00d6\u00d0\u0001\u0000"+
-		"\u0000\u0000\u00d6\u00d1\u0001\u0000\u0000\u0000\u00d6\u00d2\u0001\u0000"+
-		"\u0000\u0000\u00d7\u00f1\u0001\u0000\u0000\u0000\u00d8\u00d9\n\r\u0000"+
-		"\u0000\u00d9\u00da\u0007\u0000\u0000\u0000\u00da\u00f0\u0003\"\u0011\u000e"+
-		"\u00db\u00dc\n\f\u0000\u0000\u00dc\u00dd\u0007\u0001\u0000\u0000\u00dd"+
-		"\u00f0\u0003\"\u0011\r\u00de\u00df\n\u000b\u0000\u0000\u00df\u00e0\u0007"+
-		"\u0002\u0000\u0000\u00e0\u00f0\u0003\"\u0011\f\u00e1\u00e2\n\u0011\u0000"+
-		"\u0000\u00e2\u00e3\u0005\'\u0000\u0000\u00e3\u00f0\u0005+\u0000\u0000"+
-		"\u00e4\u00e5\n\u0010\u0000\u0000\u00e5\u00e7\u0005\u001f\u0000\u0000\u00e6"+
-		"\u00e8\u0003$\u0012\u0000\u00e7\u00e6\u0001\u0000\u0000\u0000\u00e7\u00e8"+
-		"\u0001\u0000\u0000\u0000\u00e8\u00e9\u0001\u0000\u0000\u0000\u00e9\u00f0"+
-		"\u0005 \u0000\u0000\u00ea\u00eb\n\u000f\u0000\u0000\u00eb\u00ec\u0005"+
-		"!\u0000\u0000\u00ec\u00ed\u0003\"\u0011\u0000\u00ed\u00ee\u0005\"\u0000"+
-		"\u0000\u00ee\u00f0\u0001\u0000\u0000\u0000\u00ef\u00d8\u0001\u0000\u0000"+
-		"\u0000\u00ef\u00db\u0001\u0000\u0000\u0000\u00ef\u00de\u0001\u0000\u0000"+
-		"\u0000\u00ef\u00e1\u0001\u0000\u0000\u0000\u00ef\u00e4\u0001\u0000\u0000"+
-		"\u0000\u00ef\u00ea\u0001\u0000\u0000\u0000\u00f0\u00f3\u0001\u0000\u0000"+
-		"\u0000\u00f1\u00ef\u0001\u0000\u0000\u0000\u00f1\u00f2\u0001\u0000\u0000"+
-		"\u0000\u00f2#\u0001\u0000\u0000\u0000\u00f3\u00f1\u0001\u0000\u0000\u0000"+
-		"\u00f4\u00f9\u0003&\u0013\u0000\u00f5\u00f6\u0005%\u0000\u0000\u00f6\u00f8"+
-		"\u0003&\u0013\u0000\u00f7\u00f5\u0001\u0000\u0000\u0000\u00f8\u00fb\u0001"+
-		"\u0000\u0000\u0000\u00f9\u00f7\u0001\u0000\u0000\u0000\u00f9\u00fa\u0001"+
-		"\u0000\u0000\u0000\u00fa%\u0001\u0000\u0000\u0000\u00fb\u00f9\u0001\u0000"+
-		"\u0000\u0000\u00fc\u00fd\u0005+\u0000\u0000\u00fd\u00fe\u0005\u0016\u0000"+
-		"\u0000\u00fe\u0101\u0003\"\u0011\u0000\u00ff\u0101\u0003\"\u0011\u0000"+
-		"\u0100\u00fc\u0001\u0000\u0000\u0000\u0100\u00ff\u0001\u0000\u0000\u0000"+
-		"\u0101\'\u0001\u0000\u0000\u0000\u0102\u010b\u0005!\u0000\u0000\u0103"+
-		"\u0108\u0003\"\u0011\u0000\u0104\u0105\u0005%\u0000\u0000\u0105\u0107"+
-		"\u0003\"\u0011\u0000\u0106\u0104\u0001\u0000\u0000\u0000\u0107\u010a\u0001"+
-		"\u0000\u0000\u0000\u0108\u0106\u0001\u0000\u0000\u0000\u0108\u0109\u0001"+
-		"\u0000\u0000\u0000\u0109\u010c\u0001\u0000\u0000\u0000\u010a\u0108\u0001"+
-		"\u0000\u0000\u0000\u010b\u0103\u0001\u0000\u0000\u0000\u010b\u010c\u0001"+
-		"\u0000\u0000\u0000\u010c\u010d\u0001\u0000\u0000\u0000\u010d\u010e\u0005"+
-		"\"\u0000\u0000\u010e)\u0001\u0000\u0000\u0000\u010f\u0118\u0005#\u0000"+
-		"\u0000\u0110\u0115\u0003,\u0016\u0000\u0111\u0112\u0005%\u0000\u0000\u0112"+
-		"\u0114\u0003,\u0016\u0000\u0113\u0111\u0001\u0000\u0000\u0000\u0114\u0117"+
-		"\u0001\u0000\u0000\u0000\u0115\u0113\u0001\u0000\u0000\u0000\u0115\u0116"+
-		"\u0001\u0000\u0000\u0000\u0116\u0119\u0001\u0000\u0000\u0000\u0117\u0115"+
-		"\u0001\u0000\u0000\u0000\u0118\u0110\u0001\u0000\u0000\u0000\u0118\u0119"+
-		"\u0001\u0000\u0000\u0000\u0119\u011a\u0001\u0000\u0000\u0000\u011a\u011b"+
-		"\u0005$\u0000\u0000\u011b+\u0001\u0000\u0000\u0000\u011c\u011d\u0007\u0003"+
-		"\u0000\u0000\u011d\u011e\u0005&\u0000\u0000\u011e\u011f\u0003\"\u0011"+
-		"\u0000\u011f-\u0001\u0000\u0000\u0000\u0120\u0121\u0005!\u0000\u0000\u0121"+
-		"\u0122\u0003\"\u0011\u0000\u0122\u0123\u0005\u0005\u0000\u0000\u0123\u0124"+
-		"\u0005+\u0000\u0000\u0124\u0125\u0005\u0006\u0000\u0000\u0125\u0128\u0003"+
-		"\"\u0011\u0000\u0126\u0127\u0005\u0002\u0000\u0000\u0127\u0129\u0003\""+
-		"\u0011\u0000\u0128\u0126\u0001\u0000\u0000\u0000\u0128\u0129\u0001\u0000"+
-		"\u0000\u0000\u0129\u012a\u0001\u0000\u0000\u0000\u012a\u012b\u0005\"\u0000"+
-		"\u0000\u012b/\u0001\u0000\u0000\u0000\u001e24BHTY`gps|\u0082\u008a\u008e"+
-		"\u0097\u00a4\u00aa\u00bd\u00c2\u00d6\u00e7\u00ef\u00f1\u00f9\u0100\u0108"+
-		"\u010b\u0115\u0118\u0128";
+		"\u0001\u0003\u0003\u0003e\b\u0003\u0001\u0004\u0001\u0004\u0001\u0004"+
+		"\u0003\u0004j\b\u0004\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005"+
+		"\u0003\u0005p\b\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0003\u0006w\b\u0006\u0001\u0007\u0001\u0007\u0001\u0007"+
+		"\u0005\u0007|\b\u0007\n\u0007\f\u0007\u007f\t\u0007\u0001\b\u0001\b\u0001"+
+		"\b\u0003\b\u0084\b\b\u0001\t\u0001\t\u0001\t\u0005\t\u0089\b\t\n\t\f\t"+
+		"\u008c\t\t\u0001\n\u0005\n\u008f\b\n\n\n\f\n\u0092\t\n\u0001\n\u0001\n"+
+		"\u0001\n\u0001\n\u0003\n\u0098\b\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001"+
+		"\u000b\u0001\u000b\u0003\u000b\u00a0\b\u000b\u0001\u000b\u0001\u000b\u0001"+
+		"\f\u0001\f\u0001\f\u0005\f\u00a7\b\f\n\f\f\f\u00aa\t\f\u0001\r\u0001\r"+
+		"\u0001\r\u0003\r\u00af\b\r\u0001\u000e\u0001\u000e\u0001\u000e\u0001\u000e"+
+		"\u0004\u000e\u00b5\b\u000e\u000b\u000e\f\u000e\u00b6\u0001\u000e\u0001"+
+		"\u000e\u0003\u000e\u00bb\b\u000e\u0001\u000f\u0001\u000f\u0001\u000f\u0001"+
+		"\u000f\u0001\u000f\u0001\u000f\u0001\u000f\u0001\u000f\u0001\u000f\u0005"+
+		"\u000f\u00c6\b\u000f\n\u000f\f\u000f\u00c9\t\u000f\u0001\u000f\u0001\u000f"+
+		"\u0001\u000f\u0003\u000f\u00ce\b\u000f\u0001\u0010\u0001\u0010\u0001\u0010"+
+		"\u0001\u0010\u0001\u0010\u0001\u0010\u0001\u0010\u0001\u0011\u0001\u0011"+
+		"\u0001\u0011\u0001\u0011\u0001\u0012\u0001\u0012\u0001\u0012\u0001\u0012"+
+		"\u0005\u0012\u00df\b\u0012\n\u0012\f\u0012\u00e2\t\u0012\u0001\u0013\u0001"+
+		"\u0013\u0003\u0013\u00e6\b\u0013\u0001\u0014\u0001\u0014\u0001\u0015\u0001"+
+		"\u0015\u0001\u0016\u0001\u0016\u0001\u0016\u0005\u0016\u00ef\b\u0016\n"+
+		"\u0016\f\u0016\u00f2\t\u0016\u0001\u0017\u0001\u0017\u0001\u0017\u0005"+
+		"\u0017\u00f7\b\u0017\n\u0017\f\u0017\u00fa\t\u0017\u0001\u0018\u0001\u0018"+
+		"\u0001\u0018\u0003\u0018\u00ff\b\u0018\u0001\u0019\u0001\u0019\u0001\u0019"+
+		"\u0001\u0019\u0005\u0019\u0105\b\u0019\n\u0019\f\u0019\u0108\t\u0019\u0001"+
+		"\u001a\u0001\u001a\u0001\u001b\u0001\u001b\u0001\u001b\u0005\u001b\u010f"+
+		"\b\u001b\n\u001b\f\u001b\u0112\t\u001b\u0001\u001c\u0001\u001c\u0001\u001c"+
+		"\u0005\u001c\u0117\b\u001c\n\u001c\f\u001c\u011a\t\u001c\u0001\u001d\u0001"+
+		"\u001d\u0001\u001d\u0003\u001d\u011f\b\u001d\u0001\u001e\u0001\u001e\u0001"+
+		"\u001e\u0003\u001e\u0124\b\u001e\u0001\u001f\u0001\u001f\u0005\u001f\u0128"+
+		"\b\u001f\n\u001f\f\u001f\u012b\t\u001f\u0001 \u0001 \u0003 \u012f\b \u0001"+
+		" \u0001 \u0001 \u0001 \u0001 \u0001 \u0001 \u0003 \u0138\b \u0001!\u0001"+
+		"!\u0003!\u013c\b!\u0001!\u0001!\u0001!\u0003!\u0141\b!\u0001!\u0001!\u0001"+
+		"!\u0003!\u0146\b!\u0001!\u0001!\u0001!\u0001!\u0004!\u014c\b!\u000b!\f"+
+		"!\u014d\u0001!\u0001!\u0001!\u0003!\u0153\b!\u0001\"\u0001\"\u0001\"\u0005"+
+		"\"\u0158\b\"\n\"\f\"\u015b\t\"\u0001#\u0001#\u0001#\u0001#\u0001#\u0003"+
+		"#\u0162\b#\u0001#\u0001#\u0001#\u0001#\u0001#\u0001#\u0001#\u0003#\u016b"+
+		"\b#\u0005#\u016d\b#\n#\f#\u0170\t#\u0003#\u0172\b#\u0001$\u0001$\u0001"+
+		"$\u0001$\u0001$\u0001$\u0003$\u017a\b$\u0001%\u0001%\u0001%\u0005%\u017f"+
+		"\b%\n%\f%\u0182\t%\u0001&\u0001&\u0001&\u0001&\u0003&\u0188\b&\u0001&"+
+		"\u0000\u0000\'\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016"+
+		"\u0018\u001a\u001c\u001e \"$&(*,.02468:<>@BDFHJL\u0000\u0003\u0002\u0000"+
+		"\u0006\u0006\u001c!\u0001\u0000\u0012\u0013\u0002\u0000\u0014\u0016\u0018"+
+		"\u0018\u019c\u0000R\u0001\u0000\u0000\u0000\u0002Y\u0001\u0000\u0000\u0000"+
+		"\u0004[\u0001\u0000\u0000\u0000\u0006d\u0001\u0000\u0000\u0000\bi\u0001"+
+		"\u0000\u0000\u0000\nk\u0001\u0000\u0000\u0000\fq\u0001\u0000\u0000\u0000"+
+		"\u000ex\u0001\u0000\u0000\u0000\u0010\u0080\u0001\u0000\u0000\u0000\u0012"+
+		"\u0085\u0001\u0000\u0000\u0000\u0014\u0090\u0001\u0000\u0000\u0000\u0016"+
+		"\u009d\u0001\u0000\u0000\u0000\u0018\u00a3\u0001\u0000\u0000\u0000\u001a"+
+		"\u00ab\u0001\u0000\u0000\u0000\u001c\u00ba\u0001\u0000\u0000\u0000\u001e"+
+		"\u00bc\u0001\u0000\u0000\u0000 \u00cf\u0001\u0000\u0000\u0000\"\u00d6"+
+		"\u0001\u0000\u0000\u0000$\u00da\u0001\u0000\u0000\u0000&\u00e3\u0001\u0000"+
+		"\u0000\u0000(\u00e7\u0001\u0000\u0000\u0000*\u00e9\u0001\u0000\u0000\u0000"+
+		",\u00eb\u0001\u0000\u0000\u0000.\u00f3\u0001\u0000\u0000\u00000\u00fe"+
+		"\u0001\u0000\u0000\u00002\u0100\u0001\u0000\u0000\u00004\u0109\u0001\u0000"+
+		"\u0000\u00006\u010b\u0001\u0000\u0000\u00008\u0113\u0001\u0000\u0000\u0000"+
+		":\u011e\u0001\u0000\u0000\u0000<\u0120\u0001\u0000\u0000\u0000>\u0125"+
+		"\u0001\u0000\u0000\u0000@\u0137\u0001\u0000\u0000\u0000B\u0152\u0001\u0000"+
+		"\u0000\u0000D\u0154\u0001\u0000\u0000\u0000F\u0161\u0001\u0000\u0000\u0000"+
+		"H\u0173\u0001\u0000\u0000\u0000J\u017b\u0001\u0000\u0000\u0000L\u0187"+
+		"\u0001\u0000\u0000\u0000NQ\u00050\u0000\u0000OQ\u0003\u0002\u0001\u0000"+
+		"PN\u0001\u0000\u0000\u0000PO\u0001\u0000\u0000\u0000QT\u0001\u0000\u0000"+
+		"\u0000RP\u0001\u0000\u0000\u0000RS\u0001\u0000\u0000\u0000SU\u0001\u0000"+
+		"\u0000\u0000TR\u0001\u0000\u0000\u0000UV\u0005\u0000\u0000\u0001V\u0001"+
+		"\u0001\u0000\u0000\u0000WZ\u0003\u0004\u0002\u0000XZ\u0003\b\u0004\u0000"+
+		"YW\u0001\u0000\u0000\u0000YX\u0001\u0000\u0000\u0000Z\u0003\u0001\u0000"+
+		"\u0000\u0000[\\\u0003\u0006\u0003\u0000\\]\u00050\u0000\u0000]\u0005\u0001"+
+		"\u0000\u0000\u0000^e\u0003(\u0014\u0000_e\u0003\"\u0011\u0000`e\u0003"+
+		"&\u0013\u0000ae\u0003$\u0012\u0000be\u0003\n\u0005\u0000ce\u0003\f\u0006"+
+		"\u0000d^\u0001\u0000\u0000\u0000d_\u0001\u0000\u0000\u0000d`\u0001\u0000"+
+		"\u0000\u0000da\u0001\u0000\u0000\u0000db\u0001\u0000\u0000\u0000dc\u0001"+
+		"\u0000\u0000\u0000e\u0007\u0001\u0000\u0000\u0000fj\u0003\u0014\n\u0000"+
+		"gj\u0003\u001e\u000f\u0000hj\u0003 \u0010\u0000if\u0001\u0000\u0000\u0000"+
+		"ig\u0001\u0000\u0000\u0000ih\u0001\u0000\u0000\u0000j\t\u0001\u0000\u0000"+
+		"\u0000kl\u0005\b\u0000\u0000lo\u0003\u0012\t\u0000mn\u0005\n\u0000\u0000"+
+		"np\u0005.\u0000\u0000om\u0001\u0000\u0000\u0000op\u0001\u0000\u0000\u0000"+
+		"p\u000b\u0001\u0000\u0000\u0000qr\u0005\t\u0000\u0000rs\u0003\u0012\t"+
+		"\u0000sv\u0005\b\u0000\u0000tw\u0005\u0014\u0000\u0000uw\u0003\u000e\u0007"+
+		"\u0000vt\u0001\u0000\u0000\u0000vu\u0001\u0000\u0000\u0000w\r\u0001\u0000"+
+		"\u0000\u0000x}\u0003\u0010\b\u0000yz\u0005(\u0000\u0000z|\u0003\u0010"+
+		"\b\u0000{y\u0001\u0000\u0000\u0000|\u007f\u0001\u0000\u0000\u0000}{\u0001"+
+		"\u0000\u0000\u0000}~\u0001\u0000\u0000\u0000~\u000f\u0001\u0000\u0000"+
+		"\u0000\u007f}\u0001\u0000\u0000\u0000\u0080\u0083\u0005.\u0000\u0000\u0081"+
+		"\u0082\u0005\n\u0000\u0000\u0082\u0084\u0005.\u0000\u0000\u0083\u0081"+
+		"\u0001\u0000\u0000\u0000\u0083\u0084\u0001\u0000\u0000\u0000\u0084\u0011"+
+		"\u0001\u0000\u0000\u0000\u0085\u008a\u0005.\u0000\u0000\u0086\u0087\u0005"+
+		"*\u0000\u0000\u0087\u0089\u0005.\u0000\u0000\u0088\u0086\u0001\u0000\u0000"+
+		"\u0000\u0089\u008c\u0001\u0000\u0000\u0000\u008a\u0088\u0001\u0000\u0000"+
+		"\u0000\u008a\u008b\u0001\u0000\u0000\u0000\u008b\u0013\u0001\u0000\u0000"+
+		"\u0000\u008c\u008a\u0001\u0000\u0000\u0000\u008d\u008f\u0003\u0016\u000b"+
+		"\u0000\u008e\u008d\u0001\u0000\u0000\u0000\u008f\u0092\u0001\u0000\u0000"+
+		"\u0000\u0090\u008e\u0001\u0000\u0000\u0000\u0090\u0091\u0001\u0000\u0000"+
+		"\u0000\u0091\u0093\u0001\u0000\u0000\u0000\u0092\u0090\u0001\u0000\u0000"+
+		"\u0000\u0093\u0094\u0005\u0001\u0000\u0000\u0094\u0095\u0005.\u0000\u0000"+
+		"\u0095\u0097\u0005\"\u0000\u0000\u0096\u0098\u0003\u0018\f\u0000\u0097"+
+		"\u0096\u0001\u0000\u0000\u0000\u0097\u0098\u0001\u0000\u0000\u0000\u0098"+
+		"\u0099\u0001\u0000\u0000\u0000\u0099\u009a\u0005#\u0000\u0000\u009a\u009b"+
+		"\u0005)\u0000\u0000\u009b\u009c\u0003\u001c\u000e\u0000\u009c\u0015\u0001"+
+		"\u0000\u0000\u0000\u009d\u009f\u0005/\u0000\u0000\u009e\u00a0\u0003J%"+
+		"\u0000\u009f\u009e\u0001\u0000\u0000\u0000\u009f\u00a0\u0001\u0000\u0000"+
+		"\u0000\u00a0\u00a1\u0001\u0000\u0000\u0000\u00a1\u00a2\u00050\u0000\u0000"+
+		"\u00a2\u0017\u0001\u0000\u0000\u0000\u00a3\u00a8\u0003\u001a\r\u0000\u00a4"+
+		"\u00a5\u0005(\u0000\u0000\u00a5\u00a7\u0003\u001a\r\u0000\u00a6\u00a4"+
+		"\u0001\u0000\u0000\u0000\u00a7\u00aa\u0001\u0000\u0000\u0000\u00a8\u00a6"+
+		"\u0001\u0000\u0000\u0000\u00a8\u00a9\u0001\u0000\u0000\u0000\u00a9\u0019"+
+		"\u0001\u0000\u0000\u0000\u00aa\u00a8\u0001\u0000\u0000\u0000\u00ab\u00ae"+
+		"\u0005.\u0000\u0000\u00ac\u00ad\u0005\u0019\u0000\u0000\u00ad\u00af\u0003"+
+		"*\u0015\u0000\u00ae\u00ac\u0001\u0000\u0000\u0000\u00ae\u00af\u0001\u0000"+
+		"\u0000\u0000\u00af\u001b\u0001\u0000\u0000\u0000\u00b0\u00bb\u0003\u0004"+
+		"\u0002\u0000\u00b1\u00b2\u00050\u0000\u0000\u00b2\u00b4\u00051\u0000\u0000"+
+		"\u00b3\u00b5\u0003\u0002\u0001\u0000\u00b4\u00b3\u0001\u0000\u0000\u0000"+
+		"\u00b5\u00b6\u0001\u0000\u0000\u0000\u00b6\u00b4\u0001\u0000\u0000\u0000"+
+		"\u00b6\u00b7\u0001\u0000\u0000\u0000\u00b7\u00b8\u0001\u0000\u0000\u0000"+
+		"\u00b8\u00b9\u00052\u0000\u0000\u00b9\u00bb\u0001\u0000\u0000\u0000\u00ba"+
+		"\u00b0\u0001\u0000\u0000\u0000\u00ba\u00b1\u0001\u0000\u0000\u0000\u00bb"+
+		"\u001d\u0001\u0000\u0000\u0000\u00bc\u00bd\u0005\u0002\u0000\u0000\u00bd"+
+		"\u00be\u0003*\u0015\u0000\u00be\u00bf\u0005)\u0000\u0000\u00bf\u00c7\u0003"+
+		"\u001c\u000e\u0000\u00c0\u00c1\u0005\u0003\u0000\u0000\u00c1\u00c2\u0003"+
+		"*\u0015\u0000\u00c2\u00c3\u0005)\u0000\u0000\u00c3\u00c4\u0003\u001c\u000e"+
+		"\u0000\u00c4\u00c6\u0001\u0000\u0000\u0000\u00c5\u00c0\u0001\u0000\u0000"+
+		"\u0000\u00c6\u00c9\u0001\u0000\u0000\u0000\u00c7\u00c5\u0001\u0000\u0000"+
+		"\u0000\u00c7\u00c8\u0001\u0000\u0000\u0000\u00c8\u00cd\u0001\u0000\u0000"+
+		"\u0000\u00c9\u00c7\u0001\u0000\u0000\u0000\u00ca\u00cb\u0005\u0004\u0000"+
+		"\u0000\u00cb\u00cc\u0005)\u0000\u0000\u00cc\u00ce\u0003\u001c\u000e\u0000"+
+		"\u00cd\u00ca\u0001\u0000\u0000\u0000\u00cd\u00ce\u0001\u0000\u0000\u0000"+
+		"\u00ce\u001f\u0001\u0000\u0000\u0000\u00cf\u00d0\u0005\u0005\u0000\u0000"+
+		"\u00d0\u00d1\u0005.\u0000\u0000\u00d1\u00d2\u0005\u0006\u0000\u0000\u00d2"+
+		"\u00d3\u0003*\u0015\u0000\u00d3\u00d4\u0005)\u0000\u0000\u00d4\u00d5\u0003"+
+		"\u001c\u000e\u0000\u00d5!\u0001\u0000\u0000\u0000\u00d6\u00d7\u0005.\u0000"+
+		"\u0000\u00d7\u00d8\u0005\u0019\u0000\u0000\u00d8\u00d9\u0003*\u0015\u0000"+
+		"\u00d9#\u0001\u0000\u0000\u0000\u00da\u00db\u0005\u000b\u0000\u0000\u00db"+
+		"\u00e0\u0005.\u0000\u0000\u00dc\u00dd\u0005(\u0000\u0000\u00dd\u00df\u0005"+
+		".\u0000\u0000\u00de\u00dc\u0001\u0000\u0000\u0000\u00df\u00e2\u0001\u0000"+
+		"\u0000\u0000\u00e0\u00de\u0001\u0000\u0000\u0000\u00e0\u00e1\u0001\u0000"+
+		"\u0000\u0000\u00e1%\u0001\u0000\u0000\u0000\u00e2\u00e0\u0001\u0000\u0000"+
+		"\u0000\u00e3\u00e5\u0005\u0007\u0000\u0000\u00e4\u00e6\u0003*\u0015\u0000"+
+		"\u00e5\u00e4\u0001\u0000\u0000\u0000\u00e5\u00e6\u0001\u0000\u0000\u0000"+
+		"\u00e6\'\u0001\u0000\u0000\u0000\u00e7\u00e8\u0003*\u0015\u0000\u00e8"+
+		")\u0001\u0000\u0000\u0000\u00e9\u00ea\u0003,\u0016\u0000\u00ea+\u0001"+
+		"\u0000\u0000\u0000\u00eb\u00f0\u0003.\u0017\u0000\u00ec\u00ed\u0005\u000f"+
+		"\u0000\u0000\u00ed\u00ef\u0003.\u0017\u0000\u00ee\u00ec\u0001\u0000\u0000"+
+		"\u0000\u00ef\u00f2\u0001\u0000\u0000\u0000\u00f0\u00ee\u0001\u0000\u0000"+
+		"\u0000\u00f0\u00f1\u0001\u0000\u0000\u0000\u00f1-\u0001\u0000\u0000\u0000"+
+		"\u00f2\u00f0\u0001\u0000\u0000\u0000\u00f3\u00f8\u00030\u0018\u0000\u00f4"+
+		"\u00f5\u0005\u0010\u0000\u0000\u00f5\u00f7\u00030\u0018\u0000\u00f6\u00f4"+
+		"\u0001\u0000\u0000\u0000\u00f7\u00fa\u0001\u0000\u0000\u0000\u00f8\u00f6"+
+		"\u0001\u0000\u0000\u0000\u00f8\u00f9\u0001\u0000\u0000\u0000\u00f9/\u0001"+
+		"\u0000\u0000\u0000\u00fa\u00f8\u0001\u0000\u0000\u0000\u00fb\u00fc\u0005"+
+		"\u0011\u0000\u0000\u00fc\u00ff\u00030\u0018\u0000\u00fd\u00ff\u00032\u0019"+
+		"\u0000\u00fe\u00fb\u0001\u0000\u0000\u0000\u00fe\u00fd\u0001\u0000\u0000"+
+		"\u0000\u00ff1\u0001\u0000\u0000\u0000\u0100\u0106\u00036\u001b\u0000\u0101"+
+		"\u0102\u00034\u001a\u0000\u0102\u0103\u00036\u001b\u0000\u0103\u0105\u0001"+
+		"\u0000\u0000\u0000\u0104\u0101\u0001\u0000\u0000\u0000\u0105\u0108\u0001"+
+		"\u0000\u0000\u0000\u0106\u0104\u0001\u0000\u0000\u0000\u0106\u0107\u0001"+
+		"\u0000\u0000\u0000\u01073\u0001\u0000\u0000\u0000\u0108\u0106\u0001\u0000"+
+		"\u0000\u0000\u0109\u010a\u0007\u0000\u0000\u0000\u010a5\u0001\u0000\u0000"+
+		"\u0000\u010b\u0110\u00038\u001c\u0000\u010c\u010d\u0007\u0001\u0000\u0000"+
+		"\u010d\u010f\u00038\u001c\u0000\u010e\u010c\u0001\u0000\u0000\u0000\u010f"+
+		"\u0112\u0001\u0000\u0000\u0000\u0110\u010e\u0001\u0000\u0000\u0000\u0110"+
+		"\u0111\u0001\u0000\u0000\u0000\u01117\u0001\u0000\u0000\u0000\u0112\u0110"+
+		"\u0001\u0000\u0000\u0000\u0113\u0118\u0003:\u001d\u0000\u0114\u0115\u0007"+
+		"\u0002\u0000\u0000\u0115\u0117\u0003:\u001d\u0000\u0116\u0114\u0001\u0000"+
+		"\u0000\u0000\u0117\u011a\u0001\u0000\u0000\u0000\u0118\u0116\u0001\u0000"+
+		"\u0000\u0000\u0118\u0119\u0001\u0000\u0000\u0000\u01199\u0001\u0000\u0000"+
+		"\u0000\u011a\u0118\u0001\u0000\u0000\u0000\u011b\u011c\u0007\u0001\u0000"+
+		"\u0000\u011c\u011f\u0003:\u001d\u0000\u011d\u011f\u0003<\u001e\u0000\u011e"+
+		"\u011b\u0001\u0000\u0000\u0000\u011e\u011d\u0001\u0000\u0000\u0000\u011f"+
+		";\u0001\u0000\u0000\u0000\u0120\u0123\u0003>\u001f\u0000\u0121\u0122\u0005"+
+		"\u0017\u0000\u0000\u0122\u0124\u0003:\u001d\u0000\u0123\u0121\u0001\u0000"+
+		"\u0000\u0000\u0123\u0124\u0001\u0000\u0000\u0000\u0124=\u0001\u0000\u0000"+
+		"\u0000\u0125\u0129\u0003B!\u0000\u0126\u0128\u0003@ \u0000\u0127\u0126"+
+		"\u0001\u0000\u0000\u0000\u0128\u012b\u0001\u0000\u0000\u0000\u0129\u0127"+
+		"\u0001\u0000\u0000\u0000\u0129\u012a\u0001\u0000\u0000\u0000\u012a?\u0001"+
+		"\u0000\u0000\u0000\u012b\u0129\u0001\u0000\u0000\u0000\u012c\u012e\u0005"+
+		"\"\u0000\u0000\u012d\u012f\u0003J%\u0000\u012e\u012d\u0001\u0000\u0000"+
+		"\u0000\u012e\u012f\u0001\u0000\u0000\u0000\u012f\u0130\u0001\u0000\u0000"+
+		"\u0000\u0130\u0138\u0005#\u0000\u0000\u0131\u0132\u0005$\u0000\u0000\u0132"+
+		"\u0133\u0003*\u0015\u0000\u0133\u0134\u0005%\u0000\u0000\u0134\u0138\u0001"+
+		"\u0000\u0000\u0000\u0135\u0136\u0005*\u0000\u0000\u0136\u0138\u0005.\u0000"+
+		"\u0000\u0137\u012c\u0001\u0000\u0000\u0000\u0137\u0131\u0001\u0000\u0000"+
+		"\u0000\u0137\u0135\u0001\u0000\u0000\u0000\u0138A\u0001\u0000\u0000\u0000"+
+		"\u0139\u013b\u0005\"\u0000\u0000\u013a\u013c\u0003*\u0015\u0000\u013b"+
+		"\u013a\u0001\u0000\u0000\u0000\u013b\u013c\u0001\u0000\u0000\u0000\u013c"+
+		"\u013d\u0001\u0000\u0000\u0000\u013d\u0153\u0005#\u0000\u0000\u013e\u0140"+
+		"\u0005$\u0000\u0000\u013f\u0141\u0003D\"\u0000\u0140\u013f\u0001\u0000"+
+		"\u0000\u0000\u0140\u0141\u0001\u0000\u0000\u0000\u0141\u0142\u0001\u0000"+
+		"\u0000\u0000\u0142\u0153\u0005%\u0000\u0000\u0143\u0145\u0005&\u0000\u0000"+
+		"\u0144\u0146\u0003F#\u0000\u0145\u0144\u0001\u0000\u0000\u0000\u0145\u0146"+
+		"\u0001\u0000\u0000\u0000\u0146\u0147\u0001\u0000\u0000\u0000\u0147\u0153"+
+		"\u0005\'\u0000\u0000\u0148\u0153\u0005.\u0000\u0000\u0149\u0153\u0005"+
+		"-\u0000\u0000\u014a\u014c\u0005,\u0000\u0000\u014b\u014a\u0001\u0000\u0000"+
+		"\u0000\u014c\u014d\u0001\u0000\u0000\u0000\u014d\u014b\u0001\u0000\u0000"+
+		"\u0000\u014d\u014e\u0001\u0000\u0000\u0000\u014e\u0153\u0001\u0000\u0000"+
+		"\u0000\u014f\u0153\u0005\f\u0000\u0000\u0150\u0153\u0005\r\u0000\u0000"+
+		"\u0151\u0153\u0005\u000e\u0000\u0000\u0152\u0139\u0001\u0000\u0000\u0000"+
+		"\u0152\u013e\u0001\u0000\u0000\u0000\u0152\u0143\u0001\u0000\u0000\u0000"+
+		"\u0152\u0148\u0001\u0000\u0000\u0000\u0152\u0149\u0001\u0000\u0000\u0000"+
+		"\u0152\u014b\u0001\u0000\u0000\u0000\u0152\u014f\u0001\u0000\u0000\u0000"+
+		"\u0152\u0150\u0001\u0000\u0000\u0000\u0152\u0151\u0001\u0000\u0000\u0000"+
+		"\u0153C\u0001\u0000\u0000\u0000\u0154\u0159\u0003*\u0015\u0000\u0155\u0156"+
+		"\u0005(\u0000\u0000\u0156\u0158\u0003*\u0015\u0000\u0157\u0155\u0001\u0000"+
+		"\u0000\u0000\u0158\u015b\u0001\u0000\u0000\u0000\u0159\u0157\u0001\u0000"+
+		"\u0000\u0000\u0159\u015a\u0001\u0000\u0000\u0000\u015aE\u0001\u0000\u0000"+
+		"\u0000\u015b\u0159\u0001\u0000\u0000\u0000\u015c\u015d\u0003*\u0015\u0000"+
+		"\u015d\u015e\u0005)\u0000\u0000\u015e\u015f\u0003*\u0015\u0000\u015f\u0162"+
+		"\u0001\u0000\u0000\u0000\u0160\u0162\u0003*\u0015\u0000\u0161\u015c\u0001"+
+		"\u0000\u0000\u0000\u0161\u0160\u0001\u0000\u0000\u0000\u0162\u0171\u0001"+
+		"\u0000\u0000\u0000\u0163\u0172\u0003H$\u0000\u0164\u016a\u0005(\u0000"+
+		"\u0000\u0165\u0166\u0003*\u0015\u0000\u0166\u0167\u0005)\u0000\u0000\u0167"+
+		"\u0168\u0003*\u0015\u0000\u0168\u016b\u0001\u0000\u0000\u0000\u0169\u016b"+
+		"\u0003*\u0015\u0000\u016a\u0165\u0001\u0000\u0000\u0000\u016a\u0169\u0001"+
+		"\u0000\u0000\u0000\u016b\u016d\u0001\u0000\u0000\u0000\u016c\u0164\u0001"+
+		"\u0000\u0000\u0000\u016d\u0170\u0001\u0000\u0000\u0000\u016e\u016c\u0001"+
+		"\u0000\u0000\u0000\u016e\u016f\u0001\u0000\u0000\u0000\u016f\u0172\u0001"+
+		"\u0000\u0000\u0000\u0170\u016e\u0001\u0000\u0000\u0000\u0171\u0163\u0001"+
+		"\u0000\u0000\u0000\u0171\u016e\u0001\u0000\u0000\u0000\u0172G\u0001\u0000"+
+		"\u0000\u0000\u0173\u0174\u0005\u0005\u0000\u0000\u0174\u0175\u0005.\u0000"+
+		"\u0000\u0175\u0176\u0005\u0006\u0000\u0000\u0176\u0179\u0003*\u0015\u0000"+
+		"\u0177\u0178\u0005\u0002\u0000\u0000\u0178\u017a\u0003*\u0015\u0000\u0179"+
+		"\u0177\u0001\u0000\u0000\u0000\u0179\u017a\u0001\u0000\u0000\u0000\u017a"+
+		"I\u0001\u0000\u0000\u0000\u017b\u0180\u0003L&\u0000\u017c\u017d\u0005"+
+		"(\u0000\u0000\u017d\u017f\u0003L&\u0000\u017e\u017c\u0001\u0000\u0000"+
+		"\u0000\u017f\u0182\u0001\u0000\u0000\u0000\u0180\u017e\u0001\u0000\u0000"+
+		"\u0000\u0180\u0181\u0001\u0000\u0000\u0000\u0181K\u0001\u0000\u0000\u0000"+
+		"\u0182\u0180\u0001\u0000\u0000\u0000\u0183\u0184\u0005.\u0000\u0000\u0184"+
+		"\u0185\u0005\u0019\u0000\u0000\u0185\u0188\u0003*\u0015\u0000\u0186\u0188"+
+		"\u0003*\u0015\u0000\u0187\u0183\u0001\u0000\u0000\u0000\u0187\u0186\u0001"+
+		"\u0000\u0000\u0000\u0188M\u0001\u0000\u0000\u0000-PRYdiov}\u0083\u008a"+
+		"\u0090\u0097\u009f\u00a8\u00ae\u00b6\u00ba\u00c7\u00cd\u00e0\u00e5\u00f0"+
+		"\u00f8\u00fe\u0106\u0110\u0118\u011e\u0123\u0129\u012e\u0137\u013b\u0140"+
+		"\u0145\u014d\u0152\u0159\u0161\u016a\u016e\u0171\u0179\u0180\u0187";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

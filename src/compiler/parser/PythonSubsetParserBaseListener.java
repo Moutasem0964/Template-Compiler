@@ -31,109 +31,49 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterImportStatement(PythonSubsetParser.ImportStatementContext ctx) { }
+	@Override public void enterStmt(PythonSubsetParser.StmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitImportStatement(PythonSubsetParser.ImportStatementContext ctx) { }
+	@Override public void exitStmt(PythonSubsetParser.StmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFromImportStatement(PythonSubsetParser.FromImportStatementContext ctx) { }
+	@Override public void enterSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFromImportStatement(PythonSubsetParser.FromImportStatementContext ctx) { }
+	@Override public void exitSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionDefinition(PythonSubsetParser.FunctionDefinitionContext ctx) { }
+	@Override public void enterSmall_stmt(PythonSubsetParser.Small_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionDefinition(PythonSubsetParser.FunctionDefinitionContext ctx) { }
+	@Override public void exitSmall_stmt(PythonSubsetParser.Small_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIfStatement(PythonSubsetParser.IfStatementContext ctx) { }
+	@Override public void enterCompound_stmt(PythonSubsetParser.Compound_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfStatement(PythonSubsetParser.IfStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterForStatement(PythonSubsetParser.ForStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitForStatement(PythonSubsetParser.ForStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAssignStatement(PythonSubsetParser.AssignStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAssignStatement(PythonSubsetParser.AssignStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExpressionStatement(PythonSubsetParser.ExpressionStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpressionStatement(PythonSubsetParser.ExpressionStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterGlobalStatement(PythonSubsetParser.GlobalStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGlobalStatement(PythonSubsetParser.GlobalStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReturnStatement(PythonSubsetParser.ReturnStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReturnStatement(PythonSubsetParser.ReturnStatementContext ctx) { }
+	@Override public void exitCompound_stmt(PythonSubsetParser.Compound_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -158,6 +98,42 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFrom_import_stmt(PythonSubsetParser.From_import_stmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterImport_as_names(PythonSubsetParser.Import_as_namesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImport_as_names(PythonSubsetParser.Import_as_namesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterImport_as_name(PythonSubsetParser.Import_as_nameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImport_as_name(PythonSubsetParser.Import_as_nameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDotted_name(PythonSubsetParser.Dotted_nameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDotted_name(PythonSubsetParser.Dotted_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -218,30 +194,6 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSuite(PythonSubsetParser.SuiteContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSmall_stmt(PythonSubsetParser.Small_stmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSmall_stmt(PythonSubsetParser.Small_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -319,157 +271,49 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMulDivOp(PythonSubsetParser.MulDivOpContext ctx) { }
+	@Override public void enterTest(PythonSubsetParser.TestContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMulDivOp(PythonSubsetParser.MulDivOpContext ctx) { }
+	@Override public void exitTest(PythonSubsetParser.TestContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterListComprehensionExpression(PythonSubsetParser.ListComprehensionExpressionContext ctx) { }
+	@Override public void enterOr_test(PythonSubsetParser.Or_testContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitListComprehensionExpression(PythonSubsetParser.ListComprehensionExpressionContext ctx) { }
+	@Override public void exitOr_test(PythonSubsetParser.Or_testContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDictExpression(PythonSubsetParser.DictExpressionContext ctx) { }
+	@Override public void enterAnd_test(PythonSubsetParser.And_testContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDictExpression(PythonSubsetParser.DictExpressionContext ctx) { }
+	@Override public void exitAnd_test(PythonSubsetParser.And_testContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNameExpression(PythonSubsetParser.NameExpressionContext ctx) { }
+	@Override public void enterNot_test(PythonSubsetParser.Not_testContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNameExpression(PythonSubsetParser.NameExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterListExpression(PythonSubsetParser.ListExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitListExpression(PythonSubsetParser.ListExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAddSubOp(PythonSubsetParser.AddSubOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAddSubOp(PythonSubsetParser.AddSubOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterUnaryMinus(PythonSubsetParser.UnaryMinusContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnaryMinus(PythonSubsetParser.UnaryMinusContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNoneLiteral(PythonSubsetParser.NoneLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNoneLiteral(PythonSubsetParser.NoneLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSubscript(PythonSubsetParser.SubscriptContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSubscript(PythonSubsetParser.SubscriptContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAttributeAccess(PythonSubsetParser.AttributeAccessContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAttributeAccess(PythonSubsetParser.AttributeAccessContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFalseLiteral(PythonSubsetParser.FalseLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFalseLiteral(PythonSubsetParser.FalseLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStringLiteral(PythonSubsetParser.StringLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringLiteral(PythonSubsetParser.StringLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTrueLiteral(PythonSubsetParser.TrueLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTrueLiteral(PythonSubsetParser.TrueLiteralContext ctx) { }
+	@Override public void exitNot_test(PythonSubsetParser.Not_testContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -487,37 +331,253 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParenExpression(PythonSubsetParser.ParenExpressionContext ctx) { }
+	@Override public void enterComp_op(PythonSubsetParser.Comp_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParenExpression(PythonSubsetParser.ParenExpressionContext ctx) { }
+	@Override public void exitComp_op(PythonSubsetParser.Comp_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionCall(PythonSubsetParser.FunctionCallContext ctx) { }
+	@Override public void enterExpr(PythonSubsetParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionCall(PythonSubsetParser.FunctionCallContext ctx) { }
+	@Override public void exitExpr(PythonSubsetParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumberLiteral(PythonSubsetParser.NumberLiteralContext ctx) { }
+	@Override public void enterTerm(PythonSubsetParser.TermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumberLiteral(PythonSubsetParser.NumberLiteralContext ctx) { }
+	@Override public void exitTerm(PythonSubsetParser.TermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFactor(PythonSubsetParser.FactorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFactor(PythonSubsetParser.FactorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPower(PythonSubsetParser.PowerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPower(PythonSubsetParser.PowerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAtom_expr(PythonSubsetParser.Atom_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAtom_expr(PythonSubsetParser.Atom_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCallTrailer(PythonSubsetParser.CallTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCallTrailer(PythonSubsetParser.CallTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIndexTrailer(PythonSubsetParser.IndexTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndexTrailer(PythonSubsetParser.IndexTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAttrTrailer(PythonSubsetParser.AttrTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAttrTrailer(PythonSubsetParser.AttrTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParenAtom(PythonSubsetParser.ParenAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParenAtom(PythonSubsetParser.ParenAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterListAtom(PythonSubsetParser.ListAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitListAtom(PythonSubsetParser.ListAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDictAtom(PythonSubsetParser.DictAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDictAtom(PythonSubsetParser.DictAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNameAtom(PythonSubsetParser.NameAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNameAtom(PythonSubsetParser.NameAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNumberAtom(PythonSubsetParser.NumberAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumberAtom(PythonSubsetParser.NumberAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringAtom(PythonSubsetParser.StringAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringAtom(PythonSubsetParser.StringAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTrueAtom(PythonSubsetParser.TrueAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTrueAtom(PythonSubsetParser.TrueAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFalseAtom(PythonSubsetParser.FalseAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFalseAtom(PythonSubsetParser.FalseAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNoneAtom(PythonSubsetParser.NoneAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNoneAtom(PythonSubsetParser.NoneAtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTestlist(PythonSubsetParser.TestlistContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTestlist(PythonSubsetParser.TestlistContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDictorsetmaker(PythonSubsetParser.DictorsetmakerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDictorsetmaker(PythonSubsetParser.DictorsetmakerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterComp_for(PythonSubsetParser.Comp_forContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComp_for(PythonSubsetParser.Comp_forContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -535,61 +595,25 @@ public class PythonSubsetParserBaseListener implements PythonSubsetParserListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArgument(PythonSubsetParser.ArgumentContext ctx) { }
+	@Override public void enterKeywordArgument(PythonSubsetParser.KeywordArgumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArgument(PythonSubsetParser.ArgumentContext ctx) { }
+	@Override public void exitKeywordArgument(PythonSubsetParser.KeywordArgumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterList_literal(PythonSubsetParser.List_literalContext ctx) { }
+	@Override public void enterPositionalArgument(PythonSubsetParser.PositionalArgumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitList_literal(PythonSubsetParser.List_literalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDict_literal(PythonSubsetParser.Dict_literalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDict_literal(PythonSubsetParser.Dict_literalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDict_pair(PythonSubsetParser.Dict_pairContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDict_pair(PythonSubsetParser.Dict_pairContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterList_comprehension(PythonSubsetParser.List_comprehensionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitList_comprehension(PythonSubsetParser.List_comprehensionContext ctx) { }
+	@Override public void exitPositionalArgument(PythonSubsetParser.PositionalArgumentContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

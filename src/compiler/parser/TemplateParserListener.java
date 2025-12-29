@@ -116,6 +116,18 @@ public interface TemplateParserListener extends ParseTreeListener {
 	 */
 	void exitDoctypeContent(TemplateParser.DoctypeContentContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code CloseTagContent}
+	 * labeled alternative in {@link TemplateParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void enterCloseTagContent(TemplateParser.CloseTagContentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CloseTagContent}
+	 * labeled alternative in {@link TemplateParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void exitCloseTagContent(TemplateParser.CloseTagContentContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NormalElement}
 	 * labeled alternative in {@link TemplateParser#html_element}.
 	 * @param ctx the parse tree
@@ -139,6 +151,18 @@ public interface TemplateParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSelfClosingElement(TemplateParser.SelfClosingElementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code OpenOnlyElement}
+	 * labeled alternative in {@link TemplateParser#html_element}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpenOnlyElement(TemplateParser.OpenOnlyElementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code OpenOnlyElement}
+	 * labeled alternative in {@link TemplateParser#html_element}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpenOnlyElement(TemplateParser.OpenOnlyElementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code StaticAttribute}
 	 * labeled alternative in {@link TemplateParser#attribute}.

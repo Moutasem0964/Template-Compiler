@@ -3,10 +3,10 @@ package compiler.main;
 import compiler.ast.core.AstNode;
 import compiler.ast.visitors.PrintVisitor;
 import compiler.visitors.*;
-import compiler.parser.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import compiler.parser.*;
 
 import java.io.IOException;
 

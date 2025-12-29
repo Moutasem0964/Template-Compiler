@@ -1,7 +1,6 @@
 parser grammar TemplateParser;
 
 
-
 @header {
     package compiler.parser;
 }
@@ -23,17 +22,19 @@ content
     | jinja_comment     #JinjaCommentContent
     | HTML_COMMENT      #HtmlCommentContent
     | DOCTYPE           #DoctypeContent
+    | HTML_CLOSE        #CloseTagContent
     ;
 
 // HTML Elements
 html_element
     : HTML_OPEN attribute* TAG_CLOSE content* HTML_CLOSE     #NormalElement
     | HTML_OPEN attribute* TAG_SLASH_CLOSE                   #SelfClosingElement
+    | HTML_OPEN attribute* TAG_CLOSE                         #OpenOnlyElement
     ;
 
 attribute
-    : TAG_NAME TAG_EQUALS TAG_VALUE                          #StaticAttribute
-    | TAG_NAME TAG_EQUALS TAG_JINJA_VAR_START jinja_expr JINJA_VAR_END  #DynamicAttribute
+    : TAG_NAME TAG_EQUALS TAG_VALUE                                         #StaticAttribute
+    | TAG_NAME TAG_EQUALS TAG_JINJA_VAR_START jinja_expr JINJA_VAR_END    #DynamicAttribute
     ;
 
 // Plain text
@@ -64,7 +65,7 @@ jinja_comment
     : JINJA_COMMENT_START JINJA_COMMENT_TEXT? JINJA_COMMENT_END
     ;
 
-// Jinja expressions (simplified for your use case)
+// Jinja expressions
 jinja_expr
     : jinja_expr DOT JINJA_NAME                              #JinjaAttributeAccess
     | jinja_expr LBRACK jinja_expr RBRACK                    #JinjaSubscript

@@ -1,6 +1,5 @@
 lexer grammar PythonSubsetLexer;
 
-
 @header {
     package compiler.parser;
 }
@@ -20,6 +19,9 @@ GLOBAL: 'global';
 TRUE: 'True';
 FALSE: 'False';
 NONE: 'None';
+OR: 'or';
+AND: 'and';
+NOT: 'not';
 
 // Operators
 PLUS: '+';
@@ -53,10 +55,10 @@ COLON: ':';
 DOT: '.';
 ARROW: '->';
 
-// String literals
+// String literals - handle any string content
 STRING
-    : '"' (~["\\\r\n] | '\\' .)* '"'
-    | '\'' (~['\\\r\n] | '\\' .)* '\''
+    : '"' ( ~["\\\r\n] | '\\' . | '\\"' )* '"'
+    | '\'' ( ~['\\\r\n] | '\\' . | '\\\'' )* '\''
     ;
 
 // Numbers
@@ -64,19 +66,21 @@ NUMBER
     : [0-9]+ ('.' [0-9]+)?
     ;
 
-// Identifiers
+// Identifiers - must come after keywords
 NAME: [a-zA-Z_][a-zA-Z0-9_]*;
 
 // Decorator
 DECORATOR: '@' NAME;
 
-// Whitespace and newlines
-NEWLINE: ('\r'? '\n' | '\r') -> channel(HIDDEN);
-WS: [ \t]+ -> skip;
+// Newlines - important for Python!
+NEWLINE: ('\r'? '\n' | '\r');
+
+// Indentation tokens - managed by PythonIndentingLexer
+INDENT: '<<<INDENT>>>';
+DEDENT: '<<<DEDENT>>>';
+
+// Whitespace
+WS: [ \t]+ -> channel(HIDDEN);
 
 // Comments
 COMMENT: '#' ~[\r\n]* -> skip;
-
-// Indentation (handled by PythonIndentingLexer wrapper)
-INDENT: '<<<INDENT>>>' -> channel(HIDDEN);
-DEDENT: '<<<DEDENT>>>' -> channel(HIDDEN);
