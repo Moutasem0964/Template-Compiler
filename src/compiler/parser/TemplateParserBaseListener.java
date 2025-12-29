@@ -31,133 +31,349 @@ public class TemplateParserBaseListener implements TemplateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTextPart(TemplateParser.TextPartContext ctx) { }
+	@Override public void enterHtmlContent(TemplateParser.HtmlContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTextPart(TemplateParser.TextPartContext ctx) { }
+	@Override public void exitHtmlContent(TemplateParser.HtmlContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprPart(TemplateParser.ExprPartContext ctx) { }
+	@Override public void enterTextContent(TemplateParser.TextContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExprPart(TemplateParser.ExprPartContext ctx) { }
+	@Override public void exitTextContent(TemplateParser.TextContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStmtPart(TemplateParser.StmtPartContext ctx) { }
+	@Override public void enterJinjaVariableContent(TemplateParser.JinjaVariableContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStmtPart(TemplateParser.StmtPartContext ctx) { }
+	@Override public void exitJinjaVariableContent(TemplateParser.JinjaVariableContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHtmlPart(TemplateParser.HtmlPartContext ctx) { }
+	@Override public void enterJinjaForContent(TemplateParser.JinjaForContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHtmlPart(TemplateParser.HtmlPartContext ctx) { }
+	@Override public void exitJinjaForContent(TemplateParser.JinjaForContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJinjaExpr(TemplateParser.JinjaExprContext ctx) { }
+	@Override public void enterJinjaIfContent(TemplateParser.JinjaIfContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJinjaExpr(TemplateParser.JinjaExprContext ctx) { }
+	@Override public void exitJinjaIfContent(TemplateParser.JinjaIfContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJinjaStmt(TemplateParser.JinjaStmtContext ctx) { }
+	@Override public void enterJinjaCommentContent(TemplateParser.JinjaCommentContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJinjaStmt(TemplateParser.JinjaStmtContext ctx) { }
+	@Override public void exitJinjaCommentContent(TemplateParser.JinjaCommentContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFullTag(TemplateParser.FullTagContext ctx) { }
+	@Override public void enterHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFullTag(TemplateParser.FullTagContext ctx) { }
+	@Override public void exitHtmlCommentContent(TemplateParser.HtmlCommentContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelfClosingTag(TemplateParser.SelfClosingTagContext ctx) { }
+	@Override public void enterDoctypeContent(TemplateParser.DoctypeContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelfClosingTag(TemplateParser.SelfClosingTagContext ctx) { }
+	@Override public void exitDoctypeContent(TemplateParser.DoctypeContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStyleTag(TemplateParser.StyleTagContext ctx) { }
+	@Override public void enterCloseTagContent(TemplateParser.CloseTagContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStyleTag(TemplateParser.StyleTagContext ctx) { }
+	@Override public void exitCloseTagContent(TemplateParser.CloseTagContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCssRawContent(TemplateParser.CssRawContentContext ctx) { }
+	@Override public void enterNormalElement(TemplateParser.NormalElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCssRawContent(TemplateParser.CssRawContentContext ctx) { }
+	@Override public void exitNormalElement(TemplateParser.NormalElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttributes(TemplateParser.AttributesContext ctx) { }
+	@Override public void enterSelfClosingElement(TemplateParser.SelfClosingElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttributes(TemplateParser.AttributesContext ctx) { }
+	@Override public void exitSelfClosingElement(TemplateParser.SelfClosingElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOpenOnlyElement(TemplateParser.OpenOnlyElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpenOnlyElement(TemplateParser.OpenOnlyElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStaticAttribute(TemplateParser.StaticAttributeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStaticAttribute(TemplateParser.StaticAttributeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDynamicAttribute(TemplateParser.DynamicAttributeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDynamicAttribute(TemplateParser.DynamicAttributeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterText_content(TemplateParser.Text_contentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitText_content(TemplateParser.Text_contentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinja_variable(TemplateParser.Jinja_variableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinja_variable(TemplateParser.Jinja_variableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinja_for(TemplateParser.Jinja_forContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinja_for(TemplateParser.Jinja_forContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinja_if(TemplateParser.Jinja_ifContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinja_if(TemplateParser.Jinja_ifContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinja_comment(TemplateParser.Jinja_commentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinja_comment(TemplateParser.Jinja_commentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaFunctionCall(TemplateParser.JinjaFunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaFunctionCall(TemplateParser.JinjaFunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaString(TemplateParser.JinjaStringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaString(TemplateParser.JinjaStringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaParenExpr(TemplateParser.JinjaParenExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaParenExpr(TemplateParser.JinjaParenExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaSubscript(TemplateParser.JinjaSubscriptContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaSubscript(TemplateParser.JinjaSubscriptContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaAttributeAccess(TemplateParser.JinjaAttributeAccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaAttributeAccess(TemplateParser.JinjaAttributeAccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaNumber(TemplateParser.JinjaNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaNumber(TemplateParser.JinjaNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaName(TemplateParser.JinjaNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaName(TemplateParser.JinjaNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinja_args(TemplateParser.Jinja_argsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinja_args(TemplateParser.Jinja_argsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaKeywordArg(TemplateParser.JinjaKeywordArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaKeywordArg(TemplateParser.JinjaKeywordArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJinjaPositionalArg(TemplateParser.JinjaPositionalArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJinjaPositionalArg(TemplateParser.JinjaPositionalArgContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

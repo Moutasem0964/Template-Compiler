@@ -13,65 +13,89 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link PythonSubsetParser#program}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#file_input}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProgram(PythonSubsetParser.ProgramContext ctx);
+	T visitFile_input(PythonSubsetParser.File_inputContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code simple}
-	 * labeled alternative in {@link PythonSubsetParser#stmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSimple(PythonSubsetParser.SimpleContext ctx);
+	T visitStmt(PythonSubsetParser.StmtContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code compound}
-	 * labeled alternative in {@link PythonSubsetParser#stmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#simple_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCompound(PythonSubsetParser.CompoundContext ctx);
+	T visitSimple_stmt(PythonSubsetParser.Simple_stmtContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprStmt}
-	 * labeled alternative in {@link PythonSubsetParser#simpleStmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#small_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprStmt(PythonSubsetParser.ExprStmtContext ctx);
+	T visitSmall_stmt(PythonSubsetParser.Small_stmtContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code assign}
-	 * labeled alternative in {@link PythonSubsetParser#simpleStmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#compound_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssign(PythonSubsetParser.AssignContext ctx);
+	T visitCompound_stmt(PythonSubsetParser.Compound_stmtContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ifRule}
-	 * labeled alternative in {@link PythonSubsetParser#compoundStmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#import_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfRule(PythonSubsetParser.IfRuleContext ctx);
+	T visitImport_stmt(PythonSubsetParser.Import_stmtContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code forRule}
-	 * labeled alternative in {@link PythonSubsetParser#compoundStmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#from_import_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitForRule(PythonSubsetParser.ForRuleContext ctx);
+	T visitFrom_import_stmt(PythonSubsetParser.From_import_stmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PythonSubsetParser#ifStmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#import_as_names}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfStmt(PythonSubsetParser.IfStmtContext ctx);
+	T visitImport_as_names(PythonSubsetParser.Import_as_namesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PythonSubsetParser#forStmt}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#import_as_name}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitForStmt(PythonSubsetParser.ForStmtContext ctx);
+	T visitImport_as_name(PythonSubsetParser.Import_as_nameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#dotted_name}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDotted_name(PythonSubsetParser.Dotted_nameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#function_def}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction_def(PythonSubsetParser.Function_defContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#decorator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecorator(PythonSubsetParser.DecoratorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#parameters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameters(PythonSubsetParser.ParametersContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#parameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter(PythonSubsetParser.ParameterContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PythonSubsetParser#suite}.
 	 * @param ctx the parse tree
@@ -79,119 +103,227 @@ public interface PythonSubsetParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSuite(PythonSubsetParser.SuiteContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#if_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIf_stmt(PythonSubsetParser.If_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#for_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFor_stmt(PythonSubsetParser.For_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#assign_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssign_stmt(PythonSubsetParser.Assign_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#global_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGlobal_stmt(PythonSubsetParser.Global_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#return_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_stmt(PythonSubsetParser.Return_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#expr_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpr_stmt(PythonSubsetParser.Expr_stmtContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PythonSubsetParser#test}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTest(PythonSubsetParser.TestContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code comparison}
-	 * labeled alternative in {@link PythonSubsetParser#expr}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#or_test}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOr_test(PythonSubsetParser.Or_testContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#and_test}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnd_test(PythonSubsetParser.And_testContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#not_test}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNot_test(PythonSubsetParser.Not_testContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#comparison}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitComparison(PythonSubsetParser.ComparisonContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code atomExpr}
-	 * labeled alternative in {@link PythonSubsetParser#expr}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#comp_op}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAtomExpr(PythonSubsetParser.AtomExprContext ctx);
+	T visitComp_op(PythonSubsetParser.Comp_opContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code addSub}
-	 * labeled alternative in {@link PythonSubsetParser#expr}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAddSub(PythonSubsetParser.AddSubContext ctx);
+	T visitExpr(PythonSubsetParser.ExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code mulDiv}
-	 * labeled alternative in {@link PythonSubsetParser#expr}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#term}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMulDiv(PythonSubsetParser.MulDivContext ctx);
+	T visitTerm(PythonSubsetParser.TermContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code call}
+	 * Visit a parse tree produced by {@link PythonSubsetParser#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFactor(PythonSubsetParser.FactorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#power}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPower(PythonSubsetParser.PowerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#atom_expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAtom_expr(PythonSubsetParser.Atom_exprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code CallTrailer}
+	 * labeled alternative in {@link PythonSubsetParser#trailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallTrailer(PythonSubsetParser.CallTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IndexTrailer}
+	 * labeled alternative in {@link PythonSubsetParser#trailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexTrailer(PythonSubsetParser.IndexTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AttrTrailer}
+	 * labeled alternative in {@link PythonSubsetParser#trailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAttrTrailer(PythonSubsetParser.AttrTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParenAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCall(PythonSubsetParser.CallContext ctx);
+	T visitParenAtom(PythonSubsetParser.ParenAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code number}
+	 * Visit a parse tree produced by the {@code ListAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNumber(PythonSubsetParser.NumberContext ctx);
+	T visitListAtom(PythonSubsetParser.ListAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code trueLit}
+	 * Visit a parse tree produced by the {@code DictAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTrueLit(PythonSubsetParser.TrueLitContext ctx);
+	T visitDictAtom(PythonSubsetParser.DictAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code paren}
+	 * Visit a parse tree produced by the {@code NameAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParen(PythonSubsetParser.ParenContext ctx);
+	T visitNameAtom(PythonSubsetParser.NameAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code string}
+	 * Visit a parse tree produced by the {@code NumberAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitString(PythonSubsetParser.StringContext ctx);
+	T visitNumberAtom(PythonSubsetParser.NumberAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code attrAccess}
+	 * Visit a parse tree produced by the {@code StringAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAttrAccess(PythonSubsetParser.AttrAccessContext ctx);
+	T visitStringAtom(PythonSubsetParser.StringAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code subscript}
+	 * Visit a parse tree produced by the {@code TrueAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSubscript(PythonSubsetParser.SubscriptContext ctx);
+	T visitTrueAtom(PythonSubsetParser.TrueAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code falseLit}
+	 * Visit a parse tree produced by the {@code FalseAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFalseLit(PythonSubsetParser.FalseLitContext ctx);
+	T visitFalseAtom(PythonSubsetParser.FalseAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code name}
+	 * Visit a parse tree produced by the {@code NoneAtom}
 	 * labeled alternative in {@link PythonSubsetParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitName(PythonSubsetParser.NameContext ctx);
+	T visitNoneAtom(PythonSubsetParser.NoneAtomContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code list}
-	 * labeled alternative in {@link PythonSubsetParser#atom}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#testlist}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitList(PythonSubsetParser.ListContext ctx);
+	T visitTestlist(PythonSubsetParser.TestlistContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PythonSubsetParser#listLiteral}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#dictorsetmaker}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitListLiteral(PythonSubsetParser.ListLiteralContext ctx);
+	T visitDictorsetmaker(PythonSubsetParser.DictorsetmakerContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PythonSubsetParser#arglist}.
+	 * Visit a parse tree produced by {@link PythonSubsetParser#comp_for}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArglist(PythonSubsetParser.ArglistContext ctx);
+	T visitComp_for(PythonSubsetParser.Comp_forContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PythonSubsetParser#arguments}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArguments(PythonSubsetParser.ArgumentsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code KeywordArgument}
+	 * labeled alternative in {@link PythonSubsetParser#argument}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitKeywordArgument(PythonSubsetParser.KeywordArgumentContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code PositionalArgument}
+	 * labeled alternative in {@link PythonSubsetParser#argument}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPositionalArgument(PythonSubsetParser.PositionalArgumentContext ctx);
 }

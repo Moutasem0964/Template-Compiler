@@ -1,79 +1,141 @@
 parser grammar PythonSubsetParser;
 
-options {
-    tokenVocab = PythonSubsetLexer;
-}
 
 @header {
     package compiler.parser;
 }
 
-// Entry point
-program : stmt* EOF ;
+options {
+    tokenVocab = PythonSubsetLexer;
+}
+
+// Program - skip empty lines
+file_input: (NEWLINE | stmt)* EOF;
 
 // Statements
 stmt
-    : simpleStmt NEWLINE                    # simple
-    | compoundStmt                          # compound
+    : simple_stmt
+    | compound_stmt
     ;
 
-simpleStmt
-    : expr                                  # exprStmt
-    | NAME EQ expr                          # assign
+simple_stmt
+    : small_stmt NEWLINE
     ;
 
-compoundStmt
-    : ifStmt                                # ifRule
-    | forStmt                               # forRule
+small_stmt
+    : expr_stmt
+    | assign_stmt
+    | return_stmt
+    | global_stmt
+    | import_stmt
+    | from_import_stmt
     ;
 
-// If statement
-ifStmt
-    : IF test COLON suite
-      (ELIF test COLON suite)*
-      (ELSE COLON suite)?
+compound_stmt
+    : function_def
+    | if_stmt
+    | for_stmt
     ;
 
-// For statement
-forStmt
-    : FOR NAME IN expr COLON suite
+// Import
+import_stmt: IMPORT dotted_name (AS NAME)?;
+from_import_stmt: FROM dotted_name IMPORT (STAR | import_as_names);
+import_as_names: import_as_name (COMMA import_as_name)*;
+import_as_name: NAME (AS NAME)?;
+dotted_name: NAME (DOT NAME)*;
+
+// Function definition - decorators can have any arguments
+function_def
+    : decorator* DEF NAME LPAREN parameters? RPAREN COLON suite
     ;
 
-// Suite (block)
+decorator
+    : DECORATOR arguments? NEWLINE
+    ;
+
+parameters: parameter (COMMA parameter)*;
+parameter: NAME (EQUAL test)?;
+
 suite
-    : simpleStmt NEWLINE
+    : simple_stmt
     | NEWLINE INDENT stmt+ DEDENT
     ;
 
-// Condition in if (alias for expr)
-test : expr ;
+// Control flow
+if_stmt
+    : IF test COLON suite (ELIF test COLON suite)* (ELSE COLON suite)?
+    ;
 
-// Expressions
-expr
-    : expr (STAR|SLASH) expr                # mulDiv
-    | expr (PLUS|MINUS) expr                # addSub
-    | expr (LT|LTEQ|GT|GTEQ|EQEQ) expr      # comparison
-    | atom                                  # atomExpr
+for_stmt
+    : FOR NAME IN test COLON suite
+    ;
+
+// Assignment
+assign_stmt: NAME EQUAL test;
+
+global_stmt: GLOBAL NAME (COMMA NAME)*;
+
+return_stmt: RETURN test?;
+
+expr_stmt: test;
+
+// Test expression (most general)
+test: or_test;
+
+or_test: and_test (OR and_test)*;
+
+and_test: not_test (AND not_test)*;
+
+not_test: NOT not_test | comparison;
+
+comparison: expr (comp_op expr)*;
+
+comp_op: LESS | GREATER | EQEQUAL | GREATEREQUAL | LESSEQUAL | NOTEQUAL | IN;
+
+// Expressions with precedence
+expr: term ((PLUS | MINUS) term)*;
+
+term: factor ((STAR | SLASH | PERCENT | DOUBLESLASH) factor)*;
+
+factor: (PLUS | MINUS) factor | power;
+
+power: atom_expr (DOUBLESTAR factor)?;
+
+atom_expr
+    : atom trailer*
+    ;
+
+trailer
+    : LPAREN arguments? RPAREN    #CallTrailer
+    | LBRACK test RBRACK           #IndexTrailer
+    | DOT NAME                     #AttrTrailer
     ;
 
 atom
-    : NAME                                  # name
-    | NUMBER                                # number
-    | STRING                                # string
-    | TRUE                                  # trueLit
-    | FALSE                                 # falseLit
-    | LPAREN expr RPAREN                    # paren
-    | atom DOT NAME                         # attrAccess
-    | atom LBRACK expr RBRACK               # subscript
-    | atom LPAREN arglist? RPAREN           # call
-    | listLiteral                           # list
+    : LPAREN test? RPAREN                          #ParenAtom
+    | LBRACK testlist? RBRACK                      #ListAtom
+    | LBRACE dictorsetmaker? RBRACE                #DictAtom
+    | NAME                                          #NameAtom
+    | NUMBER                                        #NumberAtom
+    | STRING+                                       #StringAtom
+    | TRUE                                          #TrueAtom
+    | FALSE                                         #FalseAtom
+    | NONE                                          #NoneAtom
     ;
 
-listLiteral
-    : LBRACK (expr (COMMA expr)*)? RBRACK
+testlist: test (COMMA test)*;
+
+// Dictionary and list comprehensions
+dictorsetmaker
+    : (test COLON test | test) (comp_for | (COMMA (test COLON test | test))*)
     ;
 
-arglist
-    : expr (COMMA expr)*
-    ;
+comp_for: FOR NAME IN test (IF test)?;
 
+// Function arguments
+arguments: argument (COMMA argument)*;
+
+argument
+    : NAME EQUAL test    #KeywordArgument
+    | test               #PositionalArgument
+    ;

@@ -36,4 +36,6 @@ public interface AstVisitor<R> {
     R visitAssign(AssignNode node);
     R visitFor(ForNode node);
     R visitIf(IfNode node);
+    R visitDef(DefNode node);
+
 }

@@ -4,42 +4,83 @@ lexer grammar PythonSubsetLexer;
     package compiler.parser;
 }
 
-NEWLINE     : ('\r'? '\n' | '\r')+ ;
-WS          : [ \t]+ -> skip ;
+// Keywords
+DEF: 'def';
+IF: 'if';
+ELIF: 'elif';
+ELSE: 'else';
+FOR: 'for';
+IN: 'in';
+RETURN: 'return';
+IMPORT: 'import';
+FROM: 'from';
+AS: 'as';
+GLOBAL: 'global';
+TRUE: 'True';
+FALSE: 'False';
+NONE: 'None';
+OR: 'or';
+AND: 'and';
+NOT: 'not';
 
-DEF         : 'def' ;
-IF          : 'if' ;
-ELIF        : 'elif' ;
-ELSE        : 'else' ;
-FOR         : 'for' ;
-IN          : 'in' ;
-RETURN      : 'return' ;
-TRUE        : 'true' ;
-FALSE       : 'false' ;
+// Operators
+PLUS: '+';
+MINUS: '-';
+STAR: '*';
+SLASH: '/';
+PERCENT: '%';
+DOUBLESTAR: '**';
+DOUBLESLASH: '//';
 
-EQ          : '=' ;
-EQEQ        : '==' ;
-LT          : '<' ;
-GT          : '>' ;
-LTEQ        : '<=' ;
-GTEQ        : '>=' ;
-PLUS        : '+' ;
-MINUS       : '-' ;
-STAR        : '*' ;
-SLASH       : '/' ;
+EQUAL: '=';
+PLUSEQUAL: '+=';
+MINUSEQUAL: '-=';
 
-LPAREN      : '(' ;
-RPAREN      : ')' ;
-LBRACK      : '[' ;
-RBRACK      : ']' ;
-COLON       : ':' ;
-DOT         : '.' ;
-COMMA       : ',' ;
+EQEQUAL: '==';
+NOTEQUAL: '!=';
+LESS: '<';
+GREATER: '>';
+LESSEQUAL: '<=';
+GREATEREQUAL: '>=';
 
-NUMBER      : [0-9]+ ('.' [0-9]+)? ;
-STRING      : '"' (~["\\\r\n] | '\\' .)* '"'
-            | '\'' (~['\\\r\n] | '\\' .)* '\'' ;
+// Delimiters
+LPAREN: '(';
+RPAREN: ')';
+LBRACK: '[';
+RBRACK: ']';
+LBRACE: '{';
+RBRACE: '}';
+COMMA: ',';
+COLON: ':';
+DOT: '.';
+ARROW: '->';
 
-NAME        : [a-zA-Z_][a-zA-Z0-9_]* ;
+// String literals - handle any string content
+STRING
+    : '"' ( ~["\\\r\n] | '\\' . | '\\"' )* '"'
+    | '\'' ( ~['\\\r\n] | '\\' . | '\\\'' )* '\''
+    ;
 
-COMMENT     : '#' ~[\r\n]* -> skip ;
+// Numbers
+NUMBER
+    : [0-9]+ ('.' [0-9]+)?
+    ;
+
+// Identifiers - must come after keywords
+NAME: [a-zA-Z_][a-zA-Z0-9_]*;
+
+// Decorator
+DECORATOR: '@' NAME;
+
+// Newlines - important for Python!
+NEWLINE: ('\r'? '\n' | '\r');
+
+// Indentation tokens - managed by PythonIndentingLexer
+INDENT: '<<<INDENT>>>';
+DEDENT: '<<<DEDENT>>>';
+
+// Whitespace
+WS: [ \t]+ -> channel(HIDDEN);
+
+// Comments
+COMMENT: '#' ~[\r\n]* -> skip;
