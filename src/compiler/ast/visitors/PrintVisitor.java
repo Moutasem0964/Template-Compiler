@@ -8,262 +8,129 @@ import compiler.ast.nodes.jinja.*;
 import compiler.ast.nodes.python.*;
 
 public class PrintVisitor implements AstVisitor<Void> {
-    private int indent = 0;
 
     public void printTree(AstNode root) {
-        root.accept(this);
+        printNode(root, "", true);
     }
 
-    private void print(String text) {
-        System.out.println("  ".repeat(indent) + text);
-    }
+    private void printNode(AstNode node, String prefix, boolean isLast) {
+        // Print connector and node
+        String connector = isLast ? "└── " : "├── ";
+        String className = node.getClass().getSimpleName();
+        System.out.println(prefix + connector + className + " (line " + node.getLine() + ")");
 
-    private void visitChildren(AstNode node) {
-        indent++;
-        for (AstNode child : node.getChildren()) {
-            child.accept(this);
+        // Prepare prefix for children
+        String childPrefix = prefix + (isLast ? "    " : "│   ");
+
+        // Print children
+        var children = node.getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            boolean lastChild = (i == children.size() - 1);
+            printNode(children.get(i), childPrefix, lastChild);
         }
-        indent--;
     }
 
-    // ===== Python Nodes =====
+    // ===== All visit methods =====
 
     @Override
-    public Void visitPythonFile(PythonFileNode node) {
-        print("PythonFile (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitPythonFile(PythonFileNode node) { return null; }
 
     @Override
-    public Void visitDef(DefNode node) {
-        print("Def " + node.getName() + " params=" + node.getParams() + " (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitDef(DefNode node) { return null; }
 
     @Override
-    public Void visitIf(IfNode node) {
-        print("If (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitIf(IfNode node) { return null; }
 
     @Override
-    public Void visitFor(ForNode node) {
-        print("For " + node.getVarName() + " (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitFor(ForNode node) { return null; }
 
     @Override
-    public Void visitAssign(AssignNode node) {
-        print("Assign (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitAssign(AssignNode node) { return null; }
 
     @Override
-    public Void visitReturn(ReturnNode node) {
-        print("Return (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitReturn(ReturnNode node) { return null; }
 
     @Override
-    public Void visitGlobal(GlobalNode node) {
-        print("Global (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitGlobal(GlobalNode node) { return null; }
 
     @Override
-    public Void visitImport(ImportNode node) {
-        print("Import (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitImport(ImportNode node) { return null; }
 
     @Override
-    public Void visitFromImport(FromImportNode node) {
-        print("FromImport (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitFromImport(FromImportNode node) { return null; }
 
     @Override
-    public Void visitSuite(SuiteNode node) {
-        print("Suite (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitSuite(SuiteNode node) { return null; }
 
     @Override
-    public Void visitDecorator(DecoratorNode node) {
-        print("Decorator (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitDecorator(DecoratorNode node) { return null; }
 
     @Override
-    public Void visitName(NameNode node) {
-        print("Name \"" + node.getName() + "\" (line " + node.getLine() + ")");
-        return null;
-    }
+    public Void visitName(NameNode node) { return null; }
 
     @Override
-    public Void visitNumber(NumberNode node) {
-        print("Number " + node.getValue() + " (line " + node.getLine() + ")");
-        return null;
-    }
+    public Void visitNumber(NumberNode node) { return null; }
 
     @Override
-    public Void visitString(StringNode node) {
-        print("String \"" + node.getValue() + "\" (line " + node.getLine() + ")");
-        return null;
-    }
+    public Void visitString(StringNode node) { return null; }
 
     @Override
-    public Void visitBinOp(BinOpNode node) {
-        print("BinOp " + node.getOp() + " (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitBinOp(BinOpNode node) { return null; }
 
     @Override
-    public Void visitUnaryOp(UnaryOpNode node) {
-        print("UnaryOp " + node.getOperator() + " (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitUnaryOp(UnaryOpNode node) { return null; }
 
     @Override
-    public Void visitNot(NotNode node) {
-        print("Not (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitNot(NotNode node) { return null; }
 
     @Override
-    public Void visitCall(CallNode node) {
-        print("Call (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitCall(CallNode node) { return null; }
 
     @Override
-    public Void visitAttrAccess(AttrAccessNode node) {
-        print("AttrAccess (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitAttrAccess(AttrAccessNode node) { return null; }
 
     @Override
-    public Void visitSubscript(SubscriptNode node) {
-        print("Subscript (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitSubscript(SubscriptNode node) { return null; }
 
     @Override
-    public Void visitList(ListNode node) {
-        print("List (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitList(ListNode node) { return null; }
 
     @Override
-    public Void visitDict(DictNode node) {
-        print("Dict (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitDict(DictNode node) { return null; }
 
     @Override
-    public Void visitTuple(TupleNode node) {
-        print("Tuple (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitTuple(TupleNode node) { return null; }
 
     @Override
-    public Void visitListComp(ListCompNode node) {
-        print("ListComp (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitListComp(ListCompNode node) { return null; }
 
     @Override
-    public Void visitGeneratorExpr(GeneratorExprNode node) {
-        print("GeneratorExpr (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitGeneratorExpr(GeneratorExprNode node) { return null; }
 
     @Override
-    public Void visitKeywordArg(KeywordArgNode node) {
-        print("KeywordArg (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
-
-    // ===== Template/HTML Nodes =====
+    public Void visitKeywordArg(KeywordArgNode node) { return null; }
 
     @Override
-    public Void visitTemplate(TemplateNode node) {
-        print("Template (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitTemplate(TemplateNode node) { return null; }
 
     @Override
-    public Void visitText(TextNode node) {
-        print("Text (line " + node.getLine() + ") \"" + node.getText() + "\"");
-        return null;
-    }
+    public Void visitText(TextNode node) { return null; }
 
     @Override
-    public Void visitHtmlElement(HtmlElementNode node) {
-        print("HtmlElement <" + node.getTagName() + "> (line " + node.getLine() + ") attrs=" + node.getAttributes());
-        visitChildren(node);
-        return null;
-    }
-
-    // ===== Jinja Nodes =====
+    public Void visitHtmlElement(HtmlElementNode node) { return null; }
 
     @Override
-    public Void visitJinjaExpr(JinjaExprNode node) {
-        print("JinjaExpr (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitJinjaExpr(JinjaExprNode node) { return null; }
 
     @Override
-    public Void visitJinjaStmt(JinjaStmtNode node) {
-        print("JinjaStmt (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
-
-    // ===== CSS Nodes =====
+    public Void visitJinjaStmt(JinjaStmtNode node) { return null; }
 
     @Override
-    public Void visitCssStylesheet(CssStylesheetNode node) {
-        print("CssStylesheet (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitCssStylesheet(CssStylesheetNode node) { return null; }
 
     @Override
-    public Void visitCssRule(CssRuleNode node) {
-        print("CssRule selector=\"" + node.getSelector() + "\" (line " + node.getLine() + ")");
-        visitChildren(node);
-        return null;
-    }
+    public Void visitCssRule(CssRuleNode node) { return null; }
 
     @Override
-    public Void visitCssDeclaration(CssDeclarationNode node) {
-        print("CssDeclaration " + node.getProperty() + ": " + node.getValue() + " (line " + node.getLine() + ")");
-        return null;
-    }
+    public Void visitCssDeclaration(CssDeclarationNode node) { return null; }
 }
