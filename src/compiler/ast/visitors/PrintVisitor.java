@@ -9,128 +9,269 @@ import compiler.ast.nodes.python.*;
 
 public class PrintVisitor implements AstVisitor<Void> {
 
+    private String prefix = "";
+    private boolean isLast = true;
+
     public void printTree(AstNode root) {
-        printNode(root, "", true);
+        root.accept(this);
     }
 
-    private void printNode(AstNode node, String prefix, boolean isLast) {
-        // Print connector and node
+    private void printCurrentNode(AstNode node) {
         String connector = isLast ? "└── " : "├── ";
         String className = node.getClass().getSimpleName();
         System.out.println(prefix + connector + className + " (line " + node.getLine() + ")");
+    }
 
-        // Prepare prefix for children
-        String childPrefix = prefix + (isLast ? "    " : "│   ");
-
-        // Print children
+    private void visitChildren(AstNode node) {
         var children = node.getChildren();
         for (int i = 0; i < children.size(); i++) {
             boolean lastChild = (i == children.size() - 1);
-            printNode(children.get(i), childPrefix, lastChild);
+            String oldPrefix = prefix;
+            boolean oldIsLast = isLast;
+
+            isLast = lastChild;
+            prefix += oldIsLast ? "    " : "│   ";
+
+            children.get(i).accept(this);
+
+            prefix = oldPrefix;
+            isLast = oldIsLast;
         }
     }
 
-    // ===== All visit methods =====
+    @Override
+    public Void visitPythonFile(PythonFileNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitPythonFile(PythonFileNode node) { return null; }
+    public Void visitDef(DefNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitDef(DefNode node) { return null; }
+    public Void visitIf(IfNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitIf(IfNode node) { return null; }
+    public Void visitFor(ForNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitFor(ForNode node) { return null; }
+    public Void visitAssign(AssignNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitAssign(AssignNode node) { return null; }
+    public Void visitReturn(ReturnNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitReturn(ReturnNode node) { return null; }
+    public Void visitGlobal(GlobalNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitGlobal(GlobalNode node) { return null; }
+    public Void visitImport(ImportNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitImport(ImportNode node) { return null; }
+    public Void visitFromImport(FromImportNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitFromImport(FromImportNode node) { return null; }
+    public Void visitSuite(SuiteNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitSuite(SuiteNode node) { return null; }
+    public Void visitDecorator(DecoratorNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
+
+    // Python Expressions
+    @Override
+    public Void visitName(NameNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitDecorator(DecoratorNode node) { return null; }
+    public Void visitNumber(NumberNode node) {
+        printCurrentNode(node);
+        return null;
+    }
 
     @Override
-    public Void visitName(NameNode node) { return null; }
+    public Void visitString(StringNode node) {
+        printCurrentNode(node);
+        return null;
+    }
 
     @Override
-    public Void visitNumber(NumberNode node) { return null; }
+    public Void visitBinOp(BinOpNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitString(StringNode node) { return null; }
+    public Void visitUnaryOp(UnaryOpNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitBinOp(BinOpNode node) { return null; }
+    public Void visitNot(NotNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitUnaryOp(UnaryOpNode node) { return null; }
+    public Void visitCall(CallNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitNot(NotNode node) { return null; }
+    public Void visitAttrAccess(AttrAccessNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitCall(CallNode node) { return null; }
+    public Void visitSubscript(SubscriptNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitAttrAccess(AttrAccessNode node) { return null; }
+    public Void visitList(ListNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitSubscript(SubscriptNode node) { return null; }
+    public Void visitDict(DictNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitList(ListNode node) { return null; }
+    public Void visitTuple(TupleNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitDict(DictNode node) { return null; }
+    public Void visitListComp(ListCompNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitTuple(TupleNode node) { return null; }
+    public Void visitGeneratorExpr(GeneratorExprNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitListComp(ListCompNode node) { return null; }
+    public Void visitKeywordArg(KeywordArgNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
+
+    // Template/HTML/CSS Nodes
+    @Override
+    public Void visitTemplate(TemplateNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitGeneratorExpr(GeneratorExprNode node) { return null; }
+    public Void visitText(TextNode node) {
+        printCurrentNode(node);
+        return null;
+    }
 
     @Override
-    public Void visitKeywordArg(KeywordArgNode node) { return null; }
+    public Void visitHtmlElement(HtmlElementNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitTemplate(TemplateNode node) { return null; }
+    public Void visitJinjaExpr(JinjaExprNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitText(TextNode node) { return null; }
+    public Void visitJinjaStmt(JinjaStmtNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitHtmlElement(HtmlElementNode node) { return null; }
+    public Void visitCssStylesheet(CssStylesheetNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitJinjaExpr(JinjaExprNode node) { return null; }
+    public Void visitCssRule(CssRuleNode node) {
+        printCurrentNode(node);
+        visitChildren(node);
+        return null;
+    }
 
     @Override
-    public Void visitJinjaStmt(JinjaStmtNode node) { return null; }
-
-    @Override
-    public Void visitCssStylesheet(CssStylesheetNode node) { return null; }
-
-    @Override
-    public Void visitCssRule(CssRuleNode node) { return null; }
-
-    @Override
-    public Void visitCssDeclaration(CssDeclarationNode node) { return null; }
+    public Void visitCssDeclaration(CssDeclarationNode node) {
+        printCurrentNode(node);
+        return null;
+    }
 }
